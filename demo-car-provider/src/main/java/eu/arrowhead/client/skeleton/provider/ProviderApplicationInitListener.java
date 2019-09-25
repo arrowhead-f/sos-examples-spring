@@ -7,6 +7,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.CertificateException;
+import java.util.Base64;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,12 +17,18 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
+import com.aitia.demo.car_provider.CarProviderConstants;
+
 import eu.arrowhead.client.skeleton.common.ArrowheadService;
 import eu.arrowhead.client.skeleton.common.config.ApplicationInitListener;
 import eu.arrowhead.client.skeleton.common.util.ClientCommonConstants;
 import eu.arrowhead.client.skeleton.provider.security.ProviderSecurityConfig;
+import eu.arrowhead.common.CommonConstants;
 import eu.arrowhead.common.Utilities;
 import eu.arrowhead.common.core.CoreSystem;
+import eu.arrowhead.common.dto.shared.ServiceRegistryRequestDTO;
+import eu.arrowhead.common.dto.shared.ServiceSecurityType;
+import eu.arrowhead.common.dto.shared.SystemRequestDTO;
 import eu.arrowhead.common.exception.ArrowheadException;
 
 @Component
@@ -37,6 +45,18 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 	
 	@Value(ClientCommonConstants.$TOKEN_SECURITY_FILTER_ENABLED_WD)
 	private boolean tokenSecurityFilterEnabled;
+	
+	@Value(CommonConstants.$SERVER_SSL_ENABLED_WD)
+	private boolean sslEnabled;
+	
+	@Value(ClientCommonConstants.$CLIENT_SYSTEM_NAME)
+	private String mySystemName;
+	
+	@Value(ClientCommonConstants.$CLIENT_SERVER_ADDRESS_WD)
+	private String mySystemAddress;
+	
+	@Value(ClientCommonConstants.$CLIENT_SERVER_PORT_WD)
+	private int mySystemPort;
 	
 	private final Logger logger = LogManager.getLogger(ProviderApplicationInitListener.class);
 	
@@ -58,13 +78,35 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 		
 		setTokenSecurityFilter();
 		
-		//TODO: implement here any custom behavior on application start up
+		//Register service into ServiceRegistry
+		final ServiceRegistryRequestDTO serviceRegistryRequest = new ServiceRegistryRequestDTO();
+		serviceRegistryRequest.setServiceDefinition(CarProviderConstants.CAR_SERVICE_DEFINITION);
+		final SystemRequestDTO systemRequest = new SystemRequestDTO();
+		systemRequest.setSystemName(mySystemName);
+		systemRequest.setAddress(mySystemAddress);
+		systemRequest.setPort(mySystemPort);
+		if (tokenSecurityFilterEnabled) {
+			systemRequest.setAuthenticationInfo(Base64.getEncoder().encodeToString(arrowheadService.getMyPublicKey().getEncoded()));
+			serviceRegistryRequest.setSecure(ServiceSecurityType.TOKEN);
+			serviceRegistryRequest.setInterfaces(List.of(CarProviderConstants.CAR_SERVICE_INTERFACE_SECURE));
+		} else if (sslEnabled) {
+			serviceRegistryRequest.setSecure(ServiceSecurityType.CERTIFICATE);
+			serviceRegistryRequest.setInterfaces(List.of(CarProviderConstants.CAR_SERVICE_INTERFACE_SECURE));
+		} else {
+			serviceRegistryRequest.setSecure(ServiceSecurityType.NOT_SECURE);
+			serviceRegistryRequest.setInterfaces(List.of(CarProviderConstants.CAR_SERVICE_INTERFACE_INSECURE));
+		}
+		serviceRegistryRequest.setProviderSystem(systemRequest);
+		serviceRegistryRequest.setServiceUri(CarProviderConstants.CAR_SERVICE_URI);
+		
+		arrowheadService.forceRegisterServiceToServiceRegistry(serviceRegistryRequest);
 	}
 	
 	//-------------------------------------------------------------------------------------------------
 	@Override
 	public void customDestroy() {
-		//TODO: implement here any custom behavior on application shout down
+		//Unregister service
+		arrowheadService.unregisterServiceFromServiceRegistry(CarProviderConstants.CAR_SERVICE_DEFINITION);
 	}
 	
 	//=================================================================================================

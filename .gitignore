@@ -24,6 +24,7 @@
 .vscode/
 wrapper
 /client-skeleton-common/target
+/demo-common-resources/target
 /demo-car-consumer/target
 /demo-car-provider/target
 /mvnw
