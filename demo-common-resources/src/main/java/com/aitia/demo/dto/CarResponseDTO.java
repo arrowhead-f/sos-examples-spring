@@ -17,6 +17,9 @@ public class CarResponseDTO implements Serializable {
 	// methods
 
 	//-------------------------------------------------------------------------------------------------
+	public CarResponseDTO() {}
+	
+	//-------------------------------------------------------------------------------------------------
 	public CarResponseDTO(final int id, final String brand, final String color) {
 		this.id = id;
 		this.brand = brand;
