@@ -26,16 +26,13 @@ import com.aitia.demo.dto.CarResponseDTO;
 import eu.arrowhead.common.exception.BadPayloadException;
 
 @RestController
-@RequestMapping(CarProviderConstants.CAR_SERVICE_URI)
+@RequestMapping(CarProviderConstants.CAR_URI)
 public class CarServiceController {
 	
 	//=================================================================================================
 	// members
 
-	private static final String BY_ID_PATH = "/{id}";
-	private static final String PATH_VARIABLE_ID = "id";
-	private static final String REQUEST_PARAM_BRAND = "brand";
-	private static final String REQUEST_PARAM_COLOR = "color";
+	
 	
 	@Autowired
 	private InMemoryCarDB carDB;
@@ -45,8 +42,8 @@ public class CarServiceController {
 
 	//-------------------------------------------------------------------------------------------------
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody public List<CarResponseDTO> getCars(@RequestParam(name = REQUEST_PARAM_BRAND, required = false) final String brand,
-																	 @RequestParam(name = REQUEST_PARAM_COLOR, required = false) final String color) {
+	@ResponseBody public List<CarResponseDTO> getCars(@RequestParam(name = CarProviderConstants.REQUEST_PARAM_BRAND, required = false) final String brand,
+													  @RequestParam(name = CarProviderConstants.REQUEST_PARAM_COLOR, required = false) final String color) {
 		final List<CarResponseDTO> response = new ArrayList<>();
 		for (final Car car : carDB.getAll()) {
 			boolean toAdd = true;
@@ -64,8 +61,8 @@ public class CarServiceController {
 	}
 	
 	//-------------------------------------------------------------------------------------------------
-	@GetMapping(path = BY_ID_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody public CarResponseDTO getCarById(@PathVariable(value = PATH_VARIABLE_ID) final int id) {
+	@GetMapping(path = CarProviderConstants.BY_ID_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody public CarResponseDTO getCarById(@PathVariable(value = CarProviderConstants.PATH_VARIABLE_ID) final int id) {
 		return DTOConverter.convertCarToCarResponseDTO(carDB.getById(id));
 	}
 	
@@ -83,8 +80,8 @@ public class CarServiceController {
 	}
 	
 	//-------------------------------------------------------------------------------------------------
-	@PutMapping(path = BY_ID_PATH, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody public CarResponseDTO updateCar(@PathVariable(name = PATH_VARIABLE_ID) final int id, @RequestBody final CarRequestDTO dto) {
+	@PutMapping(path = CarProviderConstants.BY_ID_PATH, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody public CarResponseDTO updateCar(@PathVariable(name = CarProviderConstants.PATH_VARIABLE_ID) final int id, @RequestBody final CarRequestDTO dto) {
 		if (dto.getBrand() == null || dto.getBrand().isBlank()) {
 			throw new BadPayloadException("brand is null or blank");
 		}
@@ -97,8 +94,8 @@ public class CarServiceController {
 	
 	
 	//-------------------------------------------------------------------------------------------------
-	@DeleteMapping(path = BY_ID_PATH)
-	public void removeCarById(@PathVariable(value = PATH_VARIABLE_ID) final int id) {
+	@DeleteMapping(path = CarProviderConstants.BY_ID_PATH)
+	public void removeCarById(@PathVariable(value = CarProviderConstants.PATH_VARIABLE_ID) final int id) {
 		carDB.removeById(id);
 	}
 }

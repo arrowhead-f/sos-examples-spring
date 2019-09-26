@@ -9,8 +9,9 @@ public class CarConsumerConstants {
 	
 	public static final String INTERFACE_SECURE = "HTTPS-SECURE-JSON";
 	public static final String INTERFACE_INSECURE = "HTTP-INSECURE-JSON";
+	public static final String HTTP_METHOD = "http-method";
 	
-	public static final String CAR_SERVICE_DEFINITION = "car-service";
+	public static final String CREATE_CAR_SERVICE_DEFINITION = "create-car";
 	
 	//=================================================================================================
 	// assistant methods

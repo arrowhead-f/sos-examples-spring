@@ -8,6 +8,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.CertificateException;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -15,6 +16,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 
 import com.aitia.demo.car_provider.CarProviderConstants;
@@ -79,34 +81,15 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 		setTokenSecurityFilter();
 		
 		//Register service into ServiceRegistry
-		final ServiceRegistryRequestDTO serviceRegistryRequest = new ServiceRegistryRequestDTO();
-		serviceRegistryRequest.setServiceDefinition(CarProviderConstants.CAR_SERVICE_DEFINITION);
-		final SystemRequestDTO systemRequest = new SystemRequestDTO();
-		systemRequest.setSystemName(mySystemName);
-		systemRequest.setAddress(mySystemAddress);
-		systemRequest.setPort(mySystemPort);
-		if (tokenSecurityFilterEnabled) {
-			systemRequest.setAuthenticationInfo(Base64.getEncoder().encodeToString(arrowheadService.getMyPublicKey().getEncoded()));
-			serviceRegistryRequest.setSecure(ServiceSecurityType.TOKEN);
-			serviceRegistryRequest.setInterfaces(List.of(CarProviderConstants.CAR_SERVICE_INTERFACE_SECURE));
-		} else if (sslEnabled) {
-			serviceRegistryRequest.setSecure(ServiceSecurityType.CERTIFICATE);
-			serviceRegistryRequest.setInterfaces(List.of(CarProviderConstants.CAR_SERVICE_INTERFACE_SECURE));
-		} else {
-			serviceRegistryRequest.setSecure(ServiceSecurityType.NOT_SECURE);
-			serviceRegistryRequest.setInterfaces(List.of(CarProviderConstants.CAR_SERVICE_INTERFACE_INSECURE));
-		}
-		serviceRegistryRequest.setProviderSystem(systemRequest);
-		serviceRegistryRequest.setServiceUri(CarProviderConstants.CAR_SERVICE_URI);
-		
-		arrowheadService.forceRegisterServiceToServiceRegistry(serviceRegistryRequest);
+		final ServiceRegistryRequestDTO createCarServiceRequest = createServiceRegistryRequest(CarProviderConstants.CREATE_CAR_SERVICE_DEFINITION, CarProviderConstants.CAR_URI, HttpMethod.POST);		
+		arrowheadService.forceRegisterServiceToServiceRegistry(createCarServiceRequest);
 	}
 	
 	//-------------------------------------------------------------------------------------------------
 	@Override
 	public void customDestroy() {
 		//Unregister service
-		arrowheadService.unregisterServiceFromServiceRegistry(CarProviderConstants.CAR_SERVICE_DEFINITION);
+		arrowheadService.unregisterServiceFromServiceRegistry(CarProviderConstants.CREATE_CAR_SERVICE_DEFINITION);
 	}
 	
 	//=================================================================================================
@@ -134,5 +117,32 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 			providerSecurityConfig.getTokenSecurityFilter().setAuthorizationPublicKey(authorizationPublicKey);
 			providerSecurityConfig.getTokenSecurityFilter().setMyPrivateKey(providerPrivateKey);
 		}
+	}
+	
+	//-------------------------------------------------------------------------------------------------
+	private ServiceRegistryRequestDTO createServiceRegistryRequest(final String serviceDefinition, final String serviceUri, final HttpMethod httpMethod) {
+		final ServiceRegistryRequestDTO serviceRegistryRequest = new ServiceRegistryRequestDTO();
+		serviceRegistryRequest.setServiceDefinition(serviceDefinition);
+		final SystemRequestDTO systemRequest = new SystemRequestDTO();
+		systemRequest.setSystemName(mySystemName);
+		systemRequest.setAddress(mySystemAddress);
+		systemRequest.setPort(mySystemPort);		
+		systemRequest.setAuthenticationInfo(Base64.getEncoder().encodeToString(arrowheadService.getMyPublicKey().getEncoded()));
+
+		if (tokenSecurityFilterEnabled) {
+			serviceRegistryRequest.setSecure(ServiceSecurityType.TOKEN);
+			serviceRegistryRequest.setInterfaces(List.of(CarProviderConstants.INTERFACE_SECURE));
+		} else if (sslEnabled) {
+			serviceRegistryRequest.setSecure(ServiceSecurityType.CERTIFICATE);
+			serviceRegistryRequest.setInterfaces(List.of(CarProviderConstants.INTERFACE_SECURE));
+		} else {
+			serviceRegistryRequest.setSecure(ServiceSecurityType.NOT_SECURE);
+			serviceRegistryRequest.setInterfaces(List.of(CarProviderConstants.INTERFACE_INSECURE));
+		}
+		serviceRegistryRequest.setProviderSystem(systemRequest);
+		serviceRegistryRequest.setServiceUri(serviceUri);
+		serviceRegistryRequest.setMetadata(new HashMap<>());
+		serviceRegistryRequest.getMetadata().put(CarProviderConstants.HTTP_METHOD, httpMethod.name());
+		return serviceRegistryRequest;
 	}
 }

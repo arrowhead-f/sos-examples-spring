@@ -10,7 +10,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpMethod;
 
-import com.aitia.demo.car_consumer.model.ServiceModel;
 import com.aitia.demo.dto.CarRequestDTO;
 import com.aitia.demo.dto.CarResponseDTO;
 
@@ -53,7 +52,7 @@ public class CarConsumerMain implements ApplicationRunner {
     //-------------------------------------------------------------------------------------------------
     @Override
 	public void run(final ApplicationArguments args) throws Exception {
-    	final ServiceQueryFormDTO serviceQueryForm = new ServiceQueryFormDTO.Builder(CarConsumerConstants.CAR_SERVICE_DEFINITION)
+    	final ServiceQueryFormDTO serviceQueryForm = new ServiceQueryFormDTO.Builder(CarConsumerConstants.CREATE_CAR_SERVICE_DEFINITION)
     																		.interfaces(getInterface())
     																		.build();
     	
@@ -77,15 +76,17 @@ public class CarConsumerMain implements ApplicationRunner {
 			logger.info("No provider found during the orchestration");
 		} else {
 			final OrchestrationResultDTO orchestrationResult = orchestrationResponse.getResponse().get(0);
-			validateOrchestrationResult(orchestrationResult);
+			validateOrchestrationResult(orchestrationResult, CarConsumerConstants.CREATE_CAR_SERVICE_DEFINITION);
 			
-			final ServiceModel<CarResponseDTO> carService = new ServiceModel<>(arrowheadService, orchestrationResult, getInterface(), CarResponseDTO.class);
 			final CarRequestDTO carRequestDTO = new CarRequestDTO();
 			carRequestDTO.setBrand("nissan");
 			carRequestDTO.setColor("gray");
 			
-			logger.info("Make provider create a new car...");
-			final CarResponseDTO carCreated = carService.consumeHTTP(HttpMethod.POST, carRequestDTO, new String[0]);
+			logger.info("Create a car request:");
+			printOut(carRequestDTO);
+			final CarResponseDTO carCreated = arrowheadService.consumeServiceHTTP(CarResponseDTO.class, HttpMethod.valueOf(orchestrationResult.getMetadata().get(CarConsumerConstants.HTTP_METHOD)),
+																				  orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), orchestrationResult.getServiceUri(),
+																				  getInterface(), orchestrationResult.getAuthorizationTokens().get(getInterface()), carRequestDTO, new String[0]);
 			logger.info("Provider response");
 			printOut(carCreated);
 			
@@ -101,8 +102,8 @@ public class CarConsumerMain implements ApplicationRunner {
     }
     
     //-------------------------------------------------------------------------------------------------
-    private void validateOrchestrationResult(final OrchestrationResultDTO orchestrationResult) {
-    	if (!orchestrationResult.getService().getServiceDefinition().equalsIgnoreCase(CarConsumerConstants.CAR_SERVICE_DEFINITION)) {
+    private void validateOrchestrationResult(final OrchestrationResultDTO orchestrationResult, final String serviceDefinitin) {
+    	if (!orchestrationResult.getService().getServiceDefinition().equalsIgnoreCase(serviceDefinitin)) {
 			throw new InvalidParameterException("Requested and orchestrated service definition do not match");
 		}
     	

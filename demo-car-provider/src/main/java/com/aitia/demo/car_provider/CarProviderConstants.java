@@ -7,11 +7,15 @@ public class CarProviderConstants {
 	
 	public static final String BASE_PACKAGE = "com.aitia";
 	
-	public static final String CAR_SERVICE_DEFINITION = "car-service";
-	public static final String CAR_SERVICE_INTERFACE_SECURE = "HTTPS-SECURE-JSON";
-	public static final String CAR_SERVICE_INTERFACE_INSECURE = "HTTP-INSECURE-JSON";
-	public static final String CAR_SERVICE_URI = "/car";
-	
+	public static final String CREATE_CAR_SERVICE_DEFINITION = "create-car";
+	public static final String INTERFACE_SECURE = "HTTPS-SECURE-JSON";
+	public static final String INTERFACE_INSECURE = "HTTP-INSECURE-JSON";
+	public static final String HTTP_METHOD = "http-method";
+	public static final String CAR_URI = "/car";
+	public static final String BY_ID_PATH = "/{id}";
+	public static final String PATH_VARIABLE_ID = "id";
+	public static final String REQUEST_PARAM_BRAND = "brand";
+	public static final String REQUEST_PARAM_COLOR = "color";	
 	
 	//=================================================================================================
 	// assistant methods
