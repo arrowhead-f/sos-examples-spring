@@ -20,9 +20,6 @@ public class ProviderSecurityConfig extends DefaultSecurityConfig {
 	@Value(ClientCommonConstants.$TOKEN_SECURITY_FILTER_ENABLED_WD)
 	private boolean tokenSecurityFilterEnabled;
 	
-	@Value(CommonConstants.$SERVER_SSL_ENABLED_WD)
-	private boolean sslEnabled;
-	
 	private ProviderTokenSecurityFilter tokenSecurityFilter;
 	
 	//=================================================================================================
@@ -35,8 +32,6 @@ public class ProviderSecurityConfig extends DefaultSecurityConfig {
 		if (tokenSecurityFilterEnabled) {
 			tokenSecurityFilter = new ProviderTokenSecurityFilter();
 			http.addFilterAfter(tokenSecurityFilter, SecurityContextHolderAwareRequestFilter.class);			
-		} else if (sslEnabled) {
-			http.addFilterAfter(new ProviderAccessControlFilter(), SecurityContextHolderAwareRequestFilter.class);
 		}
 	}
 
