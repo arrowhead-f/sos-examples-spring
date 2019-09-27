@@ -14,6 +14,12 @@ public class CarRequestDTO implements Serializable {
 
 	//=================================================================================================
 	// methods
+	
+	//-------------------------------------------------------------------------------------------------
+	public CarRequestDTO(final String brand, final String color) {
+		this.brand = brand;
+		this.color = color;
+	}
 
 	//-------------------------------------------------------------------------------------------------
 	public String getBrand() { return brand; }

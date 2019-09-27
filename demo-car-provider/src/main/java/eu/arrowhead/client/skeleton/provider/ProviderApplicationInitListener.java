@@ -80,9 +80,14 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 		
 		setTokenSecurityFilter();
 		
-		//Register service into ServiceRegistry
+		//Register services into ServiceRegistry
 		final ServiceRegistryRequestDTO createCarServiceRequest = createServiceRegistryRequest(CarProviderConstants.CREATE_CAR_SERVICE_DEFINITION, CarProviderConstants.CAR_URI, HttpMethod.POST);		
 		arrowheadService.forceRegisterServiceToServiceRegistry(createCarServiceRequest);
+		
+		ServiceRegistryRequestDTO getCarServiceRequest = createServiceRegistryRequest(CarProviderConstants.GET_CAR_SERVICE_DEFINITION,  CarProviderConstants.CAR_URI, HttpMethod.GET);
+		getCarServiceRequest.getMetadata().put(CarProviderConstants.REQUEST_PARAM_KEY_BRAND, CarProviderConstants.REQUEST_PARAM_BRAND);
+		getCarServiceRequest.getMetadata().put(CarProviderConstants.REQUEST_PARAM_KEY_COLOR, CarProviderConstants.REQUEST_PARAM_COLOR);
+		arrowheadService.forceRegisterServiceToServiceRegistry(getCarServiceRequest);
 	}
 	
 	//-------------------------------------------------------------------------------------------------

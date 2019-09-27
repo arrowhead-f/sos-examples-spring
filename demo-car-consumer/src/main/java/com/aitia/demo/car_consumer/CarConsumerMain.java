@@ -1,5 +1,7 @@
 package com.aitia.demo.car_consumer;
 
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +54,13 @@ public class CarConsumerMain implements ApplicationRunner {
     //-------------------------------------------------------------------------------------------------
     @Override
 	public void run(final ApplicationArguments args) throws Exception {
+    	createCarServiceOrchestrationAndConsumption();
+    	getCarServiceOrchestrationAndConsumption();
+	}
+    
+    //-------------------------------------------------------------------------------------------------
+    public void createCarServiceOrchestrationAndConsumption() {
+    	logger.info("Orchestration request for " + CarConsumerConstants.CREATE_CAR_SERVICE_DEFINITION + " service:");
     	final ServiceQueryFormDTO serviceQueryForm = new ServiceQueryFormDTO.Builder(CarConsumerConstants.CREATE_CAR_SERVICE_DEFINITION)
     																		.interfaces(getInterface())
     																		.build();
@@ -62,7 +71,6 @@ public class CarConsumerMain implements ApplicationRunner {
 																					   .flag(Flag.OVERRIDE_STORE, true)
 																					   .build();
 		
-		logger.info("Orchestration request:");
 		printOut(orchestrationFormRequest);		
 		
 		final OrchestrationResponseDTO orchestrationResponse = arrowheadService.proceedOrchestration(orchestrationFormRequest);
@@ -78,20 +86,66 @@ public class CarConsumerMain implements ApplicationRunner {
 			final OrchestrationResultDTO orchestrationResult = orchestrationResponse.getResponse().get(0);
 			validateOrchestrationResult(orchestrationResult, CarConsumerConstants.CREATE_CAR_SERVICE_DEFINITION);
 			
-			final CarRequestDTO carRequestDTO = new CarRequestDTO();
-			carRequestDTO.setBrand("nissan");
-			carRequestDTO.setColor("gray");
+			final List<CarRequestDTO> carsToCreate = List.of(new CarRequestDTO("nissan", "green"), new CarRequestDTO("mazda", "blue"), new CarRequestDTO("opel", "blue"), new CarRequestDTO("nissan", "gray"));
 			
-			logger.info("Create a car request:");
-			printOut(carRequestDTO);
-			final CarResponseDTO carCreated = arrowheadService.consumeServiceHTTP(CarResponseDTO.class, HttpMethod.valueOf(orchestrationResult.getMetadata().get(CarConsumerConstants.HTTP_METHOD)),
-																				  orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), orchestrationResult.getServiceUri(),
-																				  getInterface(), orchestrationResult.getAuthorizationTokens().get(getInterface()), carRequestDTO, new String[0]);
-			logger.info("Provider response");
-			printOut(carCreated);
-			
+			for (final CarRequestDTO carRequestDTO : carsToCreate) {
+				logger.info("Create a car request:");
+				printOut(carRequestDTO);
+				final String token = orchestrationResult.getAuthorizationTokens() == null ? null : orchestrationResult.getAuthorizationTokens().get(getInterface());
+				final CarResponseDTO carCreated = arrowheadService.consumeServiceHTTP(CarResponseDTO.class, HttpMethod.valueOf(orchestrationResult.getMetadata().get(CarConsumerConstants.HTTP_METHOD)),
+						orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), orchestrationResult.getServiceUri(),
+						getInterface(), token, carRequestDTO, new String[0]);
+				logger.info("Provider response");
+				printOut(carCreated);
+			}			
 		}
-	}
+    }
+    
+    //-------------------------------------------------------------------------------------------------
+    public void getCarServiceOrchestrationAndConsumption() {
+    	logger.info("Orchestration request for " + CarConsumerConstants.GET_CAR_SERVICE_DEFINITION + " service:");
+    	final ServiceQueryFormDTO serviceQueryForm = new ServiceQueryFormDTO.Builder(CarConsumerConstants.GET_CAR_SERVICE_DEFINITION)
+    																		.interfaces(getInterface())
+    																		.build();
+    	
+		final Builder orchestrationFormBuilder = arrowheadService.getOrchestrationFormBuilder();
+		final OrchestrationFormRequestDTO orchestrationFormRequest = orchestrationFormBuilder.requestedService(serviceQueryForm)
+																					   .flag(Flag.MATCHMAKING, true)
+																					   .flag(Flag.OVERRIDE_STORE, true)
+																					   .build();
+		
+		printOut(orchestrationFormRequest);		
+		
+		final OrchestrationResponseDTO orchestrationResponse = arrowheadService.proceedOrchestration(orchestrationFormRequest);
+		
+		logger.info("Orchestration response:");
+		printOut(orchestrationResponse);		
+		
+		if (orchestrationResponse == null) {
+			logger.info("No orchestration response received");
+		} else if (orchestrationResponse.getResponse().isEmpty()) {
+			logger.info("No provider found during the orchestration");
+		} else {
+			final OrchestrationResultDTO orchestrationResult = orchestrationResponse.getResponse().get(0);
+			validateOrchestrationResult(orchestrationResult, CarConsumerConstants.GET_CAR_SERVICE_DEFINITION);
+			
+			logger.info("Get all cars:");
+			final String token = orchestrationResult.getAuthorizationTokens() == null ? null : orchestrationResult.getAuthorizationTokens().get(getInterface());
+			@SuppressWarnings("unchecked")
+			final List<CarResponseDTO> allCar = arrowheadService.consumeServiceHTTP(List.class, HttpMethod.valueOf(orchestrationResult.getMetadata().get(CarConsumerConstants.HTTP_METHOD)),
+																					orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), orchestrationResult.getServiceUri(),
+																					getInterface(), token, null, new String[0]);
+			printOut(allCar);
+			
+			logger.info("Get only blue cars:");
+			final String[] queryParamColor = {orchestrationResult.getMetadata().get(CarConsumerConstants.REQUEST_PARAM_KEY_COLOR), "blue"};			
+			@SuppressWarnings("unchecked")
+			final List<CarResponseDTO> blueCars = arrowheadService.consumeServiceHTTP(List.class, HttpMethod.valueOf(orchestrationResult.getMetadata().get(CarConsumerConstants.HTTP_METHOD)),
+																					  orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), orchestrationResult.getServiceUri(),
+																					  getInterface(), token, null, queryParamColor);
+			printOut(blueCars);
+		}
+    }
     
     //=================================================================================================
 	// assistant methods

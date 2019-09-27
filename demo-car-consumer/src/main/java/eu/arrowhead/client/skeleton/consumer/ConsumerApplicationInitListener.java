@@ -30,8 +30,7 @@ public class ConsumerApplicationInitListener extends ApplicationInitListener {
 		
 		//Checking the availability of necessary core systems
 		checkCoreSystemReachability(CoreSystem.SERVICE_REGISTRY);
-		checkCoreSystemReachability(CoreSystem.ORCHESTRATOR);
-		
+		checkCoreSystemReachability(CoreSystem.ORCHESTRATOR);		
 		
 		//Initialize Arrowhead Context
 		arrowheadService.updateCoreServiceURIs(CoreSystem.ORCHESTRATOR);
