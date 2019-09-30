@@ -19,8 +19,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 
-import com.aitia.demo.car_provider.CarProviderConstants;
-
+import ai.aitia.demo.car_provider.CarProviderConstants;
 import eu.arrowhead.client.skeleton.common.ArrowheadService;
 import eu.arrowhead.client.skeleton.common.config.ApplicationInitListener;
 import eu.arrowhead.client.skeleton.common.util.ClientCommonConstants;

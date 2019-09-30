@@ -1,12 +1,13 @@
-package com.aitia.demo.car_provider.database;
+package ai.aitia.demo.car_provider.database;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.util.Assert;
 
-import com.aitia.demo.car_provider.entity.Car;
 import com.aitia.demo.dto.CarResponseDTO;
+
+import ai.aitia.demo.car_provider.entity.Car;
 
 public class DTOConverter {
 

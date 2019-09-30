@@ -1,4 +1,4 @@
-package com.aitia.demo.car_provider.controller;
+package ai.aitia.demo.car_provider.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.aitia.demo.car_provider.CarProviderConstants;
-import com.aitia.demo.car_provider.database.DTOConverter;
-import com.aitia.demo.car_provider.database.InMemoryCarDB;
-import com.aitia.demo.car_provider.entity.Car;
 import com.aitia.demo.dto.CarRequestDTO;
 import com.aitia.demo.dto.CarResponseDTO;
 
+import ai.aitia.demo.car_provider.CarProviderConstants;
+import ai.aitia.demo.car_provider.database.DTOConverter;
+import ai.aitia.demo.car_provider.database.InMemoryCarDB;
+import ai.aitia.demo.car_provider.entity.Car;
 import eu.arrowhead.common.exception.BadPayloadException;
 
 @RestController
@@ -53,7 +53,7 @@ public class CarServiceController {
 			if (color != null && !color.isBlank() && !car.getColor().equalsIgnoreCase(color)) {
 				toAdd = false;
 			}
-			if(toAdd) {
+			if (toAdd) {
 				response.add(DTOConverter.convertCarToCarResponseDTO(car));
 			}
 		}

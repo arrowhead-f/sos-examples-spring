@@ -1,4 +1,4 @@
-package com.aitia.demo.car_consumer;
+package ai.aitia.demo.car_consumer;
 
 import java.util.List;
 

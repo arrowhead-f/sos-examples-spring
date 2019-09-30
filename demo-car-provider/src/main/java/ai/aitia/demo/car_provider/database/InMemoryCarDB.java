@@ -1,12 +1,11 @@
-package com.aitia.demo.car_provider.database;
+package ai.aitia.demo.car_provider.database;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.stereotype.Component;
 
-import com.aitia.demo.car_provider.entity.Car;
-
+import ai.aitia.demo.car_provider.entity.Car;
 import eu.arrowhead.common.exception.InvalidParameterException;
 
 @Component

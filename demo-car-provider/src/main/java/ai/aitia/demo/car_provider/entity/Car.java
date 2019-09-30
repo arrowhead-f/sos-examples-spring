@@ -1,4 +1,4 @@
-package com.aitia.demo.car_provider.entity;
+package ai.aitia.demo.car_provider.entity;
 
 public class Car {
 
