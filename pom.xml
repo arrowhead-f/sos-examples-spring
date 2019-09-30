@@ -32,8 +32,8 @@
 	
 	<repositories>
 		<repository>
-			<id>ah-repo</id>
-			<url>https://github.com/borditamas/mvn-repo/raw/master</url>
+			<id>arrowhead-client</id>
+			<url>https://github.com/arrowhead-f/client-java-spring/raw/master/client-mvn-repo</url>
 		</repository>
 	</repositories>
 	
@@ -41,13 +41,13 @@
 		<dependency>
 			<groupId>eu.arrowhead</groupId>
 			<artifactId>client-skeleton-common</artifactId>
-			<version>4.1.3</version>
+			<version>4.1.3.1</version>
 		</dependency>
 		
 		<dependency>
 			<groupId>eu.arrowhead</groupId>
-			<artifactId>core-client</artifactId>
-			<version>skeleton</version>
+			<artifactId>core-client-skeleton</artifactId>
+			<version>4.1.3.1</version>
 		</dependency>
 	
 		<dependency>
