@@ -5,7 +5,7 @@ import java.util.Map;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.stereotype.Component;
 
-import eu.arrowhead.client.skeleton.common.util.ClientCommonConstants;
+import eu.arrowhead.client.library.util.ClientCommonConstants;
 import eu.arrowhead.common.CommonConstants;
 import eu.arrowhead.common.security.AccessControlFilter;
 

@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
-import eu.arrowhead.client.skeleton.common.ArrowheadService;
-import eu.arrowhead.client.skeleton.common.config.ApplicationInitListener;
+import eu.arrowhead.client.library.ArrowheadService;
+import eu.arrowhead.client.library.config.ApplicationInitListener;
 import eu.arrowhead.common.core.CoreSystem;
 
 @Component

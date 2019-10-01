@@ -15,7 +15,7 @@ import org.springframework.http.HttpMethod;
 import com.aitia.demo.dto.CarRequestDTO;
 import com.aitia.demo.dto.CarResponseDTO;
 
-import eu.arrowhead.client.skeleton.common.ArrowheadService;
+import eu.arrowhead.client.library.ArrowheadService;
 import eu.arrowhead.common.CommonConstants;
 import eu.arrowhead.common.SSLProperties;
 import eu.arrowhead.common.Utilities;

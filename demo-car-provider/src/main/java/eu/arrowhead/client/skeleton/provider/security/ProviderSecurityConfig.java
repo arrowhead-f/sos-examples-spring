@@ -6,8 +6,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter;
 
-import eu.arrowhead.client.skeleton.common.config.DefaultSecurityConfig;
-import eu.arrowhead.client.skeleton.common.util.ClientCommonConstants;
+import eu.arrowhead.client.library.config.DefaultSecurityConfig;
+import eu.arrowhead.client.library.util.ClientCommonConstants;
 import eu.arrowhead.common.CommonConstants;
 
 @Configuration
