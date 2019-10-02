@@ -30,9 +30,8 @@ wrapper
 *.prefs
 /.metadata/
 *.log
-*.class
 
-/demo-car-common/target
-/demo-car-consumer/target
-/demo-car-provider/target
-/demo-energy-forecast-outdoor-provider/target
+*/demo-car-common/target/
+*/demo-car-consumer/target/
+*/demo-car-provider/target/
+*/demo-energy-forecast-outdoor-provider/target/
