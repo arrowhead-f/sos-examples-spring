@@ -8,7 +8,7 @@ import eu.arrowhead.common.CommonConstants;
 import ai.aitia.demo.energy.forecast.common.EnergyForecastCommonConstants;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {CommonConstants.BASE_PACKAGE, EnergyForecastCommonConstants.BASE_PACKAGE}) //TODO: add custom packages if any
+@ComponentScan(basePackages = {CommonConstants.BASE_PACKAGE, EnergyForecastCommonConstants.BASE_PACKAGE})
 public class OutdoorProviderMain {
 
 	//=================================================================================================
