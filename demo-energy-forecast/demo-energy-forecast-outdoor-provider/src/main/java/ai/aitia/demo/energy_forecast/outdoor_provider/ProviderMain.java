@@ -1,4 +1,4 @@
-package eu.arrowhead.client.skeleton.provider;
+package ai.aitia.demo.energy_forecast.outdoor_provider;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
