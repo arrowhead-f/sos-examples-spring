@@ -30,6 +30,7 @@ wrapper
 *.prefs
 /.metadata/
 *.log
+*.class
 
 /demo-car-common/target
 /demo-car-consumer/target
