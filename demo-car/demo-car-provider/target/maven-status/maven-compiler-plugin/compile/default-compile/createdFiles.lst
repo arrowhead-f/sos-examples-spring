@@ -1,0 +1,10 @@
+ai\aitia\demo\car_provider\CarProviderMain.class
+ai\aitia\demo\car_provider\entity\Car.class
+ai\aitia\demo\car_provider\controller\CarServiceController.class
+ai\aitia\demo\car_provider\CarProviderConstants.class
+ai\aitia\demo\car_provider\database\DTOConverter.class
+eu\arrowhead\client\skeleton\provider\security\ProviderTokenSecurityFilter.class
+eu\arrowhead\client\skeleton\provider\ProviderApplicationInitListener.class
+eu\arrowhead\client\skeleton\provider\security\ProviderSecurityConfig.class
+eu\arrowhead\client\skeleton\provider\security\ProviderAccessControlFilter.class
+ai\aitia\demo\car_provider\database\InMemoryCarDB.class

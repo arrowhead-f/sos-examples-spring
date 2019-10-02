@@ -25,9 +25,8 @@
   	</licenses>
 	
 	<modules>
-	    <module>demo-common-resources</module>
-	    <module>demo-car-consumer</module>
-	    <module>demo-car-provider</module>		
+	    <module>demo-car</module>
+		<module>demo-energy-forecast</module>			
 	</modules>
 	
 	<repositories>
