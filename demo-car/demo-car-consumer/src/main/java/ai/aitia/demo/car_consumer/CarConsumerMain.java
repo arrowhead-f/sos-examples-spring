@@ -12,8 +12,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpMethod;
 
-import com.aitia.demo.dto.CarRequestDTO;
-import com.aitia.demo.dto.CarResponseDTO;
+import com.aitia.demo.car_common.dto.CarRequestDTO;
+import com.aitia.demo.car_common.dto.CarResponseDTO;
 
 import eu.arrowhead.client.library.ArrowheadService;
 import eu.arrowhead.common.CommonConstants;

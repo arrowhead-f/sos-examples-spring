@@ -1,1 +1,6 @@
-ai\aitia\demo\energy\forecast\outdoor\provider\App.class
+eu\arrowhead\client\skeleton\provider\ProviderMain.class
+eu\arrowhead\client\skeleton\provider\ProviderApplicationInitListener.class
+eu\arrowhead\client\skeleton\provider\controller\ProviderController.class
+eu\arrowhead\client\skeleton\provider\security\ProviderSecurityConfig.class
+eu\arrowhead\client\skeleton\provider\security\ProviderTokenSecurityFilter.class
+eu\arrowhead\client\skeleton\provider\security\ProviderAccessControlFilter.class
