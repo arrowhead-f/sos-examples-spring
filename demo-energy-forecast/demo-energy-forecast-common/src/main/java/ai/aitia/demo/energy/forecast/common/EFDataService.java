@@ -53,9 +53,7 @@ public class EFDataService {
 	//-------------------------------------------------------------------------------------------------
 	@PostConstruct
 	public void init() throws IOException, URISyntaxException {
-		if (mySystemName.contains("outdoor")) {
-			readOutdoorTemperatureData();			
-		}
+		readOutdoorTemperatureData();		
 	}
 	
 	//-------------------------------------------------------------------------------------------------
