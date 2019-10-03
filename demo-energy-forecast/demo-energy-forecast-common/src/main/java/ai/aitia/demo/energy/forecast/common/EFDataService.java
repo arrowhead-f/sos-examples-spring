@@ -5,12 +5,10 @@ import java.io.Reader;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimeZone;
 
 import javax.annotation.PostConstruct;
 
@@ -19,7 +17,7 @@ import org.springframework.stereotype.Component;
 import com.opencsv.CSVReader;
 
 @Component
-public class EFTemperatureService {
+public class EFDataService {
 	
 	//=================================================================================================
 	// members
@@ -53,27 +51,31 @@ public class EFTemperatureService {
 	}
 	
 	//-------------------------------------------------------------------------------------------------
-	public double getOutdoorTemperature(final long timestamp) {
-		final LocalDateTime requriedDateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(timestamp), TimeZone.getDefault().toZoneId());
-		final LocalDateTime yearStart = LocalDateTime.of(requriedDateTime.getYear(), 1, 1, 0, 0);
-		final int hourOfYear = (int) yearStart.until(requriedDateTime, ChronoUnit.HOURS);
+	public double getOutdoorTemperature(final LocalDateTime timestamp) {
+		final LocalDateTime yearStart = LocalDateTime.of(timestamp.getYear(), 1, 1, 0, 0);
+		final int hourOfYear = (int) yearStart.until(timestamp, ChronoUnit.HOURS);
 		return outdoorTemperatureData.get(hourOfYear);
 	}
 	
 	//-------------------------------------------------------------------------------------------------
-	public double getHeatLoss(final long timestamp) {
-        return Math.max(0, VENTILATION * (getIndoorTemperature(timestamp) - getOutdoorTemperature(timestamp)) * MATERIAL / SCALE);
-    }
-	
-	//-------------------------------------------------------------------------------------------------
-	public double getIndoorTemperature(final long timestamp) {
+	public double getIndoorTemperature(final LocalDateTime timestamp) {
 		return Math.max(indoorTemperatureData, getOutdoorTemperature(timestamp));
 	}
 	
 	//-------------------------------------------------------------------------------------------------
-	public double getWaterHeat(final long timestamp) {
+	public double getHeatLoss(final LocalDateTime timestamp) {
+        return Math.max(0, VENTILATION * (getIndoorTemperature(timestamp) - getOutdoorTemperature(timestamp)) * MATERIAL / SCALE);
+    }	
+	
+	//-------------------------------------------------------------------------------------------------
+	public double getWaterHeat(final LocalDateTime timestamp) {
         return -0.01f * getOutdoorTemperature(timestamp) + 0.3d;
     }
+	
+	//-------------------------------------------------------------------------------------------------
+	public double getTotalHeat(final LocalDateTime timestamp) {
+		return getWaterHeat(timestamp) + getHeatLoss(timestamp);
+	}
 	
 	//=================================================================================================
 	// assistant methods

@@ -80,20 +80,20 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 		setTokenSecurityFilter();
 		
 		//Register services into ServiceRegistry
-		final ServiceRegistryRequestDTO outdoorTempService = createServiceRegistryRequest(EFCommonConstants.OUTDOOR_TEMPERATURE_SERVICE, EFCommonConstants.OUTDOOR_TEMPERATURE_SERVICE_URI, HttpMethod.GET);
-		outdoorTempService.getMetadata().put(EFCommonConstants.OUTDOOR_TEMPERATURE_REQUEST_PARAM_KEY_BUILDING, EFCommonConstants.OUTDOOR_TEMPERATURE_REQUEST_PARAM_BUILDING);
-		outdoorTempService.getMetadata().put(EFCommonConstants.OUTDOOR_TEMPERATURE_REQUEST_PARAM_KEY_FROM, EFCommonConstants.OUTDOOR_TEMPERATURE_REQUEST_PARAM_FROM);
-		outdoorTempService.getMetadata().put(EFCommonConstants.OUTDOOR_TEMPERATURE_REQUEST_PARAM_KEY_TO, EFCommonConstants.OUTDOOR_TEMPERATURE_REQUEST_PARAM_TO);
+		final ServiceRegistryRequestDTO outdoorTempService = createServiceRegistryRequest(EFCommonConstants.OUTDOOR_ENERGY_DETAILS_SERVICE, EFCommonConstants.OUTDOOR_ENERGY_DETAILS_SERVICE_URI, HttpMethod.GET);
+		outdoorTempService.getMetadata().put(EFCommonConstants.OUTDOOR_REQUEST_PARAM_KEY_BUILDING, EFCommonConstants.OUTDOOR_REQUEST_PARAM_BUILDING);
+		outdoorTempService.getMetadata().put(EFCommonConstants.OUTDOOR_REQUEST_PARAM_KEY_FROM, EFCommonConstants.OUTDOOR_REQUEST_PARAM_FROM);
+		outdoorTempService.getMetadata().put(EFCommonConstants.OUTDOOR_REQUEST_PARAM_KEY_TO, EFCommonConstants.OUTDOOR_REQUEST_PARAM_TO);
 		arrowheadService.forceRegisterServiceToServiceRegistry(outdoorTempService);
-		logger.info("Service registered: {}", EFCommonConstants.OUTDOOR_TEMPERATURE_SERVICE);
+		logger.info("Service registered: {}", EFCommonConstants.OUTDOOR_ENERGY_DETAILS_SERVICE);
 	}
 	
 	//-------------------------------------------------------------------------------------------------
 	@Override
 	public void customDestroy() {
 		//Unregister service
-		arrowheadService.unregisterServiceFromServiceRegistry(EFCommonConstants.OUTDOOR_TEMPERATURE_SERVICE);
-		logger.info("Service unregistered: {}", EFCommonConstants.OUTDOOR_TEMPERATURE_SERVICE);
+		arrowheadService.unregisterServiceFromServiceRegistry(EFCommonConstants.OUTDOOR_ENERGY_DETAILS_SERVICE);
+		logger.info("Service unregistered: {}", EFCommonConstants.OUTDOOR_ENERGY_DETAILS_SERVICE);
 	}
 	
 	//=================================================================================================
