@@ -1,14 +1,19 @@
 package ai.aitia.demo.energy.forecast.common.dto;
 
+import java.io.Serializable;
+
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 @JacksonXmlRootElement(localName = "EnergyDetailsDTO")
-public class EnergyDetailsDTO {
+public class EnergyDetailsDTO implements Serializable{
 	
+
 	//=================================================================================================
 	// members
 	
+	private static final long serialVersionUID = 6895398314663597491L;
+
 	@JacksonXmlProperty
 	private Double inTemp;
 	

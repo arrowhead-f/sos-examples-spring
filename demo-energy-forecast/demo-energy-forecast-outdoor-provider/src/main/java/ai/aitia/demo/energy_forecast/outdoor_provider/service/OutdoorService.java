@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import ai.aitia.demo.energy.forecast.common.EFDataService;
 import ai.aitia.demo.energy.forecast.common.dto.EnergyDetailsDTO;
 import ai.aitia.demo.energy.forecast.common.dto.EnergyDetailsDTO.Builder;
+import ai.aitia.demo.energy.forecast.common.dto.EnergyDetailsListDTO;
 
 @Component
 public class OutdoorService {
@@ -26,20 +27,21 @@ public class OutdoorService {
 	//=================================================================================================
 	// methods
 	
-	public List<EnergyDetailsDTO> getHourlyEnergyDetails(final long building, final long tsStart, final long tsEnd) {
-		LocalDateTime start = LocalDateTime.ofInstant(Instant.ofEpochSecond(tsStart), TimeZone.getDefault().toZoneId());
-		LocalDateTime startHour = start.withMinute(0).withSecond(0);
-		LocalDateTime end = LocalDateTime.ofInstant(Instant.ofEpochSecond(tsEnd), TimeZone.getDefault().toZoneId());
-		LocalDateTime endHour = end.withMinute(0).withSecond(0);
+	//-------------------------------------------------------------------------------------------------
+	public EnergyDetailsListDTO getHourlyEnergyDetails(final long building, final long tsStart, final long tsEnd) {
+		final LocalDateTime start = LocalDateTime.ofInstant(Instant.ofEpochSecond(tsStart), TimeZone.getDefault().toZoneId());
+		final LocalDateTime startHour = start.withMinute(0).withSecond(0);
+		final LocalDateTime end = LocalDateTime.ofInstant(Instant.ofEpochSecond(tsEnd), TimeZone.getDefault().toZoneId());
+		final LocalDateTime endHour = end.withMinute(0).withSecond(0);
 		
-		List<EnergyDetailsDTO> energyDetails = new ArrayList<>();
+		final List<EnergyDetailsDTO> energyDetails = new ArrayList<>();
 		for (LocalDateTime timestamp = startHour; timestamp.isBefore(endHour) || timestamp.isEqual(endHour); timestamp = timestamp.plusHours(1)) {
-			Builder energyDetailsDTOBuilder = new EnergyDetailsDTO.Builder(timestamp.toEpochSecond(ZoneOffset.UTC), building);
+			final Builder energyDetailsDTOBuilder = new EnergyDetailsDTO.Builder(timestamp.toEpochSecond(ZoneOffset.UTC), building);
 			energyDetails.add(energyDetailsDTOBuilder.setOutTemp(dataService.getOutdoorTemperature(timestamp))
 								   					 .setWater(dataService.getWaterHeat(timestamp))
 								   					 .setTotal(dataService.getTotalHeat(timestamp))
 								   					 .build());
 		}
-		return energyDetails;
+		return new EnergyDetailsListDTO(energyDetails, energyDetails.get(0).getTimestamp(), energyDetails.get(energyDetails.size() - 1).getTimestamp());
 	}
 }
