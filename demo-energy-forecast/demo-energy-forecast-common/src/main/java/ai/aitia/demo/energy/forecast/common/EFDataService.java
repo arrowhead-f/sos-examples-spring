@@ -44,10 +44,7 @@ public class EFDataService {
     private static final double VENTILATION = 1.2d;
     private static final double SCALE = 2.0d * 1000.0d;
 	
-    @Value(ClientCommonConstants.$CLIENT_SYSTEM_NAME)
-	private String mySystemName;
-    
-	//=================================================================================================
+    //=================================================================================================
 	// methods
 
 	//-------------------------------------------------------------------------------------------------
