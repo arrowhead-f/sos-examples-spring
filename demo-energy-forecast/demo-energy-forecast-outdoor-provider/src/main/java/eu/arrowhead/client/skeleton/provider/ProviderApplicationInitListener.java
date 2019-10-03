@@ -7,20 +7,29 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.CertificateException;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 
+import ai.aitia.demo.energy.forecast.common.EnergyForecastCommonConstants;
 import eu.arrowhead.client.library.ArrowheadService;
 import eu.arrowhead.client.library.config.ApplicationInitListener;
 import eu.arrowhead.client.library.util.ClientCommonConstants;
 import eu.arrowhead.client.skeleton.provider.security.ProviderSecurityConfig;
+import eu.arrowhead.common.CommonConstants;
 import eu.arrowhead.common.Utilities;
 import eu.arrowhead.common.core.CoreSystem;
+import eu.arrowhead.common.dto.shared.ServiceRegistryRequestDTO;
+import eu.arrowhead.common.dto.shared.ServiceSecurityType;
+import eu.arrowhead.common.dto.shared.SystemRequestDTO;
 import eu.arrowhead.common.exception.ArrowheadException;
 
 @Component
@@ -37,6 +46,18 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 	
 	@Value(ClientCommonConstants.$TOKEN_SECURITY_FILTER_ENABLED_WD)
 	private boolean tokenSecurityFilterEnabled;
+	
+	@Value(CommonConstants.$SERVER_SSL_ENABLED_WD)
+	private boolean sslEnabled;
+	
+	@Value(ClientCommonConstants.$CLIENT_SYSTEM_NAME)
+	private String mySystemName;
+	
+	@Value(ClientCommonConstants.$CLIENT_SERVER_ADDRESS_WD)
+	private String mySystemAddress;
+	
+	@Value(ClientCommonConstants.$CLIENT_SERVER_PORT_WD)
+	private int mySystemPort;
 	
 	private final Logger logger = LogManager.getLogger(ProviderApplicationInitListener.class);
 	
@@ -58,13 +79,21 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 		
 		setTokenSecurityFilter();
 		
-		//TODO: implement here any custom behavior on application start up
+		//Register services into ServiceRegistry
+		final ServiceRegistryRequestDTO outdoorTempService = createServiceRegistryRequest(EnergyForecastCommonConstants.OUTDOOR_TEMPERATURE_SERVICE, EnergyForecastCommonConstants.OUTDOOR_TEMPERATURE_SERVICE_URI, HttpMethod.GET);
+		outdoorTempService.getMetadata().put(EnergyForecastCommonConstants.OUTDOOR_TEMPERATURE_REQUEST_PARAM_KEY_BUILDING, EnergyForecastCommonConstants.OUTDOOR_TEMPERATURE_REQUEST_PARAM_BUILDING);
+		outdoorTempService.getMetadata().put(EnergyForecastCommonConstants.OUTDOOR_TEMPERATURE_REQUEST_PARAM_KEY_FROM, EnergyForecastCommonConstants.OUTDOOR_TEMPERATURE_REQUEST_PARAM_FROM);
+		outdoorTempService.getMetadata().put(EnergyForecastCommonConstants.OUTDOOR_TEMPERATURE_REQUEST_PARAM_KEY_TO, EnergyForecastCommonConstants.OUTDOOR_TEMPERATURE_REQUEST_PARAM_TO);
+		arrowheadService.forceRegisterServiceToServiceRegistry(outdoorTempService);
+		logger.info("Service registered: {}", EnergyForecastCommonConstants.OUTDOOR_TEMPERATURE_SERVICE);
 	}
 	
 	//-------------------------------------------------------------------------------------------------
 	@Override
 	public void customDestroy() {
-		//TODO: implement here any custom behavior on application shout down
+		//Unregister service
+		arrowheadService.unregisterServiceFromServiceRegistry(EnergyForecastCommonConstants.OUTDOOR_TEMPERATURE_SERVICE);
+		logger.info("Service unregistered: {}", EnergyForecastCommonConstants.OUTDOOR_TEMPERATURE_SERVICE);
 	}
 	
 	//=================================================================================================
@@ -92,5 +121,32 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 			providerSecurityConfig.getTokenSecurityFilter().setAuthorizationPublicKey(authorizationPublicKey);
 			providerSecurityConfig.getTokenSecurityFilter().setMyPrivateKey(providerPrivateKey);
 		}
+	}
+	
+	//-------------------------------------------------------------------------------------------------
+	private ServiceRegistryRequestDTO createServiceRegistryRequest(final String serviceDefinition, final String serviceUri, final HttpMethod httpMethod) {
+		final ServiceRegistryRequestDTO serviceRegistryRequest = new ServiceRegistryRequestDTO();
+		serviceRegistryRequest.setServiceDefinition(serviceDefinition);
+		final SystemRequestDTO systemRequest = new SystemRequestDTO();
+		systemRequest.setSystemName(mySystemName);
+		systemRequest.setAddress(mySystemAddress);
+		systemRequest.setPort(mySystemPort);		
+		systemRequest.setAuthenticationInfo(Base64.getEncoder().encodeToString(arrowheadService.getMyPublicKey().getEncoded()));
+
+		if (tokenSecurityFilterEnabled) {
+			serviceRegistryRequest.setSecure(ServiceSecurityType.TOKEN);
+			serviceRegistryRequest.setInterfaces(List.of(EnergyForecastCommonConstants.INTERFACE_SECURE));
+		} else if (sslEnabled) {
+			serviceRegistryRequest.setSecure(ServiceSecurityType.CERTIFICATE);
+			serviceRegistryRequest.setInterfaces(List.of(EnergyForecastCommonConstants.INTERFACE_SECURE));
+		} else {
+			serviceRegistryRequest.setSecure(ServiceSecurityType.NOT_SECURE);
+			serviceRegistryRequest.setInterfaces(List.of(EnergyForecastCommonConstants.INTERFACE_INSECURE));
+		}
+		serviceRegistryRequest.setProviderSystem(systemRequest);
+		serviceRegistryRequest.setServiceUri(serviceUri);
+		serviceRegistryRequest.setMetadata(new HashMap<>());
+		serviceRegistryRequest.getMetadata().put(EnergyForecastCommonConstants.HTTP_METHOD, httpMethod.name());
+		return serviceRegistryRequest;
 	}
 }
