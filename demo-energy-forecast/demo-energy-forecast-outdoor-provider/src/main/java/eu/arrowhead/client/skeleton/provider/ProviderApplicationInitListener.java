@@ -19,7 +19,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 
-import ai.aitia.demo.energy.forecast.common.EnergyForecastCommonConstants;
+import ai.aitia.demo.energy.forecast.common.EFCommonConstants;
 import eu.arrowhead.client.library.ArrowheadService;
 import eu.arrowhead.client.library.config.ApplicationInitListener;
 import eu.arrowhead.client.library.util.ClientCommonConstants;
@@ -80,20 +80,20 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 		setTokenSecurityFilter();
 		
 		//Register services into ServiceRegistry
-		final ServiceRegistryRequestDTO outdoorTempService = createServiceRegistryRequest(EnergyForecastCommonConstants.OUTDOOR_TEMPERATURE_SERVICE, EnergyForecastCommonConstants.OUTDOOR_TEMPERATURE_SERVICE_URI, HttpMethod.GET);
-		outdoorTempService.getMetadata().put(EnergyForecastCommonConstants.OUTDOOR_TEMPERATURE_REQUEST_PARAM_KEY_BUILDING, EnergyForecastCommonConstants.OUTDOOR_TEMPERATURE_REQUEST_PARAM_BUILDING);
-		outdoorTempService.getMetadata().put(EnergyForecastCommonConstants.OUTDOOR_TEMPERATURE_REQUEST_PARAM_KEY_FROM, EnergyForecastCommonConstants.OUTDOOR_TEMPERATURE_REQUEST_PARAM_FROM);
-		outdoorTempService.getMetadata().put(EnergyForecastCommonConstants.OUTDOOR_TEMPERATURE_REQUEST_PARAM_KEY_TO, EnergyForecastCommonConstants.OUTDOOR_TEMPERATURE_REQUEST_PARAM_TO);
+		final ServiceRegistryRequestDTO outdoorTempService = createServiceRegistryRequest(EFCommonConstants.OUTDOOR_TEMPERATURE_SERVICE, EFCommonConstants.OUTDOOR_TEMPERATURE_SERVICE_URI, HttpMethod.GET);
+		outdoorTempService.getMetadata().put(EFCommonConstants.OUTDOOR_TEMPERATURE_REQUEST_PARAM_KEY_BUILDING, EFCommonConstants.OUTDOOR_TEMPERATURE_REQUEST_PARAM_BUILDING);
+		outdoorTempService.getMetadata().put(EFCommonConstants.OUTDOOR_TEMPERATURE_REQUEST_PARAM_KEY_FROM, EFCommonConstants.OUTDOOR_TEMPERATURE_REQUEST_PARAM_FROM);
+		outdoorTempService.getMetadata().put(EFCommonConstants.OUTDOOR_TEMPERATURE_REQUEST_PARAM_KEY_TO, EFCommonConstants.OUTDOOR_TEMPERATURE_REQUEST_PARAM_TO);
 		arrowheadService.forceRegisterServiceToServiceRegistry(outdoorTempService);
-		logger.info("Service registered: {}", EnergyForecastCommonConstants.OUTDOOR_TEMPERATURE_SERVICE);
+		logger.info("Service registered: {}", EFCommonConstants.OUTDOOR_TEMPERATURE_SERVICE);
 	}
 	
 	//-------------------------------------------------------------------------------------------------
 	@Override
 	public void customDestroy() {
 		//Unregister service
-		arrowheadService.unregisterServiceFromServiceRegistry(EnergyForecastCommonConstants.OUTDOOR_TEMPERATURE_SERVICE);
-		logger.info("Service unregistered: {}", EnergyForecastCommonConstants.OUTDOOR_TEMPERATURE_SERVICE);
+		arrowheadService.unregisterServiceFromServiceRegistry(EFCommonConstants.OUTDOOR_TEMPERATURE_SERVICE);
+		logger.info("Service unregistered: {}", EFCommonConstants.OUTDOOR_TEMPERATURE_SERVICE);
 	}
 	
 	//=================================================================================================
@@ -135,18 +135,18 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 
 		if (tokenSecurityFilterEnabled) {
 			serviceRegistryRequest.setSecure(ServiceSecurityType.TOKEN);
-			serviceRegistryRequest.setInterfaces(List.of(EnergyForecastCommonConstants.INTERFACE_SECURE));
+			serviceRegistryRequest.setInterfaces(List.of(EFCommonConstants.INTERFACE_SECURE));
 		} else if (sslEnabled) {
 			serviceRegistryRequest.setSecure(ServiceSecurityType.CERTIFICATE);
-			serviceRegistryRequest.setInterfaces(List.of(EnergyForecastCommonConstants.INTERFACE_SECURE));
+			serviceRegistryRequest.setInterfaces(List.of(EFCommonConstants.INTERFACE_SECURE));
 		} else {
 			serviceRegistryRequest.setSecure(ServiceSecurityType.NOT_SECURE);
-			serviceRegistryRequest.setInterfaces(List.of(EnergyForecastCommonConstants.INTERFACE_INSECURE));
+			serviceRegistryRequest.setInterfaces(List.of(EFCommonConstants.INTERFACE_INSECURE));
 		}
 		serviceRegistryRequest.setProviderSystem(systemRequest);
 		serviceRegistryRequest.setServiceUri(serviceUri);
 		serviceRegistryRequest.setMetadata(new HashMap<>());
-		serviceRegistryRequest.getMetadata().put(EnergyForecastCommonConstants.HTTP_METHOD, httpMethod.name());
+		serviceRegistryRequest.getMetadata().put(EFCommonConstants.HTTP_METHOD, httpMethod.name());
 		return serviceRegistryRequest;
 	}
 }

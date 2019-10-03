@@ -1,7 +1,7 @@
 package ai.aitia.demo.energy.forecast.common;
 
 
-public class EnergyForecastCommonConstants {
+public class EFCommonConstants {
 
 	//=================================================================================================
 	// members
@@ -25,7 +25,7 @@ public class EnergyForecastCommonConstants {
 	// assistant methods
 
 	//-------------------------------------------------------------------------------------------------
-	private EnergyForecastCommonConstants() {
+	private EFCommonConstants() {
 		throw new UnsupportedOperationException();
 	}
 }

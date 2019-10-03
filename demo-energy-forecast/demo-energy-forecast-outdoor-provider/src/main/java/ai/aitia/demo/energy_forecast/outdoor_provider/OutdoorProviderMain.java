@@ -5,10 +5,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 import eu.arrowhead.common.CommonConstants;
-import ai.aitia.demo.energy.forecast.common.EnergyForecastCommonConstants;
+import ai.aitia.demo.energy.forecast.common.EFCommonConstants;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {CommonConstants.BASE_PACKAGE, EnergyForecastCommonConstants.BASE_PACKAGE})
+@ComponentScan(basePackages = {CommonConstants.BASE_PACKAGE, EFCommonConstants.BASE_PACKAGE})
 public class OutdoorProviderMain {
 
 	//=================================================================================================

@@ -1,4 +1,4 @@
-package ai.aitia.demo.energy_forecast.outdoor_provider.service;
+package ai.aitia.demo.energy.forecast.common;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 import com.opencsv.CSVReader;
 
 @Component
-public class TemperatureService {
+public class EFTemperatureService {
 	
 	//=================================================================================================
 	// members

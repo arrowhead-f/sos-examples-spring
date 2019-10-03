@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import eu.arrowhead.common.CommonConstants;
 
 @RestController
-public class OutdoorTemperatureServiceController {
+public class OutdoorServiceController {
 	
 	//=================================================================================================
 	// members
