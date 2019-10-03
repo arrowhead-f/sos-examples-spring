@@ -14,5 +14,13 @@
 	<modules>
 		<module>demo-energy-forecast-common</module>
 		<module>demo-energy-forecast-outdoor-provider</module>
-  </modules>
+  	</modules>
+  	
+  	<dependencies>
+		<dependency>
+	  		<groupId>com.opencsv</groupId>
+	  		<artifactId>opencsv</artifactId>
+	  		<version>4.1</version>
+		</dependency>
+  	</dependencies>
 </project>
