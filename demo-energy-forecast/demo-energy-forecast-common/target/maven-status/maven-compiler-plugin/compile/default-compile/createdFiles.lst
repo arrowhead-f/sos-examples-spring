@@ -3,3 +3,4 @@ ai\aitia\demo\energy\forecast\common\dto\EnergyDetailsDTO$Builder.class
 ai\aitia\demo\energy\forecast\common\dto\EnergyDetailsDTO$1.class
 ai\aitia\demo\energy\forecast\common\EFCommonConstants.class
 ai\aitia\demo\energy\forecast\common\dto\EnergyDetailsDTO.class
+ai\aitia\demo\energy\forecast\common\EFUtilities.class
