@@ -81,9 +81,9 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 		
 		//Register services into ServiceRegistry
 		final ServiceRegistryRequestDTO outdoorTempService = createServiceRegistryRequest(EFCommonConstants.OUTDOOR_ENERGY_DETAILS_SERVICE, EFCommonConstants.OUTDOOR_ENERGY_DETAILS_SERVICE_URI, HttpMethod.GET);
-		outdoorTempService.getMetadata().put(EFCommonConstants.OUTDOOR_REQUEST_PARAM_KEY_BUILDING, EFCommonConstants.OUTDOOR_REQUEST_PARAM_BUILDING);
-		outdoorTempService.getMetadata().put(EFCommonConstants.OUTDOOR_REQUEST_PARAM_KEY_FROM, EFCommonConstants.OUTDOOR_REQUEST_PARAM_FROM);
-		outdoorTempService.getMetadata().put(EFCommonConstants.OUTDOOR_REQUEST_PARAM_KEY_TO, EFCommonConstants.OUTDOOR_REQUEST_PARAM_TO);
+		outdoorTempService.getMetadata().put(EFCommonConstants.REQUEST_PARAM_KEY_BUILDING, EFCommonConstants.REQUEST_PARAM_BUILDING);
+		outdoorTempService.getMetadata().put(EFCommonConstants.REQUEST_PARAM_KEY_FROM, EFCommonConstants.REQUEST_PARAM_FROM);
+		outdoorTempService.getMetadata().put(EFCommonConstants.REQUEST_PARAM_KEY_TO, EFCommonConstants.REQUEST_PARAM_TO);
 		arrowheadService.forceRegisterServiceToServiceRegistry(outdoorTempService);
 		logger.info("Service registered: {}", EFCommonConstants.OUTDOOR_ENERGY_DETAILS_SERVICE);
 	}

@@ -12,9 +12,12 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.opencsv.CSVReader;
+
+import eu.arrowhead.client.library.util.ClientCommonConstants;
 
 @Component
 public class EFDataService {
@@ -41,13 +44,18 @@ public class EFDataService {
     private static final double VENTILATION = 1.2d;
     private static final double SCALE = 2.0d * 1000.0d;
 	
+    @Value(ClientCommonConstants.$CLIENT_SYSTEM_NAME)
+	private String mySystemName;
+    
 	//=================================================================================================
 	// methods
 
 	//-------------------------------------------------------------------------------------------------
 	@PostConstruct
 	public void init() throws IOException, URISyntaxException {
-		readOutdoorTemperatureData();
+		if (mySystemName.contains("outdoor")) {
+			readOutdoorTemperatureData();			
+		}
 	}
 	
 	//-------------------------------------------------------------------------------------------------
