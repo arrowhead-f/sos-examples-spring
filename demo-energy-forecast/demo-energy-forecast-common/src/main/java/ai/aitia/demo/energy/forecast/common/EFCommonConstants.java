@@ -8,6 +8,9 @@ public class EFCommonConstants {
 	
 	public static final String BASE_PACKAGE = "ai.aitia";
 	
+	public static final String ENERGY_FORECAST_SERVICE = "energy-forecast-details";
+	public static final String ENERGY_FORECAST_SERVICE_URI = "/energy";
+	
 	public static final String OUTDOOR_ENERGY_DETAILS_SERVICE = "outdoor-energy-details";
 	public static final String OUTDOOR_ENERGY_DETAILS_SERVICE_URI = "/outdoor";
 	
