@@ -2,6 +2,7 @@ package ai.aitia.demo.energy_forecast.provider.service;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TimeZone;
@@ -16,7 +17,7 @@ public class EnergyConsumptionPredictor {
 	
 	private final List<EnergyDetailsDTO> dataSet;
 	private final long building;
-	private final long forecastedTimestamp;
+	private final LocalDateTime forecastedTimestamp;
 	
 	//=================================================================================================
 	// methods
@@ -25,64 +26,106 @@ public class EnergyConsumptionPredictor {
 	public EnergyConsumptionPredictor(final List<EnergyDetailsDTO> dataSet,  final long building, final long forecastedTimestamp) {
 		this.dataSet = dataSet;
 		this.building = building;
-		this.forecastedTimestamp = forecastedTimestamp;
+		this.forecastedTimestamp = convertToLocalDateTime(forecastedTimestamp);
 	}
 	
 	//-------------------------------------------------------------------------------------------------
 	public EnergyForecastDTO predict() {
-		return new EnergyForecastDTO(building, forecastedTimestamp, predictTotalHeat(dataSet, forecastedTimestamp), predictWaterHeat(dataSet, forecastedTimestamp));
+		final double totalHeatUnit = calculateTotalHeatUnit();
+		final double waterHeatUnit = calculateWaterHeatUnit();
+		
+		final List<Double> expectedTotalHeatConsumptions = new ArrayList<>();
+		final List<Double> expectedWaterHeatConsumptions = new ArrayList<>();
+		final LocalDateTime time = LocalDateTime.now();
+		while (time.isBefore(forecastedTimestamp) || time.isEqual(forecastedTimestamp)) {
+			final double expectedIndoorTemp = calculateExpectedIndoorTemperature(time);
+			final double expectedOutdoorTemp = calculateExpectedOutdoorTemperature(time);
+			final double expectedTempDiff = Math.abs(expectedIndoorTemp - expectedOutdoorTemp);
+			expectedTotalHeatConsumptions.add(totalHeatUnit * expectedTempDiff);
+			expectedWaterHeatConsumptions.add(waterHeatUnit * expectedTempDiff);
+			time.plusHours(1);
+		}
+		
+		return new EnergyForecastDTO(building, forecastedTimestamp.toEpochSecond(ZoneOffset.UTC), sum(expectedTotalHeatConsumptions), sum(expectedWaterHeatConsumptions));
 	}
 	
 	//=================================================================================================
-	// methods
+	// assistant methods
 
 	//-------------------------------------------------------------------------------------------------
-	private double predictTotalHeat(final List<EnergyDetailsDTO> dataSet, final long forecastedTimestamp) {
-		final List<Double> averageTotalHeatConsumptionPerHourOfDay = new ArrayList<>(24);
-		final List<Long> recordCount = new ArrayList<>(24);
+	private double calculateExpectedIndoorTemperature(final LocalDateTime time) {
+		final List<Double> indoorTemps = new ArrayList<>();
 		
-		for (final EnergyDetailsDTO record : dataSet) {
-			final LocalDateTime timestamp = LocalDateTime.ofInstant(Instant.ofEpochSecond(record.getTimestamp()), TimeZone.getDefault().toZoneId());
-			final int hourOfDay = timestamp.getHour();
-			if (recordCount.get(hourOfDay) == null) {
-				recordCount.add(hourOfDay, 1l);;
-				averageTotalHeatConsumptionPerHourOfDay.add(hourOfDay, record.getTotal());
-			} else {
-				recordCount.add(hourOfDay, recordCount.get(hourOfDay) + 1l);
-				averageTotalHeatConsumptionPerHourOfDay.add(hourOfDay, (averageTotalHeatConsumptionPerHourOfDay.get(hourOfDay) + record.getTotal()) / recordCount.get(hourOfDay));
+		final int hourOfDay = time.getHour();
+		final LocalDateTime scope = forecastedTimestamp.minusMonths(1);
+		for (int i = dataSet.size() - 1; convertToLocalDateTime(dataSet.get(i).getTimestamp()).isAfter(scope); --i) {
+			if (convertToLocalDateTime(dataSet.get(i).getTimestamp()).getHour() == hourOfDay) {
+				indoorTemps.add(dataSet.get(i).getInTemp());
 			}
 		}
 		
-		final int forecastedHour = LocalDateTime.ofInstant(Instant.ofEpochSecond(forecastedTimestamp), TimeZone.getDefault().toZoneId()).getHour();
-		double forecast = 0.0d;
-		for (int i = 0; i <= forecastedHour; i++) {
-			forecast += averageTotalHeatConsumptionPerHourOfDay.get(i);
-		}
-		return forecast;
+		return calculateAverage(indoorTemps);
 	}
 	
 	//-------------------------------------------------------------------------------------------------
-	private double predictWaterHeat(final List<EnergyDetailsDTO> dataSet, final long forecastedTimestamp) {
-		final List<Double> averageWaterHeatConsumptionPerHourOfDay = new ArrayList<>(24);
-		final List<Long> recordCount = new ArrayList<>(24);
+	private double calculateExpectedOutdoorTemperature(final LocalDateTime time) {
+		final List<Double> outdoorTemps = new ArrayList<>();
 		
-		for (final EnergyDetailsDTO record : dataSet) {
-			final LocalDateTime timestamp = LocalDateTime.ofInstant(Instant.ofEpochSecond(record.getTimestamp()), TimeZone.getDefault().toZoneId());
-			final int hourOfDay = timestamp.getHour();
-			if (recordCount.get(hourOfDay) == null) {
-				recordCount.add(hourOfDay, 1l);;
-				averageWaterHeatConsumptionPerHourOfDay.add(hourOfDay, record.getWater());
-			} else {
-				recordCount.add(hourOfDay, recordCount.get(hourOfDay) + 1l);
-				averageWaterHeatConsumptionPerHourOfDay.add(hourOfDay, (averageWaterHeatConsumptionPerHourOfDay.get(hourOfDay) + record.getWater()) / recordCount.get(hourOfDay));
+		final int hourOfDay = time.getHour();
+		final LocalDateTime scope = forecastedTimestamp.minusDays(5);
+		for (int i = dataSet.size() - 1; convertToLocalDateTime(dataSet.get(i).getTimestamp()).isAfter(scope); --i) {
+			if (convertToLocalDateTime(dataSet.get(i).getTimestamp()).getHour() == hourOfDay) {
+				outdoorTemps.add(dataSet.get(i).getInTemp());
 			}
 		}
 		
-		final int forecastedHour = LocalDateTime.ofInstant(Instant.ofEpochSecond(forecastedTimestamp), TimeZone.getDefault().toZoneId()).getHour();
-		double forecast = 0.0d;
-		for (int i = 0; i <= forecastedHour; i++) {
-			forecast += averageWaterHeatConsumptionPerHourOfDay.get(i);
+		return calculateAverage(outdoorTemps);
+	}
+	
+	//-------------------------------------------------------------------------------------------------
+	private double calculateTotalHeatUnit() {
+		final List<Double> totalHeatUnits = new ArrayList<>();
+		for (final EnergyDetailsDTO record : dataSet) {
+			final double inTemp = record.getInTemp();
+			final double outTemp = record.getOutTemp();
+			final double tempDiff = Math.abs(inTemp - outTemp);
+			totalHeatUnits.add(record.getTotal() / tempDiff);
 		}
-		return forecast;
+		return calculateAverage(totalHeatUnits);
+	}
+	
+	//-------------------------------------------------------------------------------------------------
+	private double calculateWaterHeatUnit() {
+		final List<Double> waterHeatUnits = new ArrayList<>();
+		for (final EnergyDetailsDTO record : dataSet) {
+			final double inTemp = record.getInTemp();
+			final double outTemp = record.getOutTemp();
+			final double tempDiff = Math.abs(inTemp - outTemp);
+			waterHeatUnits.add(record.getWater() / tempDiff);
+		}
+		return calculateAverage(waterHeatUnits);
+	}
+	
+	//-------------------------------------------------------------------------------------------------
+	private LocalDateTime convertToLocalDateTime(final long timestamp) {
+		return LocalDateTime.ofInstant(Instant.ofEpochSecond(timestamp), TimeZone.getDefault().toZoneId());
+	}
+	
+	//-------------------------------------------------------------------------------------------------
+	private double calculateAverage(final List<Double> temperatues) {
+		double sum = 0;
+		for (final Double temp : temperatues) {
+			sum += temp;
+		}
+		return sum / temperatues.size();
+	}
+	
+	//-------------------------------------------------------------------------------------------------
+	private double sum(final List<Double> temperatues) {
+		double sum = 0;
+		for (final Double temp : temperatues) {
+			sum += temp;
+		}
+		return sum;
 	}
 }
