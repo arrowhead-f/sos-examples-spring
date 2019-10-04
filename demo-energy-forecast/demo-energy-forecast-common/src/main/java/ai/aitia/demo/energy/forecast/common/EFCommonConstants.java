@@ -23,6 +23,8 @@ public class EFCommonConstants {
 	public static final String REQUEST_PARAM_FROM = "from";
 	public static final String REQUEST_PARAM_KEY_TO = "request-param-to";
 	public static final String REQUEST_PARAM_TO = "to";
+	public static final String REQUEST_PARAM_KEY_TIMESTAMP = "request-param-timestamp";
+	public static final String REQUEST_PARAM_TIMESTAMP = "timestamp";
 	
 	public static final String INTERFACE_SECURE = "HTTPS-SECURE-XML";
 	public static final String INTERFACE_INSECURE = "HTTP-INSECURE-XML";

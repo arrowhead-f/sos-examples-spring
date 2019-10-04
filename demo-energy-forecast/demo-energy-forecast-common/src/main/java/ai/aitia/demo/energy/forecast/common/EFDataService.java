@@ -43,6 +43,9 @@ public class EFDataService {
     private static final double MATERIAL = 2.0d * L * H * U_BRICK + 2.0d * W * H * U_BRICK + L * W * U_CONCRETE + L * W * U_ABESTOS;
     private static final double VENTILATION = 1.2d;
     private static final double SCALE = 2.0d * 1000.0d;
+    
+    @Value(ClientCommonConstants.$CLIENT_SYSTEM_NAME)
+	private String mySystemName;
 	
     //=================================================================================================
 	// methods
@@ -50,7 +53,9 @@ public class EFDataService {
 	//-------------------------------------------------------------------------------------------------
 	@PostConstruct
 	public void init() throws IOException, URISyntaxException {
-		readOutdoorTemperatureData();		
+		if (mySystemName.contains("indoor") || mySystemName.contains("outdoor")) {
+			readOutdoorTemperatureData();		
+		}
 	}
 	
 	//-------------------------------------------------------------------------------------------------
@@ -72,7 +77,7 @@ public class EFDataService {
 	
 	//-------------------------------------------------------------------------------------------------
 	public double getWaterHeat(final LocalDateTime timestamp) {
-        return -0.01f * getOutdoorTemperature(timestamp) + 0.3d;
+        return -0.01d * getOutdoorTemperature(timestamp) + 0.3d;
     }
 	
 	//-------------------------------------------------------------------------------------------------
