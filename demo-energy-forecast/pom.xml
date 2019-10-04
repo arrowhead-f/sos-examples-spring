@@ -15,7 +15,8 @@
 		<module>demo-energy-forecast-common</module>
 		<module>demo-energy-forecast-outdoor-provider</module>
 		<module>demo-energy-forecast-indoor-provider</module>
-	</modules>
+		<module>demo-energy-forecast-provider</module>
+  </modules>
   	
   	<dependencies>
 		<dependency>
