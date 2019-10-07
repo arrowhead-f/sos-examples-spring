@@ -5,15 +5,14 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimeZone;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ai.aitia.demo.energy.forecast.common.EFDataService;
 import ai.aitia.demo.energy.forecast.common.dto.EnergyDetailsDTO;
-import ai.aitia.demo.energy.forecast.common.dto.EnergyDetailsListDTO;
 import ai.aitia.demo.energy.forecast.common.dto.EnergyDetailsDTO.Builder;
+import ai.aitia.demo.energy.forecast.common.dto.EnergyDetailsListDTO;
 
 @Component
 public class IndoorService {
