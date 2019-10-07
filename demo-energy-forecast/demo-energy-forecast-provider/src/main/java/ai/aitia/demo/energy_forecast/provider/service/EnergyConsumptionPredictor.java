@@ -109,7 +109,7 @@ public class EnergyConsumptionPredictor {
 	
 	//-------------------------------------------------------------------------------------------------
 	private LocalDateTime convertToLocalDateTime(final long timestamp) {
-		return LocalDateTime.ofInstant(Instant.ofEpochSecond(timestamp), TimeZone.getDefault().toZoneId());
+		return LocalDateTime.ofInstant(Instant.ofEpochSecond(timestamp), ZoneOffset.UTC);
 	}
 	
 	//-------------------------------------------------------------------------------------------------

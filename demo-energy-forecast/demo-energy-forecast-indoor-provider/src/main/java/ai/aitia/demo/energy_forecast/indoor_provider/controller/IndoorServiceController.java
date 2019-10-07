@@ -34,7 +34,7 @@ public class IndoorServiceController {
 			throw new BadPayloadException("fromTimestamp cannot be less than zero");
 		}
 		
-		if (fromTimestamp > EFUtilities.nowUTCSeconds() || fromTimestamp > EFUtilities.nowUTCSeconds()) {
+		if (fromTimestamp > EFUtilities.nowUTCSeconds() || toTimestamp > EFUtilities.nowUTCSeconds()) {
 			throw new BadPayloadException("fromTimestamp or toTimestamp cannot be int the future");
 		}
 		

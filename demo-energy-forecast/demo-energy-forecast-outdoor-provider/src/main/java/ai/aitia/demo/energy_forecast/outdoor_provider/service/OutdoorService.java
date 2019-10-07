@@ -29,13 +29,16 @@ public class OutdoorService {
 	
 	//-------------------------------------------------------------------------------------------------
 	public EnergyDetailsListDTO getHourlyEnergyDetails(final long building, final long tsStart, final long tsEnd) {
-		final LocalDateTime start = LocalDateTime.ofInstant(Instant.ofEpochSecond(tsStart), TimeZone.getDefault().toZoneId());
+		final LocalDateTime start = LocalDateTime.ofInstant(Instant.ofEpochSecond(tsStart), ZoneOffset.UTC);
 		final LocalDateTime startHour = start.withMinute(0).withSecond(0);
-		final LocalDateTime end = LocalDateTime.ofInstant(Instant.ofEpochSecond(tsEnd), TimeZone.getDefault().toZoneId());
+		final LocalDateTime end = LocalDateTime.ofInstant(Instant.ofEpochSecond(tsEnd), ZoneOffset.UTC);
 		final LocalDateTime endHour = end.withMinute(0).withSecond(0);
 		
 		final List<EnergyDetailsDTO> energyDetails = new ArrayList<>();
 		for (LocalDateTime timestamp = startHour; timestamp.isBefore(endHour) || timestamp.isEqual(endHour); timestamp = timestamp.plusHours(1)) {
+			if (timestamp.isAfter(LocalDateTime.now())) {
+				break;
+			}
 			final Builder energyDetailsDTOBuilder = new EnergyDetailsDTO.Builder(timestamp.toEpochSecond(ZoneOffset.UTC), building);
 			energyDetails.add(energyDetailsDTOBuilder.setOutTemp(dataService.getOutdoorTemperature(timestamp))
 								   					 .setWater(dataService.getWaterHeat(timestamp))
