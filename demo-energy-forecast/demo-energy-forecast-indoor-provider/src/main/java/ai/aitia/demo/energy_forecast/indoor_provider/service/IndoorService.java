@@ -37,7 +37,7 @@ public class IndoorService {
 		final List<EnergyDetailsDTO> energyDetails = new ArrayList<>();
 		for (LocalDateTime timestamp = startHour; timestamp.isBefore(endHour) || timestamp.isEqual(endHour); timestamp = timestamp.plusHours(1)) {
 			final Builder energyDetailsDTOBuilder = new EnergyDetailsDTO.Builder(timestamp.toEpochSecond(ZoneOffset.UTC), building);
-			energyDetails.add(energyDetailsDTOBuilder.setOutTemp(dataService.getIndoorTemperature(timestamp))
+			energyDetails.add(energyDetailsDTOBuilder.setInTemp(dataService.getIndoorTemperature(timestamp))
 								   					 .build());
 		}
 		return new EnergyDetailsListDTO(energyDetails, energyDetails.get(0).getTimestamp(), energyDetails.get(energyDetails.size() - 1).getTimestamp());

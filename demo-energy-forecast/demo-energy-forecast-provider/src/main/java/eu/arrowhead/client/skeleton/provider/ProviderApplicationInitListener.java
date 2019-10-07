@@ -70,11 +70,13 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 
 		//Checking the availability of necessary core systems
 		checkCoreSystemReachability(CoreSystem.SERVICE_REGISTRY);
+		checkCoreSystemReachability(CoreSystem.ORCHESTRATOR);
 		if (tokenSecurityFilterEnabled) {
 			checkCoreSystemReachability(CoreSystem.AUTHORIZATION);			
 
 			//Initialize Arrowhead Context
-			arrowheadService.updateCoreServiceURIs(CoreSystem.AUTHORIZATION);			
+			arrowheadService.updateCoreServiceURIs(CoreSystem.AUTHORIZATION);
+			arrowheadService.updateCoreServiceURIs(CoreSystem.ORCHESTRATOR);
 		}		
 		
 		setTokenSecurityFilter();

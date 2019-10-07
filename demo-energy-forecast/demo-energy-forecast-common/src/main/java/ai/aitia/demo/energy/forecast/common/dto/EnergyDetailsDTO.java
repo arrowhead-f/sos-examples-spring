@@ -36,6 +36,9 @@ public class EnergyDetailsDTO implements Serializable{
 	// methods
 
 	//-------------------------------------------------------------------------------------------------
+	public EnergyDetailsDTO() {}
+	
+	//-------------------------------------------------------------------------------------------------
 	public Double getInTemp() { return inTemp; }
 	public Double getOutTemp() { return outTemp; }
 	public double getTotal() { return total; }

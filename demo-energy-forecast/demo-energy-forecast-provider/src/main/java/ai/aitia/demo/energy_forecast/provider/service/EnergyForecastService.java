@@ -1,17 +1,17 @@
 package ai.aitia.demo.energy_forecast.provider.service;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Reader;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -28,8 +28,8 @@ public class EnergyForecastService {
 	//=================================================================================================
 	// members
 	
-	private static final String CSV_DATA_SET_NAME_PATTERN = "buliding_%_data.csv";
-	private static final String DATA_SET_HEADER = "\"Timestamp\",\"Indoor\",\"Outdoor\",\"Energy Consumption kWh HEAT\",\"ENERGY Consumption kWh Water\"\n";
+	private static final String CSV_DATA_SET_NAME_PATTERN = "building_%d_data.csv";
+	private static final String DATA_SET_HEADER = "Timestamp,Indoor,Outdoor,Energy Consumption kWh HEAT,ENERGY Consumption kWh Water\n";
 	
 	@Autowired
 	private EnergyForecastDriver energyForecastDriver;
@@ -54,13 +54,13 @@ public class EnergyForecastService {
 		
 		long lastTimestamp;
 		if (dataSet.size() == 1) {
-			lastTimestamp = LocalDateTime.now().minusYears(1).toEpochSecond(ZoneOffset.UTC);
+			lastTimestamp = LocalDateTime.now().minusDays(10).toEpochSecond(ZoneOffset.UTC);
 		} else {
 			lastTimestamp = Long.valueOf(dataSet.get(dataSet.size() - 1)[0]);
 		}
 		
 		final List<EnergyDetailsDTO> indoorNewData = energyForecastDriver.getIndoorEnergyDetails(building, lastTimestamp, EFUtilities.nowUTCSeconds()).getEnergyDetails();
-		final List<EnergyDetailsDTO> outdoorNewData = energyForecastDriver.getIndoorEnergyDetails(building, lastTimestamp, EFUtilities.nowUTCSeconds()).getEnergyDetails();
+		final List<EnergyDetailsDTO> outdoorNewData = energyForecastDriver.getOutdoorEnergyDetails(building, lastTimestamp, EFUtilities.nowUTCSeconds()).getEnergyDetails();
 		
 		final List<String[]> newData = new ArrayList<>(indoorNewData.size());
 		for (int i = 0; i < indoorNewData.size(); i++) {
@@ -83,13 +83,15 @@ public class EnergyForecastService {
 	private EnergyForecastDTO predict(final List<String[]> dataSet, final long building, final long forecastedTimestamp) {
 		final List<EnergyDetailsDTO> convertedDataSet = new ArrayList<>(dataSet.size());
 		for (final String[] record : dataSet) {
-			final EnergyDetailsDTO energyDetails = new EnergyDetailsDTO.Builder(Long.valueOf(record[0]), Long.valueOf(building))
-																	   .setInTemp(Double.valueOf(record[1]))
-																	   .setOutTemp(Double.valueOf(record[2]))
-																	   .setTotal(Double.valueOf(record[3]))
-																	   .setWater(Double.valueOf(record[4]))
-																	   .build();
-			convertedDataSet.add(energyDetails);
+			if (NumberUtils.isCreatable(record[0])) {				
+				final EnergyDetailsDTO energyDetails = new EnergyDetailsDTO.Builder(Long.valueOf(record[0]), Long.valueOf(building))
+						.setInTemp(Double.valueOf(record[1]))
+						.setOutTemp(Double.valueOf(record[2]))
+						.setTotal(Double.valueOf(record[3]))
+						.setWater(Double.valueOf(record[4]))
+						.build();
+				convertedDataSet.add(energyDetails);
+			}
 		}		
 		return new EnergyConsumptionPredictor(convertedDataSet, building, forecastedTimestamp).predict();
 	}
@@ -97,16 +99,17 @@ public class EnergyForecastService {
 	//-------------------------------------------------------------------------------------------------
 	private void creteIfAbsentCSV(final String fileName) throws IOException {
 		final File file = new File(fileName);
-		final FileWriter writer = new FileWriter(file);
 		if (file.createNewFile()) {
+			final FileWriter writer = new FileWriter(new File(fileName));
 			writer.write(DATA_SET_HEADER);
+			writer.flush();
 			writer.close();
 		}
 	}
 	
 	//-------------------------------------------------------------------------------------------------
 	private List<String[]> readCSV(final String fileName) throws IOException, URISyntaxException {
-		final Reader reader = Files.newBufferedReader(Paths.get(ClassLoader.getSystemResource(fileName).toURI()));
+		BufferedReader reader = new BufferedReader(new FileReader(fileName));
 		final CSVReader csvReader = new CSVReader(reader);
 		final List<String[]> dataSet = csvReader.readAll();
 		reader.close();
@@ -116,7 +119,7 @@ public class EnergyForecastService {
 	
 	//-------------------------------------------------------------------------------------------------
 	private void writeCSV(final String fileName, final List<String[]> newData) throws IOException, URISyntaxException {
-		final CSVWriter writer = new CSVWriter(new FileWriter(Paths.get(ClassLoader.getSystemResource(fileName).toURI()).toString()));
+		final CSVWriter writer = new CSVWriter(new FileWriter(new File(fileName), true));
 		writer.writeAll(newData);
 		writer.close();
 	}

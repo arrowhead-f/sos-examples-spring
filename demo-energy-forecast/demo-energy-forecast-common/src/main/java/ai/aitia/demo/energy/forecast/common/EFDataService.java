@@ -1,10 +1,9 @@
 package ai.aitia.demo.energy.forecast.common;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.Reader;
+import java.io.InputStreamReader;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -13,6 +12,8 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 import com.opencsv.CSVReader;
@@ -90,7 +91,8 @@ public class EFDataService {
 
 	//-------------------------------------------------------------------------------------------------
 	private void readOutdoorTemperatureData() throws IOException, URISyntaxException {
-		final Reader reader = Files.newBufferedReader(Paths.get(ClassLoader.getSystemResource("outdoor_temerature_data.csv").toURI()));
+		Resource resource = new ClassPathResource("outdoor_temerature_data.csv");
+		BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream()));
 		final CSVReader csvReader = new CSVReader(reader);
 		final List<String[]> readAll = csvReader.readAll();
 		outdoorTemperatureData = new ArrayList<Double>(readAll.size());

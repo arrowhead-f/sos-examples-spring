@@ -1,5 +1,6 @@
 package ai.aitita.demo.energy_forecast.consumer;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
@@ -13,11 +14,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpMethod;
 
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+
 import ai.aitia.demo.energy.forecast.common.EFCommonConstants;
 import ai.aitia.demo.energy.forecast.common.dto.EnergyForecastDTO;
 import eu.arrowhead.client.library.ArrowheadService;
 import eu.arrowhead.common.CommonConstants;
 import eu.arrowhead.common.SSLProperties;
+import eu.arrowhead.common.Utilities;
 import eu.arrowhead.common.dto.shared.OrchestrationFlags.Flag;
 import eu.arrowhead.common.dto.shared.OrchestrationFormRequestDTO;
 import eu.arrowhead.common.dto.shared.OrchestrationFormRequestDTO.Builder;
@@ -55,9 +60,9 @@ public class EnergyConsumerMain implements ApplicationRunner {
     @Override
 	public void run(final ApplicationArguments args) throws Exception {
     	OrchestrationResultDTO orchestrationResult = orchestrate(EFCommonConstants.ENERGY_FORECAST_SERVICE);
-    	System.out.println(orchestrationResult);
-    	EnergyForecastDTO energyForecast = consumeEnergyForecastService(orchestrationResult, 10l, LocalDateTime.now().toEpochSecond(ZoneOffset.UTC));
-    	System.out.println(energyForecast);
+    	printOut(orchestrationResult);
+    	EnergyForecastDTO energyForecast = consumeEnergyForecastService(orchestrationResult, 10l, LocalDateTime.now().plusHours(1).toEpochSecond(ZoneOffset.UTC));
+    	printOutXML(energyForecast);
     }
     
     //=================================================================================================
@@ -78,9 +83,9 @@ public class EnergyConsumerMain implements ApplicationRunner {
     	final OrchestrationResponseDTO orchestrationResponse = arrowheadService.proceedOrchestration(orchestrationFormRequest);
     	
     	if (orchestrationResponse == null) {
-    		logger.debug("No orchestration response received");
+    		logger.info("No orchestration response received");
     	} else if (orchestrationResponse.getResponse().isEmpty()) {
-    		logger.debug("No provider found during the orchestration");
+    		logger.info("No provider found during the orchestration");
     	} else {
     		final OrchestrationResultDTO orchestrationResult = orchestrationResponse.getResponse().get(0);
     		validateOrchestrationResult(orchestrationResult, serviceDefinition);
@@ -121,5 +126,17 @@ public class EnergyConsumerMain implements ApplicationRunner {
     	if (!hasValidInterface) {
     		throw new InvalidParameterException("Requested and orchestrated interface do not match");
 		}
+    }
+    
+    //-------------------------------------------------------------------------------------------------
+    private void printOut(final Object object) {
+    	System.out.println("\n" + Utilities.toPrettyJson(Utilities.toJson(object)) + "\n");
+    }
+    
+    //-------------------------------------------------------------------------------------------------
+    private void printOutXML(final Object object) throws IOException {
+    	XmlMapper xmlMapper = new XmlMapper();
+    	xmlMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
+    	System.out.println("\n" + xmlMapper.writeValueAsString(object) + "\n");
     }
 }

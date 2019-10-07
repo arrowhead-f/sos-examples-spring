@@ -1,9 +1,9 @@
 package ai.aitia.demo.energy_forecast.indoor_provider.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import ai.aitia.demo.energy.forecast.common.EFCommonConstants;
@@ -25,10 +25,10 @@ public class IndoorServiceController {
 	// methods
 
 	//-------------------------------------------------------------------------------------------------
-	@GetMapping(path = EFCommonConstants.INDOOR_ENERGY_DETAILS_SERVICE_URI, produces = MediaType.APPLICATION_XML_VALUE)
-	public EnergyDetailsListDTO getOutdoorEnergyDetails(@RequestParam(name = EFCommonConstants.REQUEST_PARAM_BUILDING) final long building,
-														  @RequestParam(name = EFCommonConstants.REQUEST_PARAM_FROM) final long fromTimestamp,
-														  @RequestParam(name = EFCommonConstants.REQUEST_PARAM_TO, required = false) Long toTimestamp) {
+	@GetMapping(path = EFCommonConstants.INDOOR_ENERGY_DETAILS_SERVICE_URI)
+	@ResponseBody public EnergyDetailsListDTO getOutdoorEnergyDetails(@RequestParam(name = EFCommonConstants.REQUEST_PARAM_BUILDING) final long building,
+														  			  @RequestParam(name = EFCommonConstants.REQUEST_PARAM_FROM) final long fromTimestamp,
+														  			  @RequestParam(name = EFCommonConstants.REQUEST_PARAM_TO, required = false) Long toTimestamp) {
 		
 		if (fromTimestamp < 0) {
 			throw new BadPayloadException("fromTimestamp cannot be less than zero");

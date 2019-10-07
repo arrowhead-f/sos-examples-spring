@@ -67,9 +67,9 @@ public class EnergyForecastDriver {
     	final OrchestrationResponseDTO orchestrationResponse = arrowheadService.proceedOrchestration(orchestrationFormRequest);
     	
     	if (orchestrationResponse == null) {
-    		logger.debug("No orchestration response received");
+    		logger.info("No orchestration response received");
     	} else if (orchestrationResponse.getResponse().isEmpty()) {
-    		logger.debug("No provider found during the orchestration");
+    		logger.info("No provider found during the orchestration");
     	} else {
     		final OrchestrationResultDTO orchestrationResult = orchestrationResponse.getResponse().get(0);
     		validateOrchestrationResult(orchestrationResult, serviceDefinition);

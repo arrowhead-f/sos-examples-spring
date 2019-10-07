@@ -31,22 +31,23 @@ public class EnergyConsumptionPredictor {
 	
 	//-------------------------------------------------------------------------------------------------
 	public EnergyForecastDTO predict() {
-		final double totalHeatUnit = calculateTotalHeatUnit();
-		final double waterHeatUnit = calculateWaterHeatUnit();
-		
-		final List<Double> expectedTotalHeatConsumptions = new ArrayList<>();
-		final List<Double> expectedWaterHeatConsumptions = new ArrayList<>();
-		final LocalDateTime time = LocalDateTime.now();
-		while (time.isBefore(forecastedTimestamp) || time.isEqual(forecastedTimestamp)) {
-			final double expectedIndoorTemp = calculateExpectedIndoorTemperature(time);
-			final double expectedOutdoorTemp = calculateExpectedOutdoorTemperature(time);
-			final double expectedTempDiff = Math.abs(expectedIndoorTemp - expectedOutdoorTemp);
-			expectedTotalHeatConsumptions.add(totalHeatUnit * expectedTempDiff);
-			expectedWaterHeatConsumptions.add(waterHeatUnit * expectedTempDiff);
-			time.plusHours(1);
-		}
-		
-		return new EnergyForecastDTO(building, forecastedTimestamp.toEpochSecond(ZoneOffset.UTC), sum(expectedTotalHeatConsumptions), sum(expectedWaterHeatConsumptions));
+//		final double totalHeatUnit = calculateTotalHeatUnit();
+//		final double waterHeatUnit = calculateWaterHeatUnit();
+//		
+//		final List<Double> expectedTotalHeatConsumptions = new ArrayList<>();
+//		final List<Double> expectedWaterHeatConsumptions = new ArrayList<>();
+//		final LocalDateTime time = LocalDateTime.now();
+//		while (time.isBefore(forecastedTimestamp) || time.isEqual(forecastedTimestamp)) {
+//			final double expectedIndoorTemp = calculateExpectedIndoorTemperature(time);
+//			final double expectedOutdoorTemp = calculateExpectedOutdoorTemperature(time);
+//			final double expectedTempDiff = Math.abs(expectedIndoorTemp - expectedOutdoorTemp);
+//			expectedTotalHeatConsumptions.add(totalHeatUnit * expectedTempDiff);
+//			expectedWaterHeatConsumptions.add(waterHeatUnit * expectedTempDiff);
+//			time.plusHours(1);
+//		}
+//		
+//		return new EnergyForecastDTO(building, forecastedTimestamp.toEpochSecond(ZoneOffset.UTC), sum(expectedTotalHeatConsumptions), sum(expectedWaterHeatConsumptions));
+		return new EnergyForecastDTO(10, 00000, 444, 555);
 	}
 	
 	//=================================================================================================
@@ -57,7 +58,7 @@ public class EnergyConsumptionPredictor {
 		final List<Double> indoorTemps = new ArrayList<>();
 		
 		final int hourOfDay = time.getHour();
-		final LocalDateTime scope = forecastedTimestamp.minusMonths(1);
+		final LocalDateTime scope = forecastedTimestamp.minusDays(5);
 		for (int i = dataSet.size() - 1; convertToLocalDateTime(dataSet.get(i).getTimestamp()).isAfter(scope); --i) {
 			if (convertToLocalDateTime(dataSet.get(i).getTimestamp()).getHour() == hourOfDay) {
 				indoorTemps.add(dataSet.get(i).getInTemp());
