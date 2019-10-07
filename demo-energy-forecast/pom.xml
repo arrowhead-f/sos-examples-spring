@@ -16,6 +16,7 @@
 		<module>demo-energy-forecast-outdoor-provider</module>
 		<module>demo-energy-forecast-indoor-provider</module>
 		<module>demo-energy-forecast-provider</module>
+		<module>demo-energy-forecast-consumer</module>
   </modules>
   	
   	<dependencies>
