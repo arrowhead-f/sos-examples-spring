@@ -54,7 +54,7 @@ public class EnergyForecastService {
 		
 		long lastTimestamp;
 		if (dataSet.size() == 1) {
-			lastTimestamp = LocalDateTime.now().minusDays(10).toEpochSecond(ZoneOffset.UTC);
+			lastTimestamp = LocalDateTime.now().minusYears(1).toEpochSecond(ZoneOffset.UTC);
 		} else {
 			lastTimestamp = Long.valueOf(dataSet.get(dataSet.size() - 1)[0]);
 		}

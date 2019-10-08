@@ -61,7 +61,7 @@ public class EnergyConsumerMain implements ApplicationRunner {
 	public void run(final ApplicationArguments args) throws Exception {
     	OrchestrationResultDTO orchestrationResult = orchestrate(EFCommonConstants.ENERGY_FORECAST_SERVICE);
     	printOutJSON(orchestrationResult);
-    	EnergyForecastDTO energyForecast = consumeEnergyForecastService(orchestrationResult, 10l, LocalDateTime.now().plusHours(1).toEpochSecond(ZoneOffset.UTC));
+    	EnergyForecastDTO energyForecast = consumeEnergyForecastService(orchestrationResult, 10l, LocalDateTime.now().plusHours(10).toEpochSecond(ZoneOffset.UTC));
     	printOutXML(energyForecast);
     }
     
