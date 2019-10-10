@@ -1,4 +1,4 @@
-# Energy Forecast System of Systems Demo (Java Spring-Boot)
+# Energy Forecast SoS Demo (Java Spring-Boot)
 ##### The project provides Arrowhead v4.1.3 Clients demo implementation 
 
 ## Overview
