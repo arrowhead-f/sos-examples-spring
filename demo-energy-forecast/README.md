@@ -3,7 +3,7 @@
 
 ## Overview
 ##### The Project
-The goal of the project is simulate how a central heating supplier could consume an 'energy consumption forecast' service which is accomplished by several provider's service.
+The goal of the project is simulate how a central heating supplier could consume an 'energy consumption forecast' service which is accomplished by several provider's individual service.
 
 ##### The Local Cloud Architecture 
 ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) `AH Service Registry`
