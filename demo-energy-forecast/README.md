@@ -21,7 +21,25 @@ Provides hourly measured data about a specific building within a specific time f
   
   `to`={uninx_epoch_time_stamp} [*not mandatory*]
   
-* ***output:*** EnergyDetailsDTO.xml
+* ***output:*** EnergyDetailsListDTO.xml
+```
+<EnergyDetailsListDTO>
+  <energyDetails>
+    <energyDetails>
+      <inTemp/>
+      <outTemp>9.6</outTemp>
+      <total>12.04848</total>
+      <water>0.204</water>
+      <timestamp>1570788000</timestamp>
+      <building>6</building>
+    </energyDetails>
+  </energyDetails>
+  <fromTS>1570788000</fromTS>
+  <toTS>1570788000</toTS>
+</EnergyDetailsListDTO>
+```
+
+
 ```
   <EnergyDetailsDTO>
     <building>6</building>
