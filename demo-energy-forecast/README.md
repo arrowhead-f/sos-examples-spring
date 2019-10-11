@@ -26,7 +26,7 @@ Provides hourly measured data about a specific building within a specific time f
 <EnergyDetailsListDTO>
   <energyDetails>
     <energyDetails>
-      <inTemp/>
+      <inTemp>22.0</inTemp>
       <outTemp>9.6</outTemp>
       <total>12.04848</total>
       <water>0.204</water>
@@ -38,15 +38,16 @@ Provides hourly measured data about a specific building within a specific time f
   <toTS>1570788000</toTS>
 </EnergyDetailsListDTO>
 ```
+**energy-forecast-details**
 
-
+* ***output:*** EnergyForecastDTO.xml
 ```
-  <EnergyDetailsDTO>
+  <EnergyForecastDTO>
     <building>6</building>
     <forecastTime>1570814474</forecastTime>
     <forecastedTotalHeatConsumptionKWH>63.047</forecastedTotalHeatConsumptionKWH>
     <forecastedWaterHeatConsumptionKWH>1.44</forecastedWaterHeatConsumptionKWH>
-  </EnergyDetailsDTO>
+  </EnergyForecastDTO>
 ```
   
 
