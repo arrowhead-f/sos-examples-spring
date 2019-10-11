@@ -13,15 +13,15 @@ The goal of the project is simulate how a central heating supplier could consume
 **indoor-energy-details & outdoor-energy-deatils:**
 
 Provides hourly measured data about a specific building within a specific time frame.
-* input:
+* ***input:*** Query parameters: 
 
-  Query parameter: `builing`={building_id} [*mandatory*]
+  `builing`={building_id} [*mandatory*]
   
-  Query parameter: `from`={uninx_epoch_time_stamp} [*mandatory*]
+  `from`={uninx_epoch_time_stamp} [*mandatory*]
   
-  Query parameter: `to`={uninx_epoch_time_stamp} [*not mandatory*]
+  `to`={uninx_epoch_time_stamp} [*not mandatory*]
   
-* output: EnergyDetailsDTO.xml
+* ***output:*** EnergyDetailsDTO.xml
 ```
   <EnergyDetailsDTO>
     <building>6</building>
