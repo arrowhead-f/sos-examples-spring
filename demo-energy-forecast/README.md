@@ -59,3 +59,16 @@ Forcasts the energy consumption between the current time and the given time in t
 
 ##### The SoS Workflow
 ![Alt text](https://github.com/arrowhead-f/sos-examples-spring/blob/energy_forecast_demo_dev/demo-energy-forecast/doc/SequenceUML.png)
+
+## How to run?
+1. Clone this repo to your local machine.
+2. Go to the root directory and execute `mvn install` command, then wait until the build succeeds.
+3. Start the [Arrowhead Framework v4.1.3](https://github.com/arrowhead-f/core-java-spring), before you would start the demo.
+   Required core systems:
+   * Service Registry
+   * Authorization
+   * Orchestration
+4. Start the demo:
+   * run `start_energy_forecast_clients.bat` (windows) 
+     It will start the Indoor, the Outdoor, and the Energy Forecast provider in the background and will open a new console for the Consumer.
+5. Use the command line commands to trigger the SoS workflow.
