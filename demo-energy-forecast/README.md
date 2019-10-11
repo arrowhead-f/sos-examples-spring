@@ -11,15 +11,17 @@ The goal of the project is simulate how a central heating supplier could consume
 ![Alt text](https://github.com/arrowhead-f/sos-examples-spring/blob/energy_forecast_demo_dev/demo-energy-forecast/doc/overview.png)
 ## Service Descriptions
 **indoor-energy-details & outdoor-energy-deatils:**
+
 Provides hourly measured data about a specific building within a specific time frame.
 * input:
 
   Query parameter: `builing`={building_id} [*mandatory*]
+  
   Query parameter: `from`={uninx_epoch_time_stamp} [*mandatory*]
+  
   Query parameter: `to`={uninx_epoch_time_stamp} [*not mandatory*]
   
-* output:
-
+* output: EnergyDetailsDTO.xml
 ```
   <EnergyDetailsDTO>
     <building>6</building>
