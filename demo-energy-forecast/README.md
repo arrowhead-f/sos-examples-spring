@@ -68,7 +68,7 @@ Forcasts the energy consumption between the current time and the given time in t
    * Service Registry
    * Authorization
    * Orchestration
-4. At the very first time you have to run the providers with 'ssl enabled' (default) in order to registering themselves into Service Registry Core System with theirs public keys. Once it is done you can switch between 'secure' and 'insecure' mode at any time.
+4. At the very first time you have to run the providers with 'ssl enabled' (default) in order to registering themselves into Service Registry Core System with their public keys. Once it is done you can switch between 'secure' and 'insecure' mode at any time. (**Note:** the core system certicates have to belong to the same cloud as the demo certificates)
 6. Register the consumer manually and create the intra cloud authorization rules.
 5. Start the demo:
    * run `start_energy_forecast_clients.bat` (windows) 
@@ -76,4 +76,4 @@ Forcasts the energy consumption between the current time and the given time in t
      It will start the Indoor, the Outdoor, and the Energy Forecast provider in the background and will open a new console for the Consumer.
 6. Use the command line commands to trigger the SoS workflow.
 
-*(Note: The demo is designed to being used in 'SECURE' mode.)*
+
