@@ -70,7 +70,7 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 
 		//Checking the availability of necessary core systems
 		checkCoreSystemReachability(CoreSystem.SERVICE_REGISTRY);
-		if (tokenSecurityFilterEnabled) {
+		if (sslEnabled && tokenSecurityFilterEnabled) {
 			checkCoreSystemReachability(CoreSystem.AUTHORIZATION);			
 
 			//Initialize Arrowhead Context
@@ -131,12 +131,13 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 		systemRequest.setSystemName(mySystemName);
 		systemRequest.setAddress(mySystemAddress);
 		systemRequest.setPort(mySystemPort);		
-		systemRequest.setAuthenticationInfo(Base64.getEncoder().encodeToString(arrowheadService.getMyPublicKey().getEncoded()));
 
 		if (tokenSecurityFilterEnabled) {
+			systemRequest.setAuthenticationInfo(Base64.getEncoder().encodeToString(arrowheadService.getMyPublicKey().getEncoded()));
 			serviceRegistryRequest.setSecure(ServiceSecurityType.TOKEN);
 			serviceRegistryRequest.setInterfaces(List.of(EFCommonConstants.INTERFACE_SECURE));
 		} else if (sslEnabled) {
+			systemRequest.setAuthenticationInfo(Base64.getEncoder().encodeToString(arrowheadService.getMyPublicKey().getEncoded()));
 			serviceRegistryRequest.setSecure(ServiceSecurityType.CERTIFICATE);
 			serviceRegistryRequest.setInterfaces(List.of(EFCommonConstants.INTERFACE_SECURE));
 		} else {
