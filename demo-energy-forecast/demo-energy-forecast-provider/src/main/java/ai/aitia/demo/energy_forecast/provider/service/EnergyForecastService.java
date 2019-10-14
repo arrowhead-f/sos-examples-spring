@@ -48,7 +48,7 @@ public class EnergyForecastService {
 	
 	//-------------------------------------------------------------------------------------------------
 	private List<String[]> updateDataSet(final long building, final long forecastedTimestamp) throws IOException, URISyntaxException {
-		final String fileName = String.format(CSV_DATA_SET_NAME_PATTERN, building);
+		final String fileName = String.format("data_model/" + CSV_DATA_SET_NAME_PATTERN, building);
 		creteIfAbsentCSV(fileName);
 		final List<String[]> dataSet = readCSV(fileName);
 		
@@ -99,6 +99,7 @@ public class EnergyForecastService {
 	//-------------------------------------------------------------------------------------------------
 	private void creteIfAbsentCSV(final String fileName) throws IOException {
 		final File file = new File(fileName);
+		file.getParentFile().mkdirs();
 		if (file.createNewFile()) {
 			final FileWriter writer = new FileWriter(new File(fileName));
 			writer.write(DATA_SET_HEADER);

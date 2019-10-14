@@ -26,4 +26,6 @@ echo energy-forecast-consumer started
 cd ..\..\demo-energy-forecast-consumer\target
 START "demo-energy-forecast-consumer" /B "cmd /c START java -jar demo-energy-forecast-consumer-4.1.3.jar 2>&1"
 
+cd %parent_path%
+
 ::Kill self
