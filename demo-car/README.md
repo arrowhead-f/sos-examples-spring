@@ -5,7 +5,7 @@
 ##### The Project
 
 ## Service Descriptions
-**creta-car**
+**create-car:**
 
 Creates a new car instance.
 * ***input:*** CarRequestDTO.json
@@ -22,6 +22,24 @@ Creates a new car instance.
    "brand":"string",
    "color":"string"
 }
+```
+
+**get-car:**
+
+Returns a car list based on the given parameters.
+* ***input:*** Query parameters: 
+
+  `brand`={brand} [*not mandatory*]
+  
+  `color`={color} [*not mandatory*]
+
+* ***output:*** List of CarResponseDTO.json
+```
+[{
+   "id":"integer",
+   "brand":"string",
+   "color":"string"
+}]
 ```
 
 ## How to run?
