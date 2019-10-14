@@ -39,5 +39,3 @@ demo-energy-forecast/demo-energy-forecast-outdoor-provider/target/
 demo-energy-forecast/demo-energy-forecast-indoor-provider/target/
 demo-energy-forecast/demo-energy-forecast-provider/target/
 demo-energy-forecast/demo-energy-forecast-consumer/target/
-
-*.csv

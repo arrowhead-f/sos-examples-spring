@@ -91,7 +91,7 @@ public class EFDataService {
 
 	//-------------------------------------------------------------------------------------------------
 	private void readOutdoorTemperatureData() throws IOException, URISyntaxException {
-		Resource resource = new ClassPathResource("outdoor_temerature_data.csv");
+		Resource resource = new ClassPathResource("outdoor_temperature_data.csv");
 		BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream()));
 		final CSVReader csvReader = new CSVReader(reader);
 		final List<String[]> readAll = csvReader.readAll();
