@@ -70,9 +70,11 @@ Forcasts the energy consumption between the current time and the given time in t
    * Orchestration
 4. Register the consumer manually and create the intra cloud authorization rules.
 5. Start the demo:
-   * run `start_energy_forecast_clients.bat` (windows) 
+   * Run `start_energy_forecast_clients.bat` or `start_energy_forecast_clients.sh`
      
-     It will start the Indoor, the Outdoor, and the Energy Forecast provider in the background and will open a new console for the Consumer.
+     It will start the Indoor, the Outdoor, and the Energy Forecast provider in the background and will start a command line for the Consumer.
+     
+   * Or, enter to each `target` folder and run the jar files.
 6. Use the command line commands to trigger the SoS workflow.
 7. *(You can observe what happens in Arrowhead Framework if you switch the logging level to "DEBUG".)*
 
