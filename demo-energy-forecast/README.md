@@ -2,7 +2,7 @@
 ##### The project provides Arrowhead v4.1.3 Clients demo implementation developed from [client-skeleton project](https://github.com/arrowhead-f/client-skeleton-java-spring)
 
 ## Overview
-The goal of the project is to simulate how a central heating supplier could consume an 'energy consumption forecast' service which is accomplished by several provider's individual service interopeable collaboration.
+The goal of the project is to simulate how a central heating supplier could consume an 'energy consumption forecast' service which is accomplished by several provider's individual service interoperable collaboration.
 
 ##### The Local Cloud Architecture 
 ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) `AH Service Registry`
