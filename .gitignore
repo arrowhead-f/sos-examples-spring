@@ -23,14 +23,19 @@
 ### VS Code ###
 .vscode/
 wrapper
-/client-skeleton-common/target
-/demo-common-resources/target
-/demo-car-consumer/target
-/demo-car-provider/target
+
 /mvnw
 /mvnw.cmd
 /.settings
 *.prefs
 /.metadata/
-
 *.log
+
+demo-car/demo-car-consumer/target/
+demo-car/demo-car-common/target/
+demo-car/demo-car-provider/target/
+demo-energy-forecast/demo-energy-forecast-common/target/
+demo-energy-forecast/demo-energy-forecast-outdoor-provider/target/
+demo-energy-forecast/demo-energy-forecast-indoor-provider/target/
+demo-energy-forecast/demo-energy-forecast-provider/target/
+demo-energy-forecast/demo-energy-forecast-consumer/target/

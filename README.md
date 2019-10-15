@@ -9,4 +9,5 @@ The project has the following dependencies:
 
 ### Current examples in this repository
 
-1. Car demo
+1. Car demo ([read me](https://github.com/arrowhead-f/sos-examples-spring/blob/energy_forecast_demo_dev/demo-car/README.md))
+2. Energy Forecast demo ([read me](https://github.com/arrowhead-f/sos-examples-spring/blob/energy_forecast_demo_dev/demo-energy-forecast/README.md))
