@@ -76,11 +76,11 @@ public class EnergyConsumerMain implements ApplicationRunner {
     	while (true) {   
     		try {
     			System.out.print("\n" + "Trigger a new orcheastration? (y/n): ");
-    			final String answear = sc.nextLine();
-    			if (!answear.equalsIgnoreCase("y") && !answear.equalsIgnoreCase("n")) {
+    			final String answer = sc.nextLine();
+    			if (!answer.equalsIgnoreCase("y") && !answer.equalsIgnoreCase("n")) {
     				throw new InputMismatchException();
     			}
-    			if (!answear.equalsIgnoreCase("y")) {
+    			if (!answer.equalsIgnoreCase("y")) {
     				break;
     			}
     			

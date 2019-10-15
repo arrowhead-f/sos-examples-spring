@@ -26,6 +26,7 @@ public class EFDataService {
 	//=================================================================================================
 	// members
 	
+	private static final String OUTDOOR_TEMPERATURE_DATA_CSV = "outdoor_temperature_data.csv";
 	/**
      *  Outdoor temperature data from:
      *
@@ -91,15 +92,20 @@ public class EFDataService {
 
 	//-------------------------------------------------------------------------------------------------
 	private void readOutdoorTemperatureData() throws IOException, URISyntaxException {
-		Resource resource = new ClassPathResource("outdoor_temperature_data.csv");
-		BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream()));
+		final Resource resource = new ClassPathResource(OUTDOOR_TEMPERATURE_DATA_CSV);
+		final BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream()));
 		final CSVReader csvReader = new CSVReader(reader);
-		final List<String[]> readAll = csvReader.readAll();
-		outdoorTemperatureData = new ArrayList<Double>(readAll.size());
-		for (final String[] strings : readAll) {
-			outdoorTemperatureData.add(Double.valueOf(strings[0]));
+		try {
+			final List<String[]> readAll = csvReader.readAll();
+			outdoorTemperatureData = new ArrayList<Double>(readAll.size());
+			for (final String[] strings : readAll) {
+				outdoorTemperatureData.add(Double.valueOf(strings[0]));
+			}			
+		} catch (Exception ex) {
+			throw ex;
+		} finally {
+			reader.close();
+			csvReader.close();			
 		}
-		reader.close();
-	    csvReader.close();
 	}
 }
