@@ -58,7 +58,7 @@ Forcasts the energy consumption between the current time and the given time in t
 ```  
 
 ##### The SoS Workflow
-![Alt text](https://github.com/arrowhead-f/sos-examples-spring/blob/energy_forecast_demo_dev/master/doc/SequenceUML.png)
+![Alt text](https://github.com/arrowhead-f/sos-examples-spring/blob/master/demo-energy-forecast/doc/SequenceUML.png)
 
 ## How to run?
 1. Clone this repo to your local machine.
