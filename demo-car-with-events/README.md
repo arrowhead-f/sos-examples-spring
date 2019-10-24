@@ -8,7 +8,7 @@ The goal of the project is to simply demonstrate how a consumer could orchestrat
 ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) `AH Authorization` 
 ![#c5f015](https://placehold.it/15/c5f015/000000?text=+) `AH Orchestrator`
 ![#ffcc44](https://placehold.it/15/ffcc44/000000?text=+) `AH Event Handler`
-![Alt text](https://github.com/arrowhead-f/sos-examples-spring/tree/demo-car-with-events/doc/overview.png)
+![Alt text](https://github.com/arrowhead-f/sos-examples-spring/blob/car_demo_with_events/demo-car-with-events/doc/overview.png)
 
 ## Service Descriptions
 **create-car:**
