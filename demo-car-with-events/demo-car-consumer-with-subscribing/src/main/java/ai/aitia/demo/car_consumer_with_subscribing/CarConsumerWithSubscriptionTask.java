@@ -49,6 +49,8 @@ public class CarConsumerWithSubscriptionTask extends Thread {
 	@Resource( name = SubscriberConstants.NOTIFICATION_QUEUE )
 	private ConcurrentLinkedQueue<EventDTO> notificatonQueue;
 	
+	final Set<String> receivedEvenTypeList = new HashSet<>();
+	
     @Autowired
 	private ArrowheadService arrowheadService;
     
@@ -70,6 +72,13 @@ public class CarConsumerWithSubscriptionTask extends Thread {
 	@Value(ClientCommonConstants.$CLIENT_SERVER_PORT_WD)
 	private int clientSystemPort;
 	
+	@Value(CarConsumerConstants.$REORCHESTRATION_WD)
+	private boolean reorchestration;
+	
+	@Value(CarConsumerConstants.$MAX_RETRY_WD)
+	private int max_retry;
+
+	
 	//=================================================================================================
 	// methods
 
@@ -83,32 +92,46 @@ public class CarConsumerWithSubscriptionTask extends Thread {
 		OrchestrationResultDTO carCreationService = null;
 		OrchestrationResultDTO carRequestingService = null;
 		
-		while ( !interrupted ) {
+		int counter = 0;
+		while ( !interrupted && ( counter < max_retry ) ) {
 			
 			try {
 				
-				Set<SystemResponseDTO> sources = new HashSet<SystemResponseDTO>();
-				if ( carCreationService != null  && carRequestingService != null ) {
+				if ( !( notificatonQueue.peek() == null) ) {
 					
-				
-					if ( !( notificatonQueue.peek() == null) ) {
-						
-						final EventDTO event = notificatonQueue.remove();
+					for (final EventDTO event : notificatonQueue ) {
 						
 						if ( SubscriberConstants.PUBLISHER_DESTROYED_EVENT_TYPE.equalsIgnoreCase( event.getEventType() )) {
 							
-							carCreationService = orchestrateCreateCarService();
-							carRequestingService = orchestrateGetCarService();
+							if ( reorchestration ) {
+								
+								logger.info("Recieved publisher destroyed event - started reorchestration.");
+								
+								carCreationService = orchestrateCreateCarService();
+								carRequestingService = orchestrateGetCarService();
+								
+							} else {
+								
+								logger.info("Recieved publisher destroyed event - started shuting down.");
+								
+								System.exit( 0 );
+								
+							}
 							
-							sources.add( carCreationService.getProvider() );
-							sources.add( carRequestingService.getProvider() );
+						}else {
 							
-							subscribeToDestoryEvents( sources );
+							logger.info("ConsumerTask recevied event - with type: " + event.getEventType() + ", and payload: " + event.getPayload() + ".");
+							
 						}
 						
 					}
 					
+					notificatonQueue.clear();
 					
+				}
+					
+				if ( carCreationService != null  && carRequestingService != null ) {
+													
 					final List<CarRequestDTO> carsToCreate = List.of(new CarRequestDTO("nissan", "green"), new CarRequestDTO("mazda", "blue"), new CarRequestDTO("opel", "blue"), new CarRequestDTO("nissan", "gray"));
 			    	
 					callCarCreationService( carCreationService , carsToCreate);
@@ -116,10 +139,16 @@ public class CarConsumerWithSubscriptionTask extends Thread {
 
 				} else {
 					
+					counter++;
+					
 					carCreationService = orchestrateCreateCarService();
 					carRequestingService = orchestrateGetCarService();
 					
 					if ( carCreationService != null  && carRequestingService != null ) {
+						
+						counter = 0;
+						
+						final Set<SystemResponseDTO> sources = new HashSet<SystemResponseDTO>();
 						
 						sources.add( carCreationService.getProvider() );
 						sources.add( carRequestingService.getProvider() );
@@ -128,7 +157,7 @@ public class CarConsumerWithSubscriptionTask extends Thread {
 					}
 				}
 				
-			} catch ( final Throwable ex) {
+			} catch ( final Throwable ex ) {
 				
 				logger.debug( ex.getMessage() );
 				
@@ -137,6 +166,8 @@ public class CarConsumerWithSubscriptionTask extends Thread {
 			}	
 
 		}
+		
+		System.exit( 0 );
 
 	}
 	
@@ -174,7 +205,7 @@ public class CarConsumerWithSubscriptionTask extends Thread {
 
 		final Set<SystemRequestDTO> sources = new HashSet<>(providers.size());
 		
-		for (SystemResponseDTO provider : providers) {
+		for (final SystemResponseDTO provider : providers) {
 			
 			final SystemRequestDTO source = new SystemRequestDTO();
 			source.setSystemName( provider.getSystemName() );

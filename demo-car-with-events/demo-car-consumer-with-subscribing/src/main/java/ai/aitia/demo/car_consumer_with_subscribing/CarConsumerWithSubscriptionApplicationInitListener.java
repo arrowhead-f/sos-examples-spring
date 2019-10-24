@@ -141,6 +141,11 @@ public class CarConsumerWithSubscriptionApplicationInitListener extends Applicat
 				
 			}
 		}
+		
+		if ( getConsumerTask() != null) {
+			
+			getConsumerTask().destroy();
+		}
 	}
 	
 	//=================================================================================================
