@@ -39,3 +39,6 @@ demo-energy-forecast/demo-energy-forecast-outdoor-provider/target/
 demo-energy-forecast/demo-energy-forecast-indoor-provider/target/
 demo-energy-forecast/demo-energy-forecast-provider/target/
 demo-energy-forecast/demo-energy-forecast-consumer/target/
+demo-car-with-events/demo-car-common/target/
+demo-car-with-events/demo-car-consumer-with-subscribing/target/
+demo-car-with-events/demo-car-provider-with-publishing/target/
