@@ -40,8 +40,8 @@ public class CarConsumerWithSubscriptionController {
 	
 	//-------------------------------------------------------------------------------------------------
 	@PostMapping(path = SubscriberConstants.REQUEST_RECEIVED_NOTIFICATION_URI) 
-	public void receivePublisherReceivedRequestEvent(@RequestBody final EventDTO event ) {	
-		logger.debug("receivePublisherReceivedRequestEvent started...");
+	public void receiveEventRequestReceived(@RequestBody final EventDTO event ) {	
+		logger.debug("receiveEventRequestReceived started...");
 		
 		if( event.getEventType() != null) {
 			
@@ -55,8 +55,8 @@ public class CarConsumerWithSubscriptionController {
 	
 	//-------------------------------------------------------------------------------------------------
 	@PostMapping(path = SubscriberConstants.PUBLISHER_DESTORYED_NOTIFICATION_URI) 
-	public void receivePublsisherDestroyedEvent(@RequestBody final EventDTO event ) {
-		logger.debug("receivePublsisherDestroyedEvent started... ");
+	public void receiveEventDestroyed(@RequestBody final EventDTO event ) {
+		logger.debug("receiveEventDestroyed started... ");
 		
 		if( event.getEventType() != null  ) {
 			
