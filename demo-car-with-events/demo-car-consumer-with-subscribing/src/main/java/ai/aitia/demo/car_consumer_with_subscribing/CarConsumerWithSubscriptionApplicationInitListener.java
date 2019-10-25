@@ -218,7 +218,13 @@ public class CarConsumerWithSubscriptionApplicationInitListener extends Applicat
 					if( ex.getMessage().contains( "Subscription violates uniqueConstraint rules" )) {
 						
 						logger.debug("Subscription is already in DB");
+					
+					} else {
+						
+						logger.debug(ex.getMessage());
+						logger.debug(ex);
 					}
+					
 					
 				} catch ( final Exception ex) {
 					
