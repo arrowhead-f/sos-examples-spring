@@ -26,7 +26,7 @@ public class ProviderSecurityConfig extends DefaultSecurityConfig {
 
     //-------------------------------------------------------------------------------------------------
 	@Override
-	protected void configure(HttpSecurity http) throws Exception {
+	protected void configure(final HttpSecurity http) throws Exception {
 		super.configure(http);
 		if (tokenSecurityFilterEnabled) {
 			tokenSecurityFilter = new ProviderTokenSecurityFilter();
