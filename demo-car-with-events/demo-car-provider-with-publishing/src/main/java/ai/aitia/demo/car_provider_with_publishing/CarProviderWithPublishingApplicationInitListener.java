@@ -104,7 +104,7 @@ public class CarProviderWithPublishingApplicationInitListener extends Applicatio
 	@Override
 	public void customDestroy() {
 		//Unregister service
-		publishDestoyedEvent();
+		publishDestroyedEvent();
 		arrowheadService.unregisterServiceFromServiceRegistry(CarProviderWithPublishingConstants.CREATE_CAR_SERVICE_DEFINITION);
 	}
 	
@@ -112,7 +112,7 @@ public class CarProviderWithPublishingApplicationInitListener extends Applicatio
 	// assistant methods
 
 	//-------------------------------------------------------------------------------------------------
-	private void publishDestoyedEvent() {
+	private void publishDestroyedEvent() {
 		final String eventType = PresetEventType.PUBLISHER_DESTROYED.getEventTypeName();
 		
 		final SystemRequestDTO source = new SystemRequestDTO();
