@@ -49,8 +49,6 @@ public class CarConsumerWithSubscriptionTask extends Thread {
 	@Resource( name = SubscriberConstants.NOTIFICATION_QUEUE )
 	private ConcurrentLinkedQueue<EventDTO> notificatonQueue;
 	
-	final Set<String> receivedEvenTypeList = new HashSet<>();
-	
     @Autowired
 	private ArrowheadService arrowheadService;
     
@@ -97,7 +95,7 @@ public class CarConsumerWithSubscriptionTask extends Thread {
 			
 			try {
 				
-				if ( !( notificatonQueue.peek() == null) ) {
+				if ( notificatonQueue.peek() != null ) {
 					
 					for (final EventDTO event : notificatonQueue ) {
 						
