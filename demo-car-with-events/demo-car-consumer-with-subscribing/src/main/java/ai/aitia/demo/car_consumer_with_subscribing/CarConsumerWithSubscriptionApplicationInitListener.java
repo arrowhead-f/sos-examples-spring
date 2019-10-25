@@ -165,7 +165,7 @@ public class CarConsumerWithSubscriptionApplicationInitListener extends Applicat
 			try {
 				keystore = KeyStore.getInstance(sslProperties.getKeyStoreType());
 				keystore.load(sslProperties.getKeyStore().getInputStream(), sslProperties.getKeyStorePassword().toCharArray());
-			} catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException ex) {
+			} catch ( final KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException ex) {
 				throw new ArrowheadException(ex.getMessage());
 			}			
 			final PrivateKey subscriberPrivateKey = Utilities.getPrivateKey(keystore, sslProperties.getKeyPassword());
