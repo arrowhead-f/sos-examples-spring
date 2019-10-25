@@ -16,7 +16,7 @@
   },
   {
     "name": "token.security.filter.enabled",
-    "type": "java.lang.String",
+    "type": "java.lang.Boolean",
     "description": "A description for 'token.security.filter.enabled'"
   }
 ]}
