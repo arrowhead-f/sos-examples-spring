@@ -224,8 +224,7 @@ public class CarConsumerWithSubscriptionApplicationInitListener extends Applicat
 						logger.debug(ex.getMessage());
 						logger.debug(ex);
 					}
-					
-					
+						
 				} catch ( final Exception ex) {
 					
 					logger.debug("Could not subscribe to EventType: " + eventType );
