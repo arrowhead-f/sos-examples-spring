@@ -26,7 +26,8 @@
 	
 	<modules>
 	    <module>demo-car</module>
-		<module>demo-energy-forecast</module>			
+	    <module>demo-energy-forecast</module>
+		<module>demo-car-with-events</module>
 	</modules>
 	
 	<repositories>
@@ -40,7 +41,7 @@
 		<dependency>
 			<groupId>eu.arrowhead</groupId>
 			<artifactId>client-library</artifactId>
-			<version>4.1.3.2</version>
+			<version>4.1.3.3</version>
 		</dependency>		
 	</dependencies>
 	

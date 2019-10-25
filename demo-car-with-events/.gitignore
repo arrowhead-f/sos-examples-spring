@@ -23,14 +23,13 @@
 ### VS Code ###
 .vscode/
 wrapper
-
+/target
 /mvnw
 /mvnw.cmd
 /.settings
-/.settings/
 *.prefs
-/.metadata/
+
 *.log
-
-**/target
-
+/.metadata/
+*target/*
+target

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>arrowhead-demo-car-common</name>
+	<name>demo-car-consumer-with-subscribing</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -16,12 +16,12 @@
 			</arguments>
 		</buildCommand>
 		<buildCommand>
-			<name>org.springframework.ide.eclipse.boot.validation.springbootbuilder</name>
+			<name>org.springframework.ide.eclipse.core.springbuilder</name>
 			<arguments>
 			</arguments>
 		</buildCommand>
 		<buildCommand>
-			<name>org.springframework.ide.eclipse.core.springbuilder</name>
+			<name>org.springframework.ide.eclipse.boot.validation.springbootbuilder</name>
 			<arguments>
 			</arguments>
 		</buildCommand>
