@@ -11,3 +11,4 @@ The project has the following dependencies:
 
 1. Car demo ([read me](https://github.com/arrowhead-f/sos-examples-spring/blob/master/demo-car/README.md))
 2. Energy Forecast demo ([read me](https://github.com/arrowhead-f/sos-examples-spring/blob/master/demo-energy-forecast/README.md))
+3. Car demo with events ( [read me] (https://github.com/arrowhead-f/sos-examples-spring/blob/master/demo-car-with-events/README.md))
