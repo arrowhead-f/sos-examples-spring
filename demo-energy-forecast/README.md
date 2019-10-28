@@ -15,11 +15,11 @@ The goal of the project is to simulate how a central heating supplier could cons
 Provides hourly measured data about a specific building within a specific time frame.
 * ***input:*** Query parameters: 
 
-  `builing`={building_id} [*mandatory*]
+  `building`={building_id} [*mandatory*]
   
-  `from`={uninx_epoch_time_stamp} [*mandatory*]
+  `from`={unix_epoch_time_stamp} [*mandatory*]
   
-  `to`={uninx_epoch_time_stamp} [*not mandatory*]
+  `to`={unix_epoch_time_stamp} [*not mandatory*]
   
 * ***output:*** EnergyDetailsListDTO.xml
 ```
@@ -43,9 +43,9 @@ Provides hourly measured data about a specific building within a specific time f
 Forcasts the energy consumption between the current time and the given time in the future. Forecast is calculated by a simple algorithm which requests historical data from indoor and outdoor providers.
 * ***input:*** Query parameters: 
 
-  `builing`={building_id} [*mandatory*]
+  `building`={building_id} [*mandatory*]
   
-  `timestamp`={uninx_epoch_time_stamp}[*mandatory*]
+  `timestamp`={unix_epoch_time_stamp}[*mandatory*]
 
 * ***output:*** EnergyForecastDTO.xml
 ```
