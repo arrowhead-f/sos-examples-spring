@@ -19,7 +19,7 @@ The project has the following dependencies:
   *By Swagger API documentation*
   
   - Go to `http(s)://<authorization_host>:<authorization_port>`.
-  - Create the authorization rule via the `POST /authorization/mgmt/intracloud` endpoint.
+  - Create the authorization rule via the [`POST /authorization/mgmt/intracloud` endpoint](https://github.com/arrowhead-f/core-java-spring/blob/master/README.md#add-intercloud-rules).
   
   *By MySQL queries*
   - Insert a new entry with the consumer details into the `system_` table.
