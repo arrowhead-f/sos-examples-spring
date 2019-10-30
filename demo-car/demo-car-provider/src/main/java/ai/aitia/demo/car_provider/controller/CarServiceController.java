@@ -30,9 +30,7 @@ import eu.arrowhead.common.exception.BadPayloadException;
 public class CarServiceController {
 	
 	//=================================================================================================
-	// members
-
-	
+	// members	
 	
 	@Autowired
 	private InMemoryCarDB carDB;

@@ -14,6 +14,13 @@ public class Constants {
 	public static final String GET_EXCHANGE_RATE_SERVICE_DEFINITION = "exchange-rate";
 	public static final String GET_EXCHANGE_RATE_SERVICE_URI = "/exchange_rate";
 	
+	public static final String REQUEST_PARAM_META_CURRENCY_RELATION = "request-param-currency-relation";
+	public static final String REQUEST_PARAM_CURRENCY_RELATION = "currency-relation";
+	public static final String REQUEST_PARAM_META_HUF_EUR_VALUE = "request-value-huf-eur";
+	public static final String REQUEST_PARAM_HUF_EUR_VALUE = "HUF-EUR";
+	public static final String REQUEST_PARAM_META_EUR_HUF_VALUE = "request-value-eur-huf";
+	public static final String REQUEST_PARAM_EUR_HUF_VALUE = "EUR-HUF";
+	
 	//=================================================================================================
 	// assistant methods
 

@@ -81,6 +81,9 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 		
 		//Register services into ServiceRegistry
 		final ServiceRegistryRequestDTO serviceRegistryRequest = createServiceRegistryRequest(Constants.GET_EXCHANGE_RATE_SERVICE_DEFINITION, Constants.GET_EXCHANGE_RATE_SERVICE_URI, HttpMethod.GET);
+		serviceRegistryRequest.getMetadata().put(Constants.REQUEST_PARAM_META_CURRENCY_RELATION, Constants.REQUEST_PARAM_CURRENCY_RELATION);
+		serviceRegistryRequest.getMetadata().put(Constants.REQUEST_PARAM_META_HUF_EUR_VALUE, Constants.REQUEST_PARAM_HUF_EUR_VALUE);
+		serviceRegistryRequest.getMetadata().put(Constants.REQUEST_PARAM_META_EUR_HUF_VALUE, Constants.REQUEST_PARAM_EUR_HUF_VALUE);
 		arrowheadService.forceRegisterServiceToServiceRegistry(serviceRegistryRequest);
 	}
 	
