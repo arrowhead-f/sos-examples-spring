@@ -144,9 +144,7 @@ public class CarProviderWithPublishingApplicationInitListener extends Applicatio
 
 	//-------------------------------------------------------------------------------------------------
 	private void setTokenSecurityFilter() {
-		if(!tokenSecurityFilterEnabled) {
-			logger.info("TokenSecurityFilter in not active");
-		} else {
+		if(tokenSecurityFilterEnabled) {
 			final PublicKey authorizationPublicKey = arrowheadService.queryAuthorizationPublicKey();
 			if (authorizationPublicKey == null) {
 				throw new ArrowheadException("Authorization public key is null");
@@ -160,9 +158,11 @@ public class CarProviderWithPublishingApplicationInitListener extends Applicatio
 				throw new ArrowheadException(ex.getMessage());
 			}			
 			final PrivateKey providerPrivateKey = Utilities.getPrivateKey(keystore, sslProperties.getKeyPassword());
-
+			
 			providerSecurityConfig.getTokenSecurityFilter().setAuthorizationPublicKey(authorizationPublicKey);
 			providerSecurityConfig.getTokenSecurityFilter().setMyPrivateKey(providerPrivateKey);
+		} else {
+			logger.info("TokenSecurityFilter in not active");
 		}
 	}
 	
