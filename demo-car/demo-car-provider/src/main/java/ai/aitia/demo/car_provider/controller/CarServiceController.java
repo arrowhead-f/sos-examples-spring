@@ -30,18 +30,22 @@ import eu.arrowhead.common.exception.BadPayloadException;
 public class CarServiceController {
 	
 	//=================================================================================================
-	// members
-
-	
+	// members	
 	
 	@Autowired
 	private InMemoryCarDB carDB;
 
 	//=================================================================================================
 	// methods
+	
+	//-------------------------------------------------------------------------------------------------
+	@GetMapping(produces = MediaType.TEXT_PLAIN_VALUE)
+	@ResponseBody public String echoLegacy() {
+		return "Got it";
+	}
 
 	//-------------------------------------------------------------------------------------------------
-	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(path = CarProviderConstants.CAR_URI, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody public List<CarResponseDTO> getCars(@RequestParam(name = CarProviderConstants.REQUEST_PARAM_BRAND, required = false) final String brand,
 													  @RequestParam(name = CarProviderConstants.REQUEST_PARAM_COLOR, required = false) final String color) {
 		final List<CarResponseDTO> response = new ArrayList<>();
@@ -61,13 +65,19 @@ public class CarServiceController {
 	}
 	
 	//-------------------------------------------------------------------------------------------------
-	@GetMapping(path = CarProviderConstants.BY_ID_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(path = "/cars", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody public List<Car> getCarsLegacy() {
+		return carDB.getAll();
+	}
+	
+	//-------------------------------------------------------------------------------------------------
+	@GetMapping(path = CarProviderConstants.CAR_URI + CarProviderConstants.BY_ID_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody public CarResponseDTO getCarById(@PathVariable(value = CarProviderConstants.PATH_VARIABLE_ID) final int id) {
 		return DTOConverter.convertCarToCarResponseDTO(carDB.getById(id));
 	}
 	
 	//-------------------------------------------------------------------------------------------------
-	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(path = CarProviderConstants.CAR_URI, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody public CarResponseDTO createCar(@RequestBody final CarRequestDTO dto) {
 		if (dto.getBrand() == null || dto.getBrand().isBlank()) {
 			throw new BadPayloadException("brand is null or blank");
@@ -80,7 +90,20 @@ public class CarServiceController {
 	}
 	
 	//-------------------------------------------------------------------------------------------------
-	@PutMapping(path = CarProviderConstants.BY_ID_PATH, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(path = "/cars", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody public CarRequestDTO createCarLegacy(@RequestBody final CarRequestDTO dto) {
+		if (dto.getBrand() == null || dto.getBrand().isBlank()) {
+			throw new BadPayloadException("brand is null or blank");
+		}
+		if (dto.getColor() == null || dto.getColor().isBlank()) {
+			throw new BadPayloadException("color is null or blank");
+		}
+		final Car car = carDB.create(dto.getBrand(), dto.getColor());
+		return new CarRequestDTO(car.getBrand(), car.getColor());
+	}
+	
+	//-------------------------------------------------------------------------------------------------
+	@PutMapping(path = CarProviderConstants.CAR_URI + CarProviderConstants.BY_ID_PATH, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody public CarResponseDTO updateCar(@PathVariable(name = CarProviderConstants.PATH_VARIABLE_ID) final int id, @RequestBody final CarRequestDTO dto) {
 		if (dto.getBrand() == null || dto.getBrand().isBlank()) {
 			throw new BadPayloadException("brand is null or blank");
@@ -94,7 +117,7 @@ public class CarServiceController {
 	
 	
 	//-------------------------------------------------------------------------------------------------
-	@DeleteMapping(path = CarProviderConstants.BY_ID_PATH)
+	@DeleteMapping(path = CarProviderConstants.CAR_URI + CarProviderConstants.BY_ID_PATH)
 	public void removeCarById(@PathVariable(value = CarProviderConstants.PATH_VARIABLE_ID) final int id) {
 		carDB.removeById(id);
 	}

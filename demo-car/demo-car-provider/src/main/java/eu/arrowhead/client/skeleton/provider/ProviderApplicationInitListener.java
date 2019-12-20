@@ -83,13 +83,16 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 		
 		
 		//Register services into ServiceRegistry
-		final ServiceRegistryRequestDTO createCarServiceRequest = createServiceRegistryRequest(CarProviderConstants.CREATE_CAR_SERVICE_DEFINITION, CarProviderConstants.CAR_URI, HttpMethod.POST);		
+		final ServiceRegistryRequestDTO createCarServiceRequest = createServiceRegistryRequest(CarProviderConstants.CREATE_CAR_SERVICE_DEFINITION, CarProviderConstants.CAR_URI, HttpMethod.POST, false);		
 		arrowheadService.forceRegisterServiceToServiceRegistry(createCarServiceRequest);
 		
-		ServiceRegistryRequestDTO getCarServiceRequest = createServiceRegistryRequest(CarProviderConstants.GET_CAR_SERVICE_DEFINITION,  CarProviderConstants.CAR_URI, HttpMethod.GET);
+		ServiceRegistryRequestDTO getCarServiceRequest = createServiceRegistryRequest(CarProviderConstants.GET_CAR_SERVICE_DEFINITION, CarProviderConstants.CAR_URI, HttpMethod.GET, false);
 		getCarServiceRequest.getMetadata().put(CarProviderConstants.REQUEST_PARAM_KEY_BRAND, CarProviderConstants.REQUEST_PARAM_BRAND);
 		getCarServiceRequest.getMetadata().put(CarProviderConstants.REQUEST_PARAM_KEY_COLOR, CarProviderConstants.REQUEST_PARAM_COLOR);
 		arrowheadService.forceRegisterServiceToServiceRegistry(getCarServiceRequest);
+		
+		ServiceRegistryRequestDTO getCarServiceRequestLegacy = createServiceRegistryRequest("car", "", HttpMethod.GET, true);
+		arrowheadService.forceRegisterServiceToServiceRegistry(getCarServiceRequestLegacy);
 	}
 	
 	//-------------------------------------------------------------------------------------------------
@@ -97,6 +100,7 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 	public void customDestroy() {
 		//Unregister service
 		arrowheadService.unregisterServiceFromServiceRegistry(CarProviderConstants.CREATE_CAR_SERVICE_DEFINITION);
+		arrowheadService.unregisterServiceFromServiceRegistry("car");
 	}
 	
 	//=================================================================================================
@@ -124,7 +128,7 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 	}
 	
 	//-------------------------------------------------------------------------------------------------
-	private ServiceRegistryRequestDTO createServiceRegistryRequest(final String serviceDefinition, final String serviceUri, final HttpMethod httpMethod) {
+	private ServiceRegistryRequestDTO createServiceRegistryRequest(final String serviceDefinition, final String serviceUri, final HttpMethod httpMethod, boolean isLegacy) {
 		final ServiceRegistryRequestDTO serviceRegistryRequest = new ServiceRegistryRequestDTO();
 		serviceRegistryRequest.setServiceDefinition(serviceDefinition);
 		final SystemRequestDTO systemRequest = new SystemRequestDTO();
@@ -135,14 +139,14 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 		if (tokenSecurityFilterEnabled) {
 			systemRequest.setAuthenticationInfo(Base64.getEncoder().encodeToString(arrowheadService.getMyPublicKey().getEncoded()));
 			serviceRegistryRequest.setSecure(ServiceSecurityType.TOKEN);
-			serviceRegistryRequest.setInterfaces(List.of(CarProviderConstants.INTERFACE_SECURE));
+			serviceRegistryRequest.setInterfaces(List.of(isLegacy ? "JSON" : CarProviderConstants.INTERFACE_SECURE));
 		} else if (sslEnabled) {
 			systemRequest.setAuthenticationInfo(Base64.getEncoder().encodeToString(arrowheadService.getMyPublicKey().getEncoded()));
 			serviceRegistryRequest.setSecure(ServiceSecurityType.CERTIFICATE);
-			serviceRegistryRequest.setInterfaces(List.of(CarProviderConstants.INTERFACE_SECURE));
+			serviceRegistryRequest.setInterfaces(List.of(isLegacy ? "JSON" :CarProviderConstants.INTERFACE_SECURE));
 		} else {
 			serviceRegistryRequest.setSecure(ServiceSecurityType.NOT_SECURE);
-			serviceRegistryRequest.setInterfaces(List.of(CarProviderConstants.INTERFACE_INSECURE));
+			serviceRegistryRequest.setInterfaces(List.of(isLegacy ? "JSON" :CarProviderConstants.INTERFACE_INSECURE));
 		}
 		serviceRegistryRequest.setProviderSystem(systemRequest);
 		serviceRegistryRequest.setServiceUri(serviceUri);
