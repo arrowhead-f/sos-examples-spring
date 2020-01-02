@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,7 +25,6 @@ import ai.aitia.demo.car_provider.entity.Car;
 import eu.arrowhead.common.exception.BadPayloadException;
 
 @RestController
-@RequestMapping(CarProviderConstants.CAR_URI)
 public class CarServiceController {
 	
 	//=================================================================================================
