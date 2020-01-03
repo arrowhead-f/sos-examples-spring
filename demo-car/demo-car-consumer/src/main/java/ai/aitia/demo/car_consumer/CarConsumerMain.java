@@ -54,8 +54,20 @@ public class CarConsumerMain implements ApplicationRunner {
     //-------------------------------------------------------------------------------------------------
     @Override
 	public void run(final ApplicationArguments args) throws Exception {
-    	createCarServiceOrchestrationAndConsumption();
-    	getCarServiceOrchestrationAndConsumption();
+    	try {
+    		createCarServiceOrchestrationAndConsumption();
+    		getCarServiceOrchestrationAndConsumption();			
+		} catch (final Exception ex) {
+			logger.info("Proceedure 4.1.3 failed");
+			logger.info(ex.getMessage());
+		}
+    	try {			
+    		createCarServiceOrchestrationAndConsumptionLegacy();
+    		getCarServiceOrchestrationAndConsumptionLegacy();
+		} catch (final Exception ex) {
+			logger.info("Proceedure 4.1.2 failed");
+			logger.info(ex.getMessage());
+		}
 	}
     
     //-------------------------------------------------------------------------------------------------
@@ -84,7 +96,7 @@ public class CarConsumerMain implements ApplicationRunner {
 			logger.info("No provider found during the orchestration");
 		} else {
 			final OrchestrationResultDTO orchestrationResult = orchestrationResponse.getResponse().get(0);
-			validateOrchestrationResult(orchestrationResult, CarConsumerConstants.CREATE_CAR_SERVICE_DEFINITION);
+			validateOrchestrationResult(orchestrationResult, CarConsumerConstants.CREATE_CAR_SERVICE_DEFINITION, getInterface());
 			
 			final List<CarRequestDTO> carsToCreate = List.of(new CarRequestDTO("nissan", "green"), new CarRequestDTO("mazda", "blue"), new CarRequestDTO("opel", "blue"), new CarRequestDTO("nissan", "gray"));
 			
@@ -127,7 +139,7 @@ public class CarConsumerMain implements ApplicationRunner {
 			logger.info("No provider found during the orchestration");
 		} else {
 			final OrchestrationResultDTO orchestrationResult = orchestrationResponse.getResponse().get(0);
-			validateOrchestrationResult(orchestrationResult, CarConsumerConstants.GET_CAR_SERVICE_DEFINITION);
+			validateOrchestrationResult(orchestrationResult, CarConsumerConstants.GET_CAR_SERVICE_DEFINITION, getInterface());
 			
 			logger.info("Get all cars:");
 			final String token = orchestrationResult.getAuthorizationTokens() == null ? null : orchestrationResult.getAuthorizationTokens().get(getInterface());
@@ -147,6 +159,85 @@ public class CarConsumerMain implements ApplicationRunner {
 		}
     }
     
+    //-------------------------------------------------------------------------------------------------
+    public void createCarServiceOrchestrationAndConsumptionLegacy() {
+    	logger.info("Orchestration request for legacy 'car' service:");
+    	final ServiceQueryFormDTO serviceQueryForm = new ServiceQueryFormDTO.Builder("car")
+    																		.interfaces("JSON")
+    																		.build();
+    	final Builder orchestrationFormBuilder = arrowheadService.getOrchestrationFormBuilder();
+		final OrchestrationFormRequestDTO orchestrationFormRequest = orchestrationFormBuilder.requestedService(serviceQueryForm)
+																					   		 .flag(Flag.MATCHMAKING, true)
+																					   		 .flag(Flag.OVERRIDE_STORE, true)
+																					   		 .build();
+		printOut(orchestrationFormRequest);
+		final OrchestrationResponseDTO orchestrationResponse = arrowheadService.proceedOrchestration(orchestrationFormRequest);
+		
+		logger.info("Orchestration response:");
+		printOut(orchestrationResponse);
+		
+		if (orchestrationResponse == null) {
+			logger.info("No orchestration response received");
+		} else if (orchestrationResponse.getResponse().isEmpty()) {
+			logger.info("No provider found during the orchestration");
+		} else {
+			final OrchestrationResultDTO orchestrationResult = orchestrationResponse.getResponse().get(0);
+			validateOrchestrationResult(orchestrationResult, "car", "JSON");
+			
+			final CarRequestDTO carRequestDTO = new CarRequestDTO("ArrowMobile", "green");
+			logger.info("Create a car request:");
+			printOut(carRequestDTO);
+			final String token = orchestrationResult.getAuthorizationTokens() == null ? null : orchestrationResult.getAuthorizationTokens().get("JSON");
+			final String signature = orchestrationResult.getAuthorizationTokens() == null ? null : orchestrationResult.getAuthorizationTokens().get("JSON-SIGNATURE");
+			final String[] params = {"signature", signature};
+			final CarRequestDTO carCreated = arrowheadService.consumeServiceHTTP(CarRequestDTO.class, HttpMethod.POST, orchestrationResult.getProvider().getAddress(),
+																				  orchestrationResult.getProvider().getPort(), "/" + orchestrationResult.getServiceUri() + "/cars", 
+																				  "HTTPS-JSON", token, carRequestDTO, Utilities.isEmpty(signature) ? new String[0] : params);
+			logger.info("Provider response");
+			printOut(carCreated);
+		}
+    }
+    
+    //-------------------------------------------------------------------------------------------------
+    public void getCarServiceOrchestrationAndConsumptionLegacy() {
+    	logger.info("Orchestration request for legacy 'car' service:");
+    	final ServiceQueryFormDTO serviceQueryForm = new ServiceQueryFormDTO.Builder("car")
+    																		.interfaces("JSON")
+    																		.build();
+    	final Builder orchestrationFormBuilder = arrowheadService.getOrchestrationFormBuilder();
+		final OrchestrationFormRequestDTO orchestrationFormRequest = orchestrationFormBuilder.requestedService(serviceQueryForm)
+																					   		 .flag(Flag.MATCHMAKING, true)
+																					   		 .flag(Flag.OVERRIDE_STORE, true)
+																					   		 .build();
+		printOut(orchestrationFormRequest);
+		final OrchestrationResponseDTO orchestrationResponse = arrowheadService.proceedOrchestration(orchestrationFormRequest);
+		
+		logger.info("Orchestration response:");
+		printOut(orchestrationResponse);
+		
+		if (orchestrationResponse == null) {
+			logger.info("No orchestration response received");
+		} else if (orchestrationResponse.getResponse().isEmpty()) {
+			logger.info("No provider found during the orchestration");
+		} else {
+			final OrchestrationResultDTO orchestrationResult = orchestrationResponse.getResponse().get(0);
+			validateOrchestrationResult(orchestrationResult, "car", "JSON");
+			
+			final CarRequestDTO carRequestDTO = new CarRequestDTO("ArrowMobile", "green");
+			logger.info("Get cars request:");
+			printOut(carRequestDTO);
+			final String token = orchestrationResult.getAuthorizationTokens() == null ? null : orchestrationResult.getAuthorizationTokens().get("JSON");
+			final String signature = orchestrationResult.getAuthorizationTokens() == null ? null : orchestrationResult.getAuthorizationTokens().get("JSON-SIGNATURE");
+			final String[] params = {"signature", signature};
+			@SuppressWarnings("unchecked")
+			final List<CarRequestDTO> carCreated = arrowheadService.consumeServiceHTTP(List.class, HttpMethod.GET, orchestrationResult.getProvider().getAddress(),
+																				  orchestrationResult.getProvider().getPort(), "/" + orchestrationResult.getServiceUri() + "/cars", 
+																				  "HTTPS-JSON", token, carRequestDTO, Utilities.isEmpty(signature) ? new String[0] : params);
+			logger.info("Provider response");
+			printOut(carCreated);
+		}
+    }
+    
     //=================================================================================================
 	// assistant methods
     
@@ -156,14 +247,14 @@ public class CarConsumerMain implements ApplicationRunner {
     }
     
     //-------------------------------------------------------------------------------------------------
-    private void validateOrchestrationResult(final OrchestrationResultDTO orchestrationResult, final String serviceDefinitin) {
-    	if (!orchestrationResult.getService().getServiceDefinition().equalsIgnoreCase(serviceDefinitin)) {
+    private void validateOrchestrationResult(final OrchestrationResultDTO orchestrationResult, final String serviceDefinition, final String interfaceName) {
+    	if (!orchestrationResult.getService().getServiceDefinition().equalsIgnoreCase(serviceDefinition)) {
 			throw new InvalidParameterException("Requested and orchestrated service definition do not match");
 		}
     	
     	boolean hasValidInterface = false;
     	for (final ServiceInterfaceResponseDTO serviceInterface : orchestrationResult.getInterfaces()) {
-			if (serviceInterface.getInterfaceName().equalsIgnoreCase(getInterface())) {
+			if (serviceInterface.getInterfaceName().equalsIgnoreCase(interfaceName)) {
 				hasValidInterface = true;
 				break;
 			}
