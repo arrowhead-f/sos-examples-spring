@@ -1,4 +1,4 @@
-package eu.arrowhead.client.skeleton.consumer;
+package ai.aitia.demo.exchange_rate_consumer;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,7 +21,7 @@ import eu.arrowhead.common.dto.shared.ServiceQueryFormDTO;
 import eu.arrowhead.common.exception.ArrowheadException;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {CommonConstants.BASE_PACKAGE}) //TODO: add custom packages if any
+@ComponentScan(basePackages = {CommonConstants.BASE_PACKAGE, Constants.BASE_PACKAGE})
 public class ConsumerMain implements ApplicationRunner {
     
     //=================================================================================================
