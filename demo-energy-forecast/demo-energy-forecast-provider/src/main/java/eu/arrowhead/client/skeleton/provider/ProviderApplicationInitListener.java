@@ -72,14 +72,17 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 		checkCoreSystemReachability(CoreSystem.SERVICE_REGISTRY);
 		checkCoreSystemReachability(CoreSystem.ORCHESTRATOR);
 		if (sslEnabled && tokenSecurityFilterEnabled) {
-			checkCoreSystemReachability(CoreSystem.AUTHORIZATION);			
-
+			checkCoreSystemReachability(CoreSystem.AUTHORIZATION);
 			//Initialize Arrowhead Context
 			arrowheadService.updateCoreServiceURIs(CoreSystem.AUTHORIZATION);
-			arrowheadService.updateCoreServiceURIs(CoreSystem.ORCHESTRATOR);
+			setTokenSecurityFilter();
+			
+		} else {
+			logger.info("TokenSecurityFilter in not active");
 		}		
 		
-		setTokenSecurityFilter();
+		//Initialize Arrowhead Context
+		arrowheadService.updateCoreServiceURIs(CoreSystem.ORCHESTRATOR);
 		
 		//Register services into ServiceRegistry
 		final ServiceRegistryRequestDTO energyService = createServiceRegistryRequest(EFCommonConstants.ENERGY_FORECAST_SERVICE, EFCommonConstants.ENERGY_FORECAST_SERVICE_URI, HttpMethod.GET);
@@ -102,26 +105,23 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 
 	//-------------------------------------------------------------------------------------------------
 	private void setTokenSecurityFilter() {
-		if(!tokenSecurityFilterEnabled) {
-			logger.info("TokenSecurityFilter in not active");
-		} else {
-			final PublicKey authorizationPublicKey = arrowheadService.queryAuthorizationPublicKey();
-			if (authorizationPublicKey == null) {
-				throw new ArrowheadException("Authorization public key is null");
-			}
-			
-			KeyStore keystore;
-			try {
-				keystore = KeyStore.getInstance(sslProperties.getKeyStoreType());
-				keystore.load(sslProperties.getKeyStore().getInputStream(), sslProperties.getKeyStorePassword().toCharArray());
-			} catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException ex) {
-				throw new ArrowheadException(ex.getMessage());
-			}			
-			final PrivateKey providerPrivateKey = Utilities.getPrivateKey(keystore, sslProperties.getKeyPassword());
-
-			providerSecurityConfig.getTokenSecurityFilter().setAuthorizationPublicKey(authorizationPublicKey);
-			providerSecurityConfig.getTokenSecurityFilter().setMyPrivateKey(providerPrivateKey);
+		final PublicKey authorizationPublicKey = arrowheadService.queryAuthorizationPublicKey();
+		if (authorizationPublicKey == null) {
+			throw new ArrowheadException("Authorization public key is null");
 		}
+		
+		KeyStore keystore;
+		try {
+			keystore = KeyStore.getInstance(sslProperties.getKeyStoreType());
+			keystore.load(sslProperties.getKeyStore().getInputStream(), sslProperties.getKeyStorePassword().toCharArray());
+		} catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException ex) {
+			throw new ArrowheadException(ex.getMessage());
+		}			
+		final PrivateKey providerPrivateKey = Utilities.getPrivateKey(keystore, sslProperties.getKeyPassword());
+		
+		providerSecurityConfig.getTokenSecurityFilter().setAuthorizationPublicKey(authorizationPublicKey);
+		providerSecurityConfig.getTokenSecurityFilter().setMyPrivateKey(providerPrivateKey);
+
 	}
 	
 	//-------------------------------------------------------------------------------------------------
