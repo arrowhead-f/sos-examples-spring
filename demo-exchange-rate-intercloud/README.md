@@ -17,7 +17,7 @@ Returns the rate based on the given parameters.
 ## How to run?
 1. Clone or fork this repo to your local machine.
 2. Go to the root directory and execute `mvn clean install` command, then wait until the build succeeds.
-3. Start two instances of [Arrowhead Framework v4.1.3](https://github.com/arrowhead-f/core-java-spring) one with [testcloud1 certificates](https://github.com/arrowhead-f/core-java-spring/tree/master/certificates/testcloud1) and another with [testcloud2 certificates](https://github.com/arrowhead-f/core-java-spring/tree/master/certificates/testcloud2), before you would start the demo.
+3. Install two instances of [Arrowhead Framework v4.1.3](https://github.com/arrowhead-f/core-java-spring) one with [testcloud1 certificates](https://github.com/arrowhead-f/core-java-spring/tree/master/certificates/testcloud1) and another with [testcloud2 certificates](https://github.com/arrowhead-f/core-java-spring/tree/master/certificates/testcloud2). It's recommended to have the two arrowhead clouds separated on different machines. 
    Required core systems:
    * Service Registry
    * Authorization
