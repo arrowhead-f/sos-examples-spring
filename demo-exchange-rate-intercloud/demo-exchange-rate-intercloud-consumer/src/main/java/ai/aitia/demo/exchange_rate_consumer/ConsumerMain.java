@@ -1,5 +1,7 @@
 package ai.aitia.demo.exchange_rate_consumer;
 
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +14,16 @@ import org.springframework.http.HttpMethod;
 
 import eu.arrowhead.client.library.ArrowheadService;
 import eu.arrowhead.common.CommonConstants;
+import eu.arrowhead.common.SSLProperties;
+import eu.arrowhead.common.Utilities;
 import eu.arrowhead.common.dto.shared.OrchestrationFlags.Flag;
 import eu.arrowhead.common.dto.shared.OrchestrationFormRequestDTO;
 import eu.arrowhead.common.dto.shared.OrchestrationFormRequestDTO.Builder;
 import eu.arrowhead.common.dto.shared.OrchestrationResponseDTO;
 import eu.arrowhead.common.dto.shared.OrchestrationResultDTO;
+import eu.arrowhead.common.dto.shared.ServiceInterfaceResponseDTO;
 import eu.arrowhead.common.dto.shared.ServiceQueryFormDTO;
-import eu.arrowhead.common.exception.ArrowheadException;
+import eu.arrowhead.common.exception.InvalidParameterException;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {CommonConstants.BASE_PACKAGE, Constants.BASE_PACKAGE})
@@ -29,6 +34,9 @@ public class ConsumerMain implements ApplicationRunner {
 	
     @Autowired
 	private ArrowheadService arrowheadService;
+    
+    @Autowired
+	protected SSLProperties sslProperties;
     
 	private final Logger logger = LogManager.getLogger( ConsumerMain.class );
     
@@ -43,48 +51,79 @@ public class ConsumerMain implements ApplicationRunner {
     //-------------------------------------------------------------------------------------------------
     @Override
 	public void run(final ApplicationArguments args) throws Exception {
-		//SIMPLE EXAMPLE OF INITIATING AN ORCHESTRATION
+    	final ServiceQueryFormDTO serviceQueryForm = new ServiceQueryFormDTO.Builder(Constants.GET_EXCHANGE_RATE_SERVICE_DEFINITION)
+																			.interfaces(getInterface())
+																			.build();
     	
     	final Builder orchestrationFormBuilder = arrowheadService.getOrchestrationFormBuilder();
-    	
-    	final ServiceQueryFormDTO requestedService = new ServiceQueryFormDTO();
-    	requestedService.setServiceDefinitionRequirement("test-service");
-    	
-    	orchestrationFormBuilder.requestedService(requestedService)
-    							.flag(Flag.MATCHMAKING, false) //When this flag is false or not specified, then the orchestration response cloud contain more proper provider. Otherwise only one will be chosen if there is any proper.
-    							.flag(Flag.OVERRIDE_STORE, true) //When this flag is false or not specified, then a Store Orchestration will be proceeded. Otherwise a Dynamic Orchestration will be proceeded.
-    							.flag(Flag.TRIGGER_INTER_CLOUD, false); //When this flag is false or not specified, then orchestration will not look for providers in the neighbor clouds, when there is no proper provider in the local cloud. Otherwise it will. 
-    	
-    	final OrchestrationFormRequestDTO orchestrationRequest = orchestrationFormBuilder.build();
-    	
-    	OrchestrationResponseDTO response = null;
-    	try {
-    		response = arrowheadService.proceedOrchestration(orchestrationRequest);			
-		} catch (final ArrowheadException ex) {
-			//Handle the unsuccessful request as you wish!
+		final OrchestrationFormRequestDTO orchestrationFormRequest = orchestrationFormBuilder.requestedService(serviceQueryForm)
+																					   		 .flag(Flag.TRIGGER_INTER_CLOUD, true)
+																					   		 .flag(Flag.OVERRIDE_STORE, true)
+																					   		 .build();
+		
+		logger.info("Orchestration request for " + Constants.GET_EXCHANGE_RATE_SERVICE_DEFINITION + " service:");
+		printOut(orchestrationFormRequest);
+		
+		final OrchestrationResponseDTO orchestrationResponse = arrowheadService.proceedOrchestration(orchestrationFormRequest);
+		
+		logger.info("Orchestration response:");
+		printOut(orchestrationResponse);
+		
+		if (orchestrationResponse == null) {
+			logger.info("No orchestration response received");
+		} else if (orchestrationResponse.getResponse().isEmpty()) {
+			logger.info("No provider found during the orchestration");
+		} else {
+			final OrchestrationResultDTO orchestrationResult = orchestrationResponse.getResponse().get(0);
+			validateOrchestrationResult(orchestrationResult, Constants.GET_EXCHANGE_RATE_SERVICE_DEFINITION);
+			final String token = orchestrationResult.getAuthorizationTokens() == null ? null : orchestrationResult.getAuthorizationTokens().get(getInterface());
+			
+			final String[] queryParamEurHuf = {orchestrationResult.getMetadata().get(Constants.REQUEST_PARAM_META_CURRENCY_RELATION), orchestrationResult.getMetadata().get(Constants.REQUEST_PARAM_META_EUR_HUF_VALUE)};
+			@SuppressWarnings("unchecked")
+			final List<String> exchangeRateEurHuf = arrowheadService.consumeServiceHTTP(List.class, HttpMethod.valueOf(orchestrationResult.getMetadata().get(Constants.HTTP_METHOD)),
+																					orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), orchestrationResult.getServiceUri(),
+																					getInterface(), token, null, queryParamEurHuf);
+			logger.info("Get EUR-HUF exchange rate:");
+			printOut(exchangeRateEurHuf);
+			
+			final String[] queryParamHufEur = {orchestrationResult.getMetadata().get(Constants.REQUEST_PARAM_META_CURRENCY_RELATION), orchestrationResult.getMetadata().get(Constants.REQUEST_PARAM_META_HUF_EUR_VALUE)};
+			@SuppressWarnings("unchecked")
+			final List<String> exchangeRateHufEur = arrowheadService.consumeServiceHTTP(List.class, HttpMethod.valueOf(orchestrationResult.getMetadata().get(Constants.HTTP_METHOD)),
+																					orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), orchestrationResult.getServiceUri(),
+																					getInterface(), token, null, queryParamHufEur);
+			logger.info("Get HUF-EUR exchange rate:");
+			printOut(exchangeRateHufEur);
 		}
-    	
-    	//EXAMPLE OF CONSUMING THE SERVICE FROM A CHOSEN PROVIDER
-    	
-    	if (response == null || response.getResponse().isEmpty()) {
-    		//If no proper providers found during the orchestration process, then the response list will be empty. Handle the case as you wish!
-    		logger.debug("Orchestration response is empty");
-    		return;
-    	}
-    	
-    	final OrchestrationResultDTO result = response.getResponse().get(0); //Simplest way of choosing a provider.
-    	
-    	final HttpMethod httpMethod = HttpMethod.GET;//Http method should be specified in the description of the service.
-    	final String address = result.getProvider().getAddress();
-    	final int port = result.getProvider().getPort();
-    	final String serviceUri = result.getServiceUri();
-    	final String interfaceName = result.getInterfaces().get(0).getInterfaceName(); //Simplest way of choosing an interface.
-    	String token = null;
-    	if (result.getAuthorizationTokens() != null) {
-    		token = result.getAuthorizationTokens().get(interfaceName); //Can be null when the security type of the provider is 'CERTIFICATE' or nothing.
-		}
-    	final Object payload = null; //Can be null if not specified in the description of the service.
-    	
-    	final String consumedService = arrowheadService.consumeServiceHTTP(String.class, httpMethod, address, port, serviceUri, interfaceName, token, payload, "testkey", "testvalue");
 	}
+    
+    //=================================================================================================
+	// assistant methods
+    
+    //-------------------------------------------------------------------------------------------------
+    private String getInterface() {
+    	return sslProperties.isSslEnabled() ? Constants.INTERFACE_SECURE : Constants.INTERFACE_INSECURE;
+    }
+    
+    //-------------------------------------------------------------------------------------------------
+    private void validateOrchestrationResult(final OrchestrationResultDTO orchestrationResult, final String serviceDefinition) {
+    	if (!orchestrationResult.getService().getServiceDefinition().equalsIgnoreCase(serviceDefinition)) {
+			throw new InvalidParameterException("Requested and orchestrated service definition do not match");
+		}
+    	
+    	boolean hasValidInterface = false;
+    	for (final ServiceInterfaceResponseDTO serviceInterface : orchestrationResult.getInterfaces()) {
+			if (serviceInterface.getInterfaceName().equalsIgnoreCase(getInterface())) {
+				hasValidInterface = true;
+				break;
+			}
+		}
+    	if (!hasValidInterface) {
+    		throw new InvalidParameterException("Requested and orchestrated interface do not match");
+		}
+    }
+    
+    //-------------------------------------------------------------------------------------------------
+    private void printOut(final Object object) {
+    	System.out.println(Utilities.toPrettyJson(Utilities.toJson(object)));
+    }
 }
