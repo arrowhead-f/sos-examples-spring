@@ -25,7 +25,7 @@ Returns the rate based on the given parameters.
 2. At the very first time, [**configure the Gatekeeper and Gateway Core Systems**](https://github.com/arrowhead-f/core-java-spring/blob/master/documentation/gatekeeper/GatekeeperSetup.md).
 3. Clone or fork this repo to your local machine and set the Service Registry addresses & ports in the **application.properties** located in `src/main/resources folder`.
    * Consumer is belonged to TestCloud1
-   * Provider is belonged to TEstCloud2
+   * Provider is belonged to TestCloud2
 4. Go to the root directory and execute `mvn clean install` command, then wait until the build succeeds.
 5. Start the **provider** (it will registrate automatically into the Service Registry Core System of **TestCloud2**).
 6. At the very first time, [register](https://github.com/arrowhead-f/core-java-spring#serviceregistry_endpoints_post_systems) the **consumer into TestCloud1** and create the [inter-cloud authorization rules](https://github.com/arrowhead-f/core-java-spring#authorization_endpoints_post_intercloud).
