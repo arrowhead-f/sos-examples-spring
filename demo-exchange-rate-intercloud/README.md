@@ -1,2 +1,29 @@
 # Exchange Rate Intercloud SoS Demo (Java Spring-Boot)
 ##### The project provides Arrowhead v4.1.3 Clients demo implementation developed from [client-skeleton project](https://github.com/arrowhead-f/client-skeleton-java-spring)
+
+## Overview
+The goal of the project is to simply demonstrate how a consumer could procced an **inter-cloud orchestration** for a service and consume it afterward.
+
+## Service Descriptions
+**exchange-rate:**
+
+Returns the rate based on the given parameters.
+* ***input:*** Query parameters: 
+
+  `currency-relation`={relation} *[possible values: EUR-HUF, HUF-EUR]*
+ 
+* ***output:*** String value
+
+## How to run?
+1. Clone of fork this repo to your local machine.
+2. Go to the root directory and execute `mvn clean install` command, then wait until the build succeeds.
+3. Start two instances of [Arrowhead Framework v4.1.3](https://github.com/arrowhead-f/core-java-spring) one with [testcloud1 certificates](https://github.com/arrowhead-f/core-java-spring/tree/master/certificates/testcloud1) and another with [testcloud2 certificates](https://github.com/arrowhead-f/core-java-spring/tree/master/certificates/testcloud2), before you would start the demo.
+   Required core systems:
+   * Service Registry
+   * Authorization
+   * Orchestration
+   * Gatekeeper
+   * Gateway
+4. Start the provider (it will registrate automatically to the Service Registry Core System).
+5. At the very first time, register the consumer manually and create the inter cloud authorization rules.
+6. Start the Consumer.
