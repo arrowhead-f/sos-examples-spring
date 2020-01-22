@@ -2,7 +2,7 @@
 ##### The project provides Arrowhead v4.1.3 Clients demo implementation developed from [client-skeleton project](https://github.com/arrowhead-f/client-skeleton-java-spring)
 
 ## Overview
-The goal of the project is to simply demonstrate how a consumer could procced an **inter-cloud orchestration** for a service and consume it afterward.
+The goal of the project is to simply demonstrate how a consumer could proceed an **inter-cloud orchestration** for a service and consume it afterward.
 
 ## Service Descriptions
 **exchange-rate:**
