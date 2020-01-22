@@ -24,7 +24,7 @@ Returns the rate based on the given parameters.
    * Orchestration
    * Gatekeeper
    * Gateway
-4. At the very first time, [configure the Gatekeeper and Gateway Core Systems](https://github.com/arrowhead-f/core-java-spring/blob/master/documentation/gatekeeper/GatekeeperSetup.md).
+4. At the very first time, [**configure the Gatekeeper and Gateway Core Systems**](https://github.com/arrowhead-f/core-java-spring/blob/master/documentation/gatekeeper/GatekeeperSetup.md).
 5. Start the **provider** (it will registrate automatically into the Service Registry Core System of **TestCloud2**).
-7. At the very first time, register the **consumer into TestCloud1** and create the [inter-cloud authorization rules](https://github.com/arrowhead-f/core-java-spring#authorization_endpoints_post_intercloud).
-8. Start the Consumer.
+6. At the very first time, [register](https://github.com/arrowhead-f/core-java-spring#serviceregistry_endpoints_post_systems) the **consumer into TestCloud1** and create the [inter-cloud authorization rules](https://github.com/arrowhead-f/core-java-spring#authorization_endpoints_post_intercloud).
+7. Start the Consumer.
