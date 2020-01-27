@@ -1,7 +1,5 @@
 package ai.aitia.demo.exchange_rate_consumer;
 
-import java.util.List;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,7 +78,7 @@ public class ConsumerMain implements ApplicationRunner {
 			
 			final String[] queryParamEurHuf = {orchestrationResult.getMetadata().get(Constants.REQUEST_PARAM_META_CURRENCY_RELATION), orchestrationResult.getMetadata().get(Constants.REQUEST_PARAM_META_EUR_HUF_VALUE)};
 			@SuppressWarnings("unchecked")
-			final List<String> exchangeRateEurHuf = arrowheadService.consumeServiceHTTP(List.class, HttpMethod.valueOf(orchestrationResult.getMetadata().get(Constants.HTTP_METHOD)),
+			final String exchangeRateEurHuf = arrowheadService.consumeServiceHTTP(String.class, HttpMethod.valueOf(orchestrationResult.getMetadata().get(Constants.HTTP_METHOD)),
 																					orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), orchestrationResult.getServiceUri(),
 																					getInterface(), token, null, queryParamEurHuf);
 			logger.info("Get EUR-HUF exchange rate:");
@@ -88,9 +86,9 @@ public class ConsumerMain implements ApplicationRunner {
 			
 			final String[] queryParamHufEur = {orchestrationResult.getMetadata().get(Constants.REQUEST_PARAM_META_CURRENCY_RELATION), orchestrationResult.getMetadata().get(Constants.REQUEST_PARAM_META_HUF_EUR_VALUE)};
 			@SuppressWarnings("unchecked")
-			final List<String> exchangeRateHufEur = arrowheadService.consumeServiceHTTP(List.class, HttpMethod.valueOf(orchestrationResult.getMetadata().get(Constants.HTTP_METHOD)),
-																					orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), orchestrationResult.getServiceUri(),
-																					getInterface(), token, null, queryParamHufEur);
+			final String exchangeRateHufEur = arrowheadService.consumeServiceHTTP(String.class, HttpMethod.valueOf(orchestrationResult.getMetadata().get(Constants.HTTP_METHOD)),
+																				  orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), orchestrationResult.getServiceUri(),
+																				  getInterface(), token, null, queryParamHufEur);
 			logger.info("Get HUF-EUR exchange rate:");
 			printOut(exchangeRateHufEur);
 		}
