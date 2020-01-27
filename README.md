@@ -23,6 +23,12 @@ The project has the following dependencies:
   - Create the authorization rule via the [`POST /authorization/mgmt/intracloud`](https://github.com/arrowhead-f/core-java-spring/blob/master/README.md#add-intracloud-rules) or [`POST /authorization/mgmt/intercloud`](https://github.com/arrowhead-f/core-java-spring/blob/master/README.md#add-intercloud-rules) endpoint.
   
   *By MySQL queries*
+  Intra-Cloud:
   - Insert a new entry with the consumer details into the `system_` table.
   - Insert a new entry with the IDs of consumer entry, provider entry and the service definition entry into the `authorization_intra_cloud` table.
   - Insert a new entry with the IDs of authorization intra cloud entry and service interface entry into the `authorization_intra_cloud_interface_connection` table.
+  
+  Inter-Cloud:
+  - Insert a new entry with the cloud details into the `cloud` table. The `authentication_info` have to be filled out with the gatekeper's publick key of the cloud.
+  - Insert a new entry with the IDs of the cloud entry, provider entry and the service definition entry into the `authorization_inter_cloud` table.
+  - Insert a new entry with the IDs of authorization inter cloud entry and service interface entry into the `authorization_inter_cloud_interface_connection` table.
