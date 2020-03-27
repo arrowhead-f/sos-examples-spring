@@ -178,14 +178,14 @@ public class CarProviderWithPublishingApplicationInitListener extends Applicatio
 
 		if (tokenSecurityFilterEnabled) {
 			systemRequest.setAuthenticationInfo(Base64.getEncoder().encodeToString(arrowheadService.getMyPublicKey().getEncoded()));
-			serviceRegistryRequest.setSecure(ServiceSecurityType.TOKEN);
+			serviceRegistryRequest.setSecure(ServiceSecurityType.TOKEN.name());
 			serviceRegistryRequest.setInterfaces(List.of(CarProviderWithPublishingConstants.INTERFACE_SECURE));
 		} else if (sslEnabled) {
 			systemRequest.setAuthenticationInfo(Base64.getEncoder().encodeToString(arrowheadService.getMyPublicKey().getEncoded()));
-			serviceRegistryRequest.setSecure(ServiceSecurityType.CERTIFICATE);
+			serviceRegistryRequest.setSecure(ServiceSecurityType.CERTIFICATE.name());
 			serviceRegistryRequest.setInterfaces(List.of(CarProviderWithPublishingConstants.INTERFACE_SECURE));
 		} else {
-			serviceRegistryRequest.setSecure(ServiceSecurityType.NOT_SECURE);
+			serviceRegistryRequest.setSecure(ServiceSecurityType.NOT_SECURE.name());
 			serviceRegistryRequest.setInterfaces(List.of(CarProviderWithPublishingConstants.INTERFACE_INSECURE));
 		}
 		serviceRegistryRequest.setProviderSystem(systemRequest);
