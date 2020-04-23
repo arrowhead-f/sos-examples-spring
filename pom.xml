@@ -31,18 +31,11 @@
 		<module>demo-exchange-rate-intercloud</module>
   </modules>
 	
-	<repositories>
-		<repository>
-			<id>arrowhead-client</id>
-			<url>https://github.com/arrowhead-f/client-library-java-spring/raw/master/client-mvn-repo</url>
-		</repository>
-	</repositories>
-	
 	<dependencies>
 		<dependency>
 			<groupId>eu.arrowhead</groupId>
 			<artifactId>client-library</artifactId>
-			<version>4.1.3.7</version>
+			<version>4.1.3.9</version>
 		</dependency>		
 	</dependencies>
 	
