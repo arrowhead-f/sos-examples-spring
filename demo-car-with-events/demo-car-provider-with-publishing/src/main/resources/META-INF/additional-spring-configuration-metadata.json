@@ -18,5 +18,10 @@
     "name": "token.security.filter.enabled",
     "type": "java.lang.Boolean",
     "description": "A description for 'token.security.filter.enabled'"
+  },
+  {
+    "name": "container.max_keep_alive_requests",
+    "type": "java.lang.Integer",
+    "description": "A description for 'container.max_keep_alive_requests'"
   }
 ]}
