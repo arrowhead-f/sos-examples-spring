@@ -93,31 +93,35 @@ public class CarConsumerWithSubscriptionApplicationInitListener extends Applicat
 
 		//Checking the availability of necessary core systems
 		checkCoreSystemReachability(CoreSystem.SERVICE_REGISTRY);
-		if (sslEnabled && tokenSecurityFilterEnabled) {
-			checkCoreSystemReachability(CoreSystem.AUTHORIZATION);			
 
-			//Initialize Arrowhead Context
-			arrowheadService.updateCoreServiceURIs(CoreSystem.AUTHORIZATION);			
-		}		
-		
-		setTokenSecurityFilter();
-		
-		setNotificationFilter();			
+		checkCoreSystemReachability(CoreSystem.ORCHESTRATOR);
+		arrowheadService.updateCoreServiceURIs(CoreSystem.ORCHESTRATOR);
 
-		
+		if (sslEnabled) {
+
+			if (tokenSecurityFilterEnabled) {
+				checkCoreSystemReachability(CoreSystem.AUTHORIZATION);
+
+				//Initialize Arrowhead Context
+				arrowheadService.updateCoreServiceURIs(CoreSystem.AUTHORIZATION);
+
+				setTokenSecurityFilter();
+
+			} else {
+				logger.info("TokenSecurityFilter in not active");
+			}
+
+			setNotificationFilter();
+
+		}
+
 		if ( arrowheadService.echoCoreSystem( CoreSystem.EVENT_HANDLER ) ) {
 			
 			arrowheadService.updateCoreServiceURIs( CoreSystem.EVENT_HANDLER );	
 			subscribeToPresetEvents();
 			
 		}
-		
-		checkCoreSystemReachability(CoreSystem.ORCHESTRATOR);		
-		
-		//Initialize Arrowhead Context
-		arrowheadService.updateCoreServiceURIs(CoreSystem.ORCHESTRATOR);
-		
-		
+
 		final CarConsumerWithSubscriptionTask consumerTask = applicationContext.getBean( SubscriberConstants.CONSUMER_TASK, CarConsumerWithSubscriptionTask.class );
 		consumerTask.start();
 		//TODO: implement here any custom behavior on application start up
