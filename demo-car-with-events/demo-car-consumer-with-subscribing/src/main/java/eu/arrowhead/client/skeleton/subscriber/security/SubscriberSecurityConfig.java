@@ -33,13 +33,18 @@ public class SubscriberSecurityConfig extends DefaultSecurityConfig {
 	@Override
 	protected void configure( final HttpSecurity http) throws Exception {
 		super.configure(http);
-			
-		notificationFilter = new SubscriberNotificationAccessControlFilter();
-		http.addFilterBefore( notificationFilter , SecurityContextHolderAwareRequestFilter.class );
-		
-		if (sslEnabled && tokenSecurityFilterEnabled) {
-			tokenSecurityFilter = new SubscriberTokenSecurityFilter();
-			http.addFilterAfter(tokenSecurityFilter, SecurityContextHolderAwareRequestFilter.class);			
+
+		if (sslEnabled) {
+
+			notificationFilter = new SubscriberNotificationAccessControlFilter();
+			http.addFilterBefore( notificationFilter , SecurityContextHolderAwareRequestFilter.class );
+
+
+			if (tokenSecurityFilterEnabled) {
+				tokenSecurityFilter = new SubscriberTokenSecurityFilter();
+				http.addFilterAfter(tokenSecurityFilter, SecurityContextHolderAwareRequestFilter.class);
+			}
+
 		}
 	}
 
