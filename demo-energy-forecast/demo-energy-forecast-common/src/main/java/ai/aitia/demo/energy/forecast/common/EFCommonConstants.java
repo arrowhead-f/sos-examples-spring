@@ -26,7 +26,7 @@ public class EFCommonConstants {
 	public static final String REQUEST_PARAM_KEY_TIMESTAMP = "request-param-timestamp";
 	public static final String REQUEST_PARAM_TIMESTAMP = "timestamp";
 	
-	public static final String INTERFACE_SECURE = "HTTPS-SECURE-XML";
+	public static final String INTERFACE_SECURE = "HTTP-SECURE-XML";
 	public static final String INTERFACE_INSECURE = "HTTP-INSECURE-XML";
 	public static final String HTTP_METHOD = "http-method";
 	
