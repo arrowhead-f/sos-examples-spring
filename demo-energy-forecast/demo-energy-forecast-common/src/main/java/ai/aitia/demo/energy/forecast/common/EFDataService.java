@@ -101,7 +101,7 @@ public class EFDataService {
 			for (final String[] strings : readAll) {
 				outdoorTemperatureData.add(Double.valueOf(strings[0]));
 			}			
-		} catch (Exception ex) {
+		} catch (final Exception ex) {
 			throw ex;
 		} finally {
 			reader.close();
