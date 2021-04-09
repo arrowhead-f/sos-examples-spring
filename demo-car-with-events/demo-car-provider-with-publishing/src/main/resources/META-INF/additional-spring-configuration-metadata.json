@@ -23,5 +23,10 @@
     "name": "container.max_keep_alive_requests",
     "type": "java.lang.Integer",
     "description": "A description for 'container.max_keep_alive_requests'"
+  },
+  {
+    "name": "service_limit",
+    "type": "java.lang.Integer",
+    "description": "A description for 'service_limit'"
   }
 ]}

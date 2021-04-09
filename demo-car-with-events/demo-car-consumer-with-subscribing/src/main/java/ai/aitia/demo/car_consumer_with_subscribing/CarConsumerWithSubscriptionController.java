@@ -40,32 +40,21 @@ public class CarConsumerWithSubscriptionController {
 	
 	//-------------------------------------------------------------------------------------------------
 	@PostMapping(path = SubscriberConstants.REQUEST_RECEIVED_NOTIFICATION_URI) 
-	public void receiveEventRequestReceived(@RequestBody final EventDTO event ) {	
+	public void receiveEventRequestReceived(@RequestBody final EventDTO event) {	
 		logger.debug("receiveEventRequestReceived started...");
 		
-		if( event.getEventType() != null) {
-			
-			notificatonQueue.add( event );
-
+		if (event.getEventType() != null) {
+			notificatonQueue.add(event);
 		}
-		
-		
-		//TODO implement your event handling logic here 
 	}
 	
 	//-------------------------------------------------------------------------------------------------
 	@PostMapping(path = SubscriberConstants.PUBLISHER_DESTORYED_NOTIFICATION_URI) 
-	public void receiveEventDestroyed(@RequestBody final EventDTO event ) {
+	public void receiveEventDestroyed(@RequestBody final EventDTO event) {
 		logger.debug("receiveEventDestroyed started... ");
 		
-		if( event.getEventType() != null  ) {
-			
-			notificatonQueue.add( event );
+		if (event.getEventType() != null) {
+			notificatonQueue.add(event);
 		}
-		
-		//TODO implement your event handling logic here 
 	}
-	
-	//-------------------------------------------------------------------------------------------------
-	//TODO: implement here additional subscriber related REST end points
 }

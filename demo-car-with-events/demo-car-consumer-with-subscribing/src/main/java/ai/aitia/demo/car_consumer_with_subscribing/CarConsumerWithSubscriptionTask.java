@@ -91,82 +91,59 @@ public class CarConsumerWithSubscriptionTask extends Thread {
 		OrchestrationResultDTO carRequestingService = null;
 		
 		int counter = 0;
-		while ( !interrupted && ( counter < max_retry ) ) {
-			
+		while (!interrupted && (counter < max_retry)) {
 			try {
-				
-				if ( notificatonQueue.peek() != null ) {
-					
-					for (final EventDTO event : notificatonQueue ) {
-						
-						if ( SubscriberConstants.PUBLISHER_DESTROYED_EVENT_TYPE.equalsIgnoreCase( event.getEventType() )) {
-							
-							if ( reorchestration ) {
-								
+				if (notificatonQueue.peek() != null) {
+					for (final EventDTO event : notificatonQueue) {
+						if (SubscriberConstants.PUBLISHER_DESTROYED_EVENT_TYPE.equalsIgnoreCase(event.getEventType())) {
+							if (reorchestration) {
 								logger.info("Recieved publisher destroyed event - started reorchestration.");
 								
 								carCreationService = orchestrateCreateCarService();
 								carRequestingService = orchestrateGetCarService();
-								
 							} else {
-								
 								logger.info("Recieved publisher destroyed event - started shuting down.");
-								
-								System.exit( 0 );
-								
+								System.exit(0);
 							}
-							
-						}else {
-							
+						} else {
 							logger.info("ConsumerTask recevied event - with type: " + event.getEventType() + ", and payload: " + event.getPayload() + ".");
-							
 						}
-						
 					}
 					
 					notificatonQueue.clear();
-					
 				}
 					
-				if ( carCreationService != null  && carRequestingService != null ) {
-													
+				if (carCreationService != null  && carRequestingService != null) {
 					final List<CarRequestDTO> carsToCreate = List.of(new CarRequestDTO("nissan", "green"), new CarRequestDTO("mazda", "blue"), new CarRequestDTO("opel", "blue"), new CarRequestDTO("nissan", "gray"));
 			    	
-					callCarCreationService( carCreationService , carsToCreate);
-					callCarRequestingService( carRequestingService );
-
+					callCarCreationService(carCreationService , carsToCreate);
+					callCarRequestingService(carRequestingService);
 				} else {
-					
 					counter++;
 					
 					carCreationService = orchestrateCreateCarService();
 					carRequestingService = orchestrateGetCarService();
 					
-					if ( carCreationService != null  && carRequestingService != null ) {
-						
+					if (carCreationService != null  && carRequestingService != null) {
 						counter = 0;
 						
 						final Set<SystemResponseDTO> sources = new HashSet<SystemResponseDTO>();
 						
-						sources.add( carCreationService.getProvider() );
-						sources.add( carRequestingService.getProvider() );
+						sources.add(carCreationService.getProvider());
+						sources.add(carRequestingService.getProvider());
 						
-						subscribeToDestoryEvents( sources );
+						subscribeToDestoryEvents(sources);
 					}
 				}
-				
-			} catch ( final Throwable ex ) {
-				
-				logger.debug( ex.getMessage() );
+			} catch (final Throwable ex) {
+				logger.debug(ex.getMessage());
 				
 				carCreationService = null;
 				carRequestingService = null;
 			}	
-
 		}
 		
-		System.exit( 0 );
-
+		System.exit(0);
 	}
 	
 	//-------------------------------------------------------------------------------------------------	
@@ -180,11 +157,10 @@ public class CarConsumerWithSubscriptionTask extends Thread {
 	//Assistant methods
 
     //-------------------------------------------------------------------------------------------------
-    private void callCarCreationService( final OrchestrationResultDTO orchestrationResult, final List<CarRequestDTO> carsToCreate) {
+    private void callCarCreationService(final OrchestrationResultDTO orchestrationResult, final List<CarRequestDTO> carsToCreate) {
     	logger.debug("consumeCreateCarService started...");
     	
 		validateOrchestrationResult(orchestrationResult, CarConsumerConstants.CREATE_CAR_SERVICE_DEFINITION);
-		
 			
 		for (final CarRequestDTO carRequestDTO : carsToCreate) {
 			logger.info("Create a car request:");
@@ -199,63 +175,49 @@ public class CarConsumerWithSubscriptionTask extends Thread {
     }
 	
 	//-------------------------------------------------------------------------------------------------
-	private void subscribeToDestoryEvents( final Set<SystemResponseDTO> providers  ) {
-
+	private void subscribeToDestoryEvents(final Set<SystemResponseDTO> providers) {
 		final Set<SystemRequestDTO> sources = new HashSet<>(providers.size());
 		
 		for (final SystemResponseDTO provider : providers) {
-			
 			final SystemRequestDTO source = new SystemRequestDTO();
-			source.setSystemName( provider.getSystemName() );
-			source.setAddress( provider.getAddress() );
-			source.setPort( provider.getPort() );
+			source.setSystemName(provider.getSystemName());
+			source.setAddress(provider.getAddress());
+			source.setPort(provider.getPort());
 			
-			sources.add( source );
+			sources.add(source);
 		}
 		
 		final SystemRequestDTO subscriber = new SystemRequestDTO();
-		subscriber.setSystemName( clientSystemName );
-		subscriber.setAddress( clientSystemAddress );
-		subscriber.setPort( clientSystemPort );
+		subscriber.setSystemName(clientSystemName);
+		subscriber.setAddress(clientSystemAddress);
+		subscriber.setPort(clientSystemPort);
 		
 		if (sslEnabled) {
-			
-			subscriber.setAuthenticationInfo( Base64.getEncoder().encodeToString( arrowheadService.getMyPublicKey().getEncoded()) );		
-		
+			subscriber.setAuthenticationInfo(Base64.getEncoder().encodeToString( arrowheadService.getMyPublicKey().getEncoded()));		
 		}
 		
 		try {
-			
-			arrowheadService.unsubscribeFromEventHandler( SubscriberConstants.PUBLISHER_DESTROYED_EVENT_TYPE, clientSystemName, clientSystemAddress, clientSystemPort);
-		
+			arrowheadService.unsubscribeFromEventHandler(SubscriberConstants.PUBLISHER_DESTROYED_EVENT_TYPE, clientSystemName, clientSystemAddress, clientSystemPort);
 		} catch (final Exception ex) {
-			
 			logger.debug("Exception happend in subscription initalization " + ex);
 		}
 		
 		try {
+			final SubscriptionRequestDTO subscription = SubscriberUtilities.createSubscriptionRequestDTO(SubscriberConstants.PUBLISHER_DESTROYED_EVENT_TYPE, subscriber, SubscriberConstants.PUBLISHER_DESTORYED_NOTIFICATION_URI);
+			subscription.setSources(sources);
 			
-			final SubscriptionRequestDTO subscription = SubscriberUtilities.createSubscriptionRequestDTO( SubscriberConstants.PUBLISHER_DESTROYED_EVENT_TYPE, subscriber, SubscriberConstants.PUBLISHER_DESTORYED_NOTIFICATION_URI );
-			subscription.setSources( sources );
+			arrowheadService.subscribeToEventHandler(subscription);
+		} catch (final InvalidParameterException ex) {
 			
-			arrowheadService.subscribeToEventHandler( subscription );
-		
-		} catch ( final InvalidParameterException ex) {
-			
-			if( ex.getMessage().contains( "Subscription violates uniqueConstraint rules" )) {
-				
+			if (ex.getMessage().contains( "Subscription violates uniqueConstraint rules")) {
 				logger.debug("Subscription is already in DB");
-			}else {
-				
+			} else {
 				logger.debug(ex.getMessage());
 				logger.debug(ex);
 			}
-			
-		} catch ( final Exception ex) {
-			
+		} catch (final Exception ex) {
 			logger.debug("Could not subscribe to EventType: " + SubscriberConstants.PUBLISHER_DESTROYED_EVENT_TYPE );
 		}
-
 	}
 	
 	//-------------------------------------------------------------------------------------------------
@@ -330,7 +292,6 @@ public class CarConsumerWithSubscriptionTask extends Thread {
     
     //-------------------------------------------------------------------------------------------------
     private void callCarRequestingService( final OrchestrationResultDTO orchestrationResult) {
-    			
 		validateOrchestrationResult(orchestrationResult, CarConsumerConstants.GET_CAR_SERVICE_DEFINITION);
 		
 		logger.info("Get all cars:");
@@ -357,8 +318,8 @@ public class CarConsumerWithSubscriptionTask extends Thread {
     }
     
     //-------------------------------------------------------------------------------------------------
-    private void validateOrchestrationResult(final OrchestrationResultDTO orchestrationResult, final String serviceDefinitin) {
-    	if (!orchestrationResult.getService().getServiceDefinition().equalsIgnoreCase(serviceDefinitin)) {
+    private void validateOrchestrationResult(final OrchestrationResultDTO orchestrationResult, final String serviceDefinition) {
+    	if (!orchestrationResult.getService().getServiceDefinition().equalsIgnoreCase(serviceDefinition)) {
 			throw new InvalidParameterException("Requested and orchestrated service definition do not match");
 		}
     	
