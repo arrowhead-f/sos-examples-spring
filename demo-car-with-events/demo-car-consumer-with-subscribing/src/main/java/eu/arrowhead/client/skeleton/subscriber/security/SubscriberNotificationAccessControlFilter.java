@@ -26,7 +26,7 @@ public class SubscriberNotificationAccessControlFilter extends ArrowheadFilter {
 	//=================================================================================================
 	// members
 	
-	private static final CoreSystem[] allowedCoreSystemsForSendingNotification = { CoreSystem.EVENT_HANDLER };
+	private static final CoreSystem[] allowedCoreSystemsForSendingNotification = { CoreSystem.EVENTHANDLER };
 	
 	private Map<String, String> eventTypeMap;
 	private String serverCN;
