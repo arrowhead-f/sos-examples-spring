@@ -72,7 +72,7 @@ public class CarProviderWithPublishingApplicationInitListener extends Applicatio
 	@Override
 	protected void customInit(final ContextRefreshedEvent event) {
 		//Checking the availability of necessary core systems
-		checkCoreSystemReachability(CoreSystem.SERVICE_REGISTRY);
+		checkCoreSystemReachability(CoreSystem.SERVICEREGISTRY);
 		if (sslEnabled && tokenSecurityFilterEnabled) {
 			checkCoreSystemReachability(CoreSystem.AUTHORIZATION);			
 
@@ -93,8 +93,8 @@ public class CarProviderWithPublishingApplicationInitListener extends Applicatio
 		getCarServiceRequest.getMetadata().put(CarProviderWithPublishingConstants.REQUEST_PARAM_KEY_COLOR, CarProviderWithPublishingConstants.REQUEST_PARAM_COLOR);
 		arrowheadService.forceRegisterServiceToServiceRegistry(getCarServiceRequest);
 		
-		if (arrowheadService.echoCoreSystem(CoreSystem.EVENT_HANDLER)) {
-			arrowheadService.updateCoreServiceURIs(CoreSystem.EVENT_HANDLER);	
+		if (arrowheadService.echoCoreSystem(CoreSystem.EVENTHANDLER)) {
+			arrowheadService.updateCoreServiceURIs(CoreSystem.EVENTHANDLER);	
 		}
 	}
 	
@@ -103,8 +103,8 @@ public class CarProviderWithPublishingApplicationInitListener extends Applicatio
 	public void customDestroy() {
 		//Unregister service
 		publishDestroyedEvent();
-		arrowheadService.unregisterServiceFromServiceRegistry(CarProviderWithPublishingConstants.CREATE_CAR_SERVICE_DEFINITION);
-		arrowheadService.unregisterServiceFromServiceRegistry(CarProviderWithPublishingConstants.GET_CAR_SERVICE_DEFINITION);
+		arrowheadService.unregisterServiceFromServiceRegistry(CarProviderWithPublishingConstants.CREATE_CAR_SERVICE_DEFINITION, CarProviderWithPublishingConstants.CAR_URI);
+		arrowheadService.unregisterServiceFromServiceRegistry(CarProviderWithPublishingConstants.GET_CAR_SERVICE_DEFINITION, CarProviderWithPublishingConstants.CAR_URI);
 	}
 	
 	//=================================================================================================

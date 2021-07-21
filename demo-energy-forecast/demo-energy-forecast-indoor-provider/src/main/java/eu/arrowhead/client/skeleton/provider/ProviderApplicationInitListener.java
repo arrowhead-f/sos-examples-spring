@@ -68,7 +68,7 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 	@Override
 	protected void customInit(final ContextRefreshedEvent event) {
 		//Checking the availability of necessary core systems
-		checkCoreSystemReachability(CoreSystem.SERVICE_REGISTRY);
+		checkCoreSystemReachability(CoreSystem.SERVICEREGISTRY);
 		if (sslEnabled && tokenSecurityFilterEnabled) {
 			checkCoreSystemReachability(CoreSystem.AUTHORIZATION);			
 
@@ -93,7 +93,7 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 	@Override
 	public void customDestroy() {
 		//Unregister service
-		arrowheadService.unregisterServiceFromServiceRegistry(EFCommonConstants.INDOOR_ENERGY_DETAILS_SERVICE);
+		arrowheadService.unregisterServiceFromServiceRegistry(EFCommonConstants.INDOOR_ENERGY_DETAILS_SERVICE, EFCommonConstants.INDOOR_ENERGY_DETAILS_SERVICE_URI);
 		logger.info("Service unregistered: {}", EFCommonConstants.INDOOR_ENERGY_DETAILS_SERVICE);
 	}
 	

@@ -91,7 +91,7 @@ public class CarConsumerWithSubscriptionApplicationInitListener extends Applicat
 	@Override
 	protected void customInit(final ContextRefreshedEvent event) {
 		//Checking the availability of necessary core systems
-		checkCoreSystemReachability(CoreSystem.SERVICE_REGISTRY);
+		checkCoreSystemReachability(CoreSystem.SERVICEREGISTRY);
 
 		checkCoreSystemReachability(CoreSystem.ORCHESTRATOR);
 		arrowheadService.updateCoreServiceURIs(CoreSystem.ORCHESTRATOR);
@@ -110,8 +110,8 @@ public class CarConsumerWithSubscriptionApplicationInitListener extends Applicat
 			setNotificationFilter();
 		}
 
-		if (arrowheadService.echoCoreSystem(CoreSystem.EVENT_HANDLER)) {
-			arrowheadService.updateCoreServiceURIs(CoreSystem.EVENT_HANDLER);	
+		if (arrowheadService.echoCoreSystem(CoreSystem.EVENTHANDLER)) {
+			arrowheadService.updateCoreServiceURIs(CoreSystem.EVENTHANDLER);	
 			subscribeToPresetEvents();
 		}
 

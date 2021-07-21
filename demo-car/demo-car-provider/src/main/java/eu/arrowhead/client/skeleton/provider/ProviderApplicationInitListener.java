@@ -69,7 +69,7 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 	protected void customInit(final ContextRefreshedEvent event) {
 
 		//Checking the availability of necessary core systems
-		checkCoreSystemReachability(CoreSystem.SERVICE_REGISTRY);
+		checkCoreSystemReachability(CoreSystem.SERVICEREGISTRY);
 		if (sslEnabled && tokenSecurityFilterEnabled) {
 			checkCoreSystemReachability(CoreSystem.AUTHORIZATION);			
 
@@ -95,8 +95,8 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 	@Override
 	public void customDestroy() {
 		//Unregister service
-		arrowheadService.unregisterServiceFromServiceRegistry(CarProviderConstants.CREATE_CAR_SERVICE_DEFINITION);
-		arrowheadService.unregisterServiceFromServiceRegistry(CarProviderConstants.GET_CAR_SERVICE_DEFINITION);
+		arrowheadService.unregisterServiceFromServiceRegistry(CarProviderConstants.CREATE_CAR_SERVICE_DEFINITION, CarProviderConstants.CAR_URI);
+		arrowheadService.unregisterServiceFromServiceRegistry(CarProviderConstants.GET_CAR_SERVICE_DEFINITION, CarProviderConstants.CAR_URI);
 	}
 	
 	//=================================================================================================
