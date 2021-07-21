@@ -14,13 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 
-import com.aitia.demo.car_common.dto.CarRequestDTO;
-import com.aitia.demo.car_common.dto.CarResponseDTO;
-
-import eu.arrowhead.client.library.ArrowheadService;
-import eu.arrowhead.client.library.util.ClientCommonConstants;
-import eu.arrowhead.client.skeleton.subscriber.SubscriberUtilities;
-import eu.arrowhead.client.skeleton.subscriber.constants.SubscriberConstants;
+import ai.aitia.arrowhead.application.library.ArrowheadService;
+import ai.aitia.arrowhead.application.library.util.ApplicationCommonConstants;
+import ai.aitia.demo.car_common.dto.CarRequestDTO;
+import ai.aitia.demo.car_common.dto.CarResponseDTO;
+import eu.arrowhead.application.skeleton.subscriber.SubscriberUtilities;
+import eu.arrowhead.application.skeleton.subscriber.constants.SubscriberConstants;
 import eu.arrowhead.common.CommonConstants;
 import eu.arrowhead.common.SSLProperties;
 import eu.arrowhead.common.Utilities;
@@ -55,20 +54,20 @@ public class CarConsumerWithSubscriptionTask extends Thread {
     @Autowired
 	protected SSLProperties sslProperties;
 	
-	@Value(ClientCommonConstants.$TOKEN_SECURITY_FILTER_ENABLED_WD)
+	@Value(ApplicationCommonConstants.$TOKEN_SECURITY_FILTER_ENABLED_WD)
 	private boolean tokenSecurityFilterEnabled;
 	
 	@Value(CommonConstants.$SERVER_SSL_ENABLED_WD)
 	private boolean sslEnabled;
 	
-	@Value(ClientCommonConstants.$CLIENT_SYSTEM_NAME)
-	private String clientSystemName;
+	@Value(ApplicationCommonConstants.$APPLICATION_SYSTEM_NAME)
+	private String applicationSystemName;
 	
-	@Value(ClientCommonConstants.$CLIENT_SERVER_ADDRESS_WD)
-	private String clientSystemAddress;
+	@Value(ApplicationCommonConstants.$APPLICATION_SERVER_ADDRESS_WD)
+	private String applicationSystemAddress;
 	
-	@Value(ClientCommonConstants.$CLIENT_SERVER_PORT_WD)
-	private int clientSystemPort;
+	@Value(ApplicationCommonConstants.$APPLICATION_SERVER_PORT_WD)
+	private int applicationSystemPort;
 	
 	@Value(CarConsumerConstants.$REORCHESTRATION_WD)
 	private boolean reorchestration;
@@ -188,16 +187,16 @@ public class CarConsumerWithSubscriptionTask extends Thread {
 		}
 		
 		final SystemRequestDTO subscriber = new SystemRequestDTO();
-		subscriber.setSystemName(clientSystemName);
-		subscriber.setAddress(clientSystemAddress);
-		subscriber.setPort(clientSystemPort);
+		subscriber.setSystemName(applicationSystemName);
+		subscriber.setAddress(applicationSystemAddress);
+		subscriber.setPort(applicationSystemPort);
 		
 		if (sslEnabled) {
 			subscriber.setAuthenticationInfo(Base64.getEncoder().encodeToString( arrowheadService.getMyPublicKey().getEncoded()));		
 		}
 		
 		try {
-			arrowheadService.unsubscribeFromEventHandler(SubscriberConstants.PUBLISHER_DESTROYED_EVENT_TYPE, clientSystemName, clientSystemAddress, clientSystemPort);
+			arrowheadService.unsubscribeFromEventHandler(SubscriberConstants.PUBLISHER_DESTROYED_EVENT_TYPE, applicationSystemName, applicationSystemAddress, applicationSystemPort);
 		} catch (final Exception ex) {
 			logger.debug("Exception happend in subscription initalization " + ex);
 		}

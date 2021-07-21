@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import eu.arrowhead.client.skeleton.subscriber.constants.SubscriberConstants;
-import eu.arrowhead.client.skeleton.subscriber.constants.SubscriberDefaults;
+import eu.arrowhead.application.skeleton.subscriber.constants.SubscriberConstants;
+import eu.arrowhead.application.skeleton.subscriber.constants.SubscriberDefaults;
 import eu.arrowhead.common.CommonConstants;
 import eu.arrowhead.common.dto.shared.EventDTO;
 
