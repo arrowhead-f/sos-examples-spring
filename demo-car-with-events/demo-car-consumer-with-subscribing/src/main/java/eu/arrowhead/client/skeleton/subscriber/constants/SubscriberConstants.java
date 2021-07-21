@@ -13,6 +13,7 @@ public class SubscriberConstants {
 	public static final String REQUEST_RECEIVED_EVENT_TYPE = "REQUEST_RECEIVED";
 	
 	public static final String CONSUMER_TASK = "consumertask";
+	
 	//=================================================================================================
 	// assistant methods
 

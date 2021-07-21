@@ -31,16 +31,12 @@ public class SubscriberNotificationAccessControlFilter extends ArrowheadFilter {
 	private Map<String, String> eventTypeMap;
 	private String serverCN;
 
-
 	//=================================================================================================
 	// methods
 
 	//-------------------------------------------------------------------------------------------------
 	public void setEventTypeMap( final Map<String, String> eventTypeMap) { this.eventTypeMap = eventTypeMap;}
 	public void setServerCN( final String serverCN) { this.serverCN = serverCN; }
-
-	//=================================================================================================
-	// assistant methods
 
 	//-------------------------------------------------------------------------------------------------
 	@Override
@@ -51,19 +47,13 @@ public class SubscriberNotificationAccessControlFilter extends ArrowheadFilter {
 				final HttpServletRequest httpRequest = (HttpServletRequest) request;
 				final String requestTarget = Utilities.stripEndSlash(httpRequest.getRequestURL().toString());
 					
-				if ( eventTypeMap != null) {
-					
+				if (eventTypeMap != null) {
 					for (final String notificationUri  : eventTypeMap.values()) {
-						
-						if ( requestTarget.endsWith( SubscriberDefaults.DEFAULT_EVENT_NOTIFICATION_BASE_URI + "/" + notificationUri )) {
-							
-							checkIfClientIsAnAllowedCoreSystem( getCertificateCNFromRequest( httpRequest ), getServerCloudCN( serverCN ), allowedCoreSystemsForSendingNotification, requestTarget);
-
+						if (requestTarget.endsWith(SubscriberDefaults.DEFAULT_EVENT_NOTIFICATION_BASE_URI + "/" + notificationUri)) {
+							checkIfClientIsAnAllowedCoreSystem(getCertificateCNFromRequest(httpRequest), getServerCloudCN(serverCN), allowedCoreSystemsForSendingNotification, requestTarget);
 						}
 					}
 				}
-	
-
 			} catch (final ArrowheadException ex) {
 				handleException(ex, response);
 			}
@@ -71,6 +61,9 @@ public class SubscriberNotificationAccessControlFilter extends ArrowheadFilter {
 		
 		chain.doFilter(request, response);
 	}
+	
+	//=================================================================================================
+	// assistant methods
 	
 	//-------------------------------------------------------------------------------------------------
 	@Nullable
@@ -115,5 +108,4 @@ public class SubscriberNotificationAccessControlFilter extends ArrowheadFilter {
 	    
 	    return serverFields[1];
 	}
-	
 }

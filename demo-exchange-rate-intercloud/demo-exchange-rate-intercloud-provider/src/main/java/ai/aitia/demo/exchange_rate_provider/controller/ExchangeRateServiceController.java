@@ -15,8 +15,8 @@ public class ExchangeRateServiceController {
 	//=================================================================================================
 	// members
 
-	final double hufEur = 0.0030;
-	final double eurHuf = 329.8299;
+	final double hufEur = 0.0028;
+	final double eurHuf = 356.78;
 
 	//=================================================================================================
 	// methods

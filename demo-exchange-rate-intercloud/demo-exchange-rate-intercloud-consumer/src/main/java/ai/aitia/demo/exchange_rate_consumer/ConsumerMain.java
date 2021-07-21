@@ -56,6 +56,7 @@ public class ConsumerMain implements ApplicationRunner {
     	final Builder orchestrationFormBuilder = arrowheadService.getOrchestrationFormBuilder();
 		final OrchestrationFormRequestDTO orchestrationFormRequest = orchestrationFormBuilder.requestedService(serviceQueryForm)
 																					   		 .flag(Flag.TRIGGER_INTER_CLOUD, true)
+																					   		 .flag(Flag.ENABLE_INTER_CLOUD, true)
 																					   		 .flag(Flag.OVERRIDE_STORE, true)
 																					   		 .build();
 		
@@ -77,7 +78,6 @@ public class ConsumerMain implements ApplicationRunner {
 			final String token = orchestrationResult.getAuthorizationTokens() == null ? null : orchestrationResult.getAuthorizationTokens().get(getInterface());
 			
 			final String[] queryParamEurHuf = {orchestrationResult.getMetadata().get(Constants.REQUEST_PARAM_META_CURRENCY_RELATION), orchestrationResult.getMetadata().get(Constants.REQUEST_PARAM_META_EUR_HUF_VALUE)};
-			@SuppressWarnings("unchecked")
 			final String exchangeRateEurHuf = arrowheadService.consumeServiceHTTP(String.class, HttpMethod.valueOf(orchestrationResult.getMetadata().get(Constants.HTTP_METHOD)),
 																					orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), orchestrationResult.getServiceUri(),
 																					getInterface(), token, null, queryParamEurHuf);
@@ -85,7 +85,6 @@ public class ConsumerMain implements ApplicationRunner {
 			printOut(exchangeRateEurHuf);
 			
 			final String[] queryParamHufEur = {orchestrationResult.getMetadata().get(Constants.REQUEST_PARAM_META_CURRENCY_RELATION), orchestrationResult.getMetadata().get(Constants.REQUEST_PARAM_META_HUF_EUR_VALUE)};
-			@SuppressWarnings("unchecked")
 			final String exchangeRateHufEur = arrowheadService.consumeServiceHTTP(String.class, HttpMethod.valueOf(orchestrationResult.getMetadata().get(Constants.HTTP_METHOD)),
 																				  orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), orchestrationResult.getServiceUri(),
 																				  getInterface(), token, null, queryParamHufEur);

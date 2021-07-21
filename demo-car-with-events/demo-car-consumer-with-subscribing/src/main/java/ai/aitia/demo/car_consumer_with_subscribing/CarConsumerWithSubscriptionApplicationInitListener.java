@@ -90,7 +90,6 @@ public class CarConsumerWithSubscriptionApplicationInitListener extends Applicat
 	//-------------------------------------------------------------------------------------------------
 	@Override
 	protected void customInit(final ContextRefreshedEvent event) {
-
 		//Checking the availability of necessary core systems
 		checkCoreSystemReachability(CoreSystem.SERVICE_REGISTRY);
 
@@ -98,56 +97,42 @@ public class CarConsumerWithSubscriptionApplicationInitListener extends Applicat
 		arrowheadService.updateCoreServiceURIs(CoreSystem.ORCHESTRATOR);
 
 		if (sslEnabled) {
-
 			if (tokenSecurityFilterEnabled) {
 				checkCoreSystemReachability(CoreSystem.AUTHORIZATION);
 
 				//Initialize Arrowhead Context
 				arrowheadService.updateCoreServiceURIs(CoreSystem.AUTHORIZATION);
-
 				setTokenSecurityFilter();
-
 			} else {
 				logger.info("TokenSecurityFilter in not active");
 			}
 
 			setNotificationFilter();
-
 		}
 
-		if ( arrowheadService.echoCoreSystem( CoreSystem.EVENT_HANDLER ) ) {
-			
-			arrowheadService.updateCoreServiceURIs( CoreSystem.EVENT_HANDLER );	
+		if (arrowheadService.echoCoreSystem(CoreSystem.EVENT_HANDLER)) {
+			arrowheadService.updateCoreServiceURIs(CoreSystem.EVENT_HANDLER);	
 			subscribeToPresetEvents();
-			
 		}
 
-		final CarConsumerWithSubscriptionTask consumerTask = applicationContext.getBean( SubscriberConstants.CONSUMER_TASK, CarConsumerWithSubscriptionTask.class );
+		final CarConsumerWithSubscriptionTask consumerTask = applicationContext.getBean(SubscriberConstants.CONSUMER_TASK, CarConsumerWithSubscriptionTask.class);
 		consumerTask.start();
 		//TODO: implement here any custom behavior on application start up
 	}
 
-
 	//-------------------------------------------------------------------------------------------------
 	@Override
 	public void customDestroy() {
-		 
 		final Map<String, String> eventTypeMap = configEventProperites.getEventTypeURIMap();
-		if( eventTypeMap == null) {
-			
+		if (eventTypeMap == null) {
 			logger.info("No preset events to unsubscribe.");
-		
 		} else {
-			
-			for ( final String eventType : eventTypeMap.keySet() ) {
-				
+			for (final String eventType : eventTypeMap.keySet()) {
 				arrowheadService.unsubscribeFromEventHandler(eventType, clientSystemName, clientSystemAddress, clientSystemPort);
-				
 			}
 		}
 		
-		if ( getConsumerTask() != null) {
-			
+		if (getConsumerTask() != null) {
 			getConsumerTask().destroy();
 		}
 	}
@@ -157,7 +142,7 @@ public class CarConsumerWithSubscriptionApplicationInitListener extends Applicat
 
 	//-------------------------------------------------------------------------------------------------
 	private void setTokenSecurityFilter() {
-		if(!tokenSecurityFilterEnabled || !sslEnabled) {
+		if (!tokenSecurityFilterEnabled || !sslEnabled) {
 			logger.info("TokenSecurityFilter in not active");
 		} else {
 			final PublicKey authorizationPublicKey = arrowheadService.queryAuthorizationPublicKey();
@@ -169,7 +154,7 @@ public class CarConsumerWithSubscriptionApplicationInitListener extends Applicat
 			try {
 				keystore = KeyStore.getInstance(sslProperties.getKeyStoreType());
 				keystore.load(sslProperties.getKeyStore().getInputStream(), sslProperties.getKeyStorePassword().toCharArray());
-			} catch ( final KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException ex) {
+			} catch (final KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException ex) {
 				throw new ArrowheadException(ex.getMessage());
 			}			
 			final PrivateKey subscriberPrivateKey = Utilities.getPrivateKey(keystore, sslProperties.getKeyPassword());
@@ -184,57 +169,39 @@ public class CarConsumerWithSubscriptionApplicationInitListener extends Applicat
 
 	//-------------------------------------------------------------------------------------------------
 	private void subscribeToPresetEvents() {
-		
 		final Map<String, String> eventTypeMap = configEventProperites.getEventTypeURIMap();
 		
-		if( eventTypeMap == null) {
-			
+		if (eventTypeMap == null) {
 			logger.info("No preset events to subscribe.");
-		
 		} else {
-			
 			final SystemRequestDTO subscriber = new SystemRequestDTO();
-			subscriber.setSystemName( clientSystemName );
-			subscriber.setAddress( clientSystemAddress );
-			subscriber.setPort( clientSystemPort );
+			subscriber.setSystemName(clientSystemName);
+			subscriber.setAddress(clientSystemAddress);
+			subscriber.setPort(clientSystemPort);
 			if (sslEnabled) {
-				
-				subscriber.setAuthenticationInfo( Base64.getEncoder().encodeToString( arrowheadService.getMyPublicKey().getEncoded()) );		
-	
+				subscriber.setAuthenticationInfo(Base64.getEncoder().encodeToString( arrowheadService.getMyPublicKey().getEncoded()));		
 			}
+			
 			for (final String eventType  : eventTypeMap.keySet()) {
-					
 				try {
-					
 					arrowheadService.unsubscribeFromEventHandler(eventType, clientSystemName, clientSystemAddress, clientSystemPort);
-				
 				} catch (final Exception ex) {
-					
 					logger.debug("Exception happend in subscription initalization " + ex);
 				}
 				
 				try {
-					
-					arrowheadService.subscribeToEventHandler( SubscriberUtilities.createSubscriptionRequestDTO( eventType, subscriber, eventTypeMap.get( eventType ) ) );
-				
-				} catch ( final InvalidParameterException ex) {
-					
-					if( ex.getMessage().contains( "Subscription violates uniqueConstraint rules" )) {
-						
+					arrowheadService.subscribeToEventHandler(SubscriberUtilities.createSubscriptionRequestDTO(eventType, subscriber, eventTypeMap.get(eventType)));
+				} catch (final InvalidParameterException ex) {
+					if (ex.getMessage().contains( "Subscription violates uniqueConstraint rules")) {
 						logger.debug("Subscription is already in DB");
-					
 					} else {
-						
 						logger.debug(ex.getMessage());
 						logger.debug(ex);
 					}
-						
-				} catch ( final Exception ex) {
-					
+				} catch (final Exception ex) {
 					logger.debug("Could not subscribe to EventType: " + eventType );
 				} 
 			}
-
 		}
 	}
 	
@@ -246,6 +213,5 @@ public class CarConsumerWithSubscriptionApplicationInitListener extends Applicat
 
 		subscriberSecurityConfig.getNotificationFilter().setEventTypeMap( eventTypeMap );
 		subscriberSecurityConfig.getNotificationFilter().setServerCN( arrowheadService.getServerCN() );
-		
 	}
 }

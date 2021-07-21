@@ -81,7 +81,6 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 			logger.info("TokenSecurityFilter in not active");
 		}		
 		
-		
 		//Register services into ServiceRegistry
 		final ServiceRegistryRequestDTO createCarServiceRequest = createServiceRegistryRequest(CarProviderConstants.CREATE_CAR_SERVICE_DEFINITION, CarProviderConstants.CAR_URI, HttpMethod.POST);		
 		arrowheadService.forceRegisterServiceToServiceRegistry(createCarServiceRequest);
@@ -97,6 +96,7 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 	public void customDestroy() {
 		//Unregister service
 		arrowheadService.unregisterServiceFromServiceRegistry(CarProviderConstants.CREATE_CAR_SERVICE_DEFINITION);
+		arrowheadService.unregisterServiceFromServiceRegistry(CarProviderConstants.GET_CAR_SERVICE_DEFINITION);
 	}
 	
 	//=================================================================================================
@@ -113,14 +113,13 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 		try {
 			keystore = KeyStore.getInstance(sslProperties.getKeyStoreType());
 			keystore.load(sslProperties.getKeyStore().getInputStream(), sslProperties.getKeyStorePassword().toCharArray());
-		} catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException ex) {
+		} catch (final KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException ex) {
 			throw new ArrowheadException(ex.getMessage());
 		}			
 		final PrivateKey providerPrivateKey = Utilities.getPrivateKey(keystore, sslProperties.getKeyPassword());
 		
 		providerSecurityConfig.getTokenSecurityFilter().setAuthorizationPublicKey(authorizationPublicKey);
 		providerSecurityConfig.getTokenSecurityFilter().setMyPrivateKey(providerPrivateKey);
-
 	}
 	
 	//-------------------------------------------------------------------------------------------------

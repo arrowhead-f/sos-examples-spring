@@ -35,16 +35,13 @@ public class SubscriberSecurityConfig extends DefaultSecurityConfig {
 		super.configure(http);
 
 		if (sslEnabled) {
-
 			notificationFilter = new SubscriberNotificationAccessControlFilter();
-			http.addFilterBefore( notificationFilter , SecurityContextHolderAwareRequestFilter.class );
-
+			http.addFilterBefore(notificationFilter , SecurityContextHolderAwareRequestFilter.class);
 
 			if (tokenSecurityFilterEnabled) {
 				tokenSecurityFilter = new SubscriberTokenSecurityFilter();
 				http.addFilterAfter(tokenSecurityFilter, SecurityContextHolderAwareRequestFilter.class);
 			}
-
 		}
 	}
 
@@ -57,5 +54,4 @@ public class SubscriberSecurityConfig extends DefaultSecurityConfig {
 	public SubscriberNotificationAccessControlFilter getNotificationFilter() {
 		return notificationFilter;
 	}
-	
 }

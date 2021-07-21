@@ -67,7 +67,6 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 	//-------------------------------------------------------------------------------------------------
 	@Override
 	protected void customInit(final ContextRefreshedEvent event) {
-
 		//Checking the availability of necessary core systems
 		checkCoreSystemReachability(CoreSystem.SERVICE_REGISTRY);
 		if (sslEnabled && tokenSecurityFilterEnabled) {
@@ -76,7 +75,6 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 			//Initialize Arrowhead Context
 			arrowheadService.updateCoreServiceURIs(CoreSystem.AUTHORIZATION);
 			setTokenSecurityFilter();
-			
 		} else {
 			logger.info("TokenSecurityFilter in not active");
 		}		
@@ -112,7 +110,7 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 		try {
 			keystore = KeyStore.getInstance(sslProperties.getKeyStoreType());
 			keystore.load(sslProperties.getKeyStore().getInputStream(), sslProperties.getKeyStorePassword().toCharArray());
-		} catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException ex) {
+		} catch (final KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException ex) {
 			throw new ArrowheadException(ex.getMessage());
 		}			
 		final PrivateKey providerPrivateKey = Utilities.getPrivateKey(keystore, sslProperties.getKeyPassword());
@@ -147,6 +145,7 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 		serviceRegistryRequest.setServiceUri(serviceUri);
 		serviceRegistryRequest.setMetadata(new HashMap<>());
 		serviceRegistryRequest.getMetadata().put(EFCommonConstants.HTTP_METHOD, httpMethod.name());
+		
 		return serviceRegistryRequest;
 	}
 }

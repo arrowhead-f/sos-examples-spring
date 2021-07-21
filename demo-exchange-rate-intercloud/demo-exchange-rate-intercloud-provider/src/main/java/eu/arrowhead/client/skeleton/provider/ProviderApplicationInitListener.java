@@ -75,12 +75,10 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 
 			//Initialize Arrowhead Context
 			arrowheadService.updateCoreServiceURIs(CoreSystem.AUTHORIZATION);			
-
 			setTokenSecurityFilter();
-		}  else {
+		} else {
 			logger.info("TokenSecurityFilter in not active");
 		}
-		
 		
 		//Register services into ServiceRegistry
 		final ServiceRegistryRequestDTO serviceRegistryRequest = createServiceRegistryRequest(Constants.GET_EXCHANGE_RATE_SERVICE_DEFINITION, Constants.GET_EXCHANGE_RATE_SERVICE_URI, HttpMethod.GET);
@@ -110,7 +108,7 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 		try {
 			keystore = KeyStore.getInstance(sslProperties.getKeyStoreType());
 			keystore.load(sslProperties.getKeyStore().getInputStream(), sslProperties.getKeyStorePassword().toCharArray());
-		} catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException ex) {
+		} catch (final KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException ex) {
 			throw new ArrowheadException(ex.getMessage());
 		}			
 		final PrivateKey providerPrivateKey = Utilities.getPrivateKey(keystore, sslProperties.getKeyPassword());
@@ -144,6 +142,7 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 		serviceRegistryRequest.setServiceUri(serviceUri);
 		serviceRegistryRequest.setMetadata(new HashMap<>());
 		serviceRegistryRequest.getMetadata().put(Constants.HTTP_METHOD, httpMethod.name());
+		
 		return serviceRegistryRequest;
 	}
 }

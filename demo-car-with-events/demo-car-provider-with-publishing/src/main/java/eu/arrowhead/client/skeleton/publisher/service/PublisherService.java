@@ -45,10 +45,9 @@ public class PublisherService {
 
 	//-------------------------------------------------------------------------------------------------
 	//Sample implementation of event publishing of preset event types
-	public void publish( final PresetEventType eventType, final Map<String, String> metadata, final String payload ) {
-		
-		final EventPublishRequestDTO request = getPublishRequest( eventType, metadata, payload );
-		arrowheadService.publishToEventHandler( request );
+	public void publish(final PresetEventType eventType, final Map<String, String> metadata, final String payload) {
+		final EventPublishRequestDTO request = getPublishRequest(eventType, metadata, payload);
+		arrowheadService.publishToEventHandler(request);
 	}
 	
 	//=================================================================================================
@@ -56,9 +55,9 @@ public class PublisherService {
 
 	//-------------------------------------------------------------------------------------------------
 	private EventPublishRequestDTO getPublishRequest(final PresetEventType eventType, final Map<String, String> metadata, final String payload) {
-		logger.debug( "getPublishRequest started..." );
+		logger.debug("getPublishRequest started...");
 		
-		final String timeStamp = Utilities.convertZonedDateTimeToUTCString( ZonedDateTime.now() );
+		final String timeStamp = Utilities.convertZonedDateTimeToUTCString(ZonedDateTime.now());
 		
 		final EventPublishRequestDTO publishRequestDTO = new EventPublishRequestDTO(
 				eventType.getEventTypeName(), 
@@ -72,18 +71,16 @@ public class PublisherService {
 
 	//-------------------------------------------------------------------------------------------------
 	private SystemRequestDTO getSource() {
-		logger.debug( "getSource started..." );
+		logger.debug("getSource started...");
 		
 		final SystemRequestDTO source = new SystemRequestDTO();
-		source.setSystemName( clientSystemName );
-		source.setAddress( clientSystemAddress );
-		source.setPort( clientSystemPort );
+		source.setSystemName(clientSystemName);
+		source.setAddress(clientSystemAddress);
+		source.setPort(clientSystemPort);
 		if (sslEnabled) {
-			source.setAuthenticationInfo( Base64.getEncoder().encodeToString( arrowheadService.getMyPublicKey().getEncoded() ) );
+			source.setAuthenticationInfo(Base64.getEncoder().encodeToString(arrowheadService.getMyPublicKey().getEncoded()));
 		}
+		
 		return source;
-
 	}
-	
-	
 }

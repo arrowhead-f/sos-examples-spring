@@ -35,7 +35,7 @@ public class IndoorServiceController {
 		}
 		
 		if (fromTimestamp > EFUtilities.nowUTCSeconds() || toTimestamp > EFUtilities.nowUTCSeconds()) {
-			throw new BadPayloadException("fromTimestamp or toTimestamp cannot be int the future");
+			throw new BadPayloadException("fromTimestamp or toTimestamp cannot be in the future");
 		}
 		
 		toTimestamp = toTimestamp == null || toTimestamp < fromTimestamp ? fromTimestamp : toTimestamp; 

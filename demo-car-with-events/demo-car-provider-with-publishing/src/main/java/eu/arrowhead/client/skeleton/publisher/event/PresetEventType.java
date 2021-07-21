@@ -35,9 +35,9 @@ public enum PresetEventType {
 
 	//-------------------------------------------------------------------------------------------------
 	private PresetEventType( final String eventTypeName, final List<String> metadataKeys ) {
-		Assert.isTrue( !Utilities.isEmpty( eventTypeName ), "EventType name is invalid." );
+		Assert.isTrue(!Utilities.isEmpty(eventTypeName), "EventType name is invalid.");
 		
-		this.metadataKeys = metadataKeys != null ? Collections.unmodifiableList( metadataKeys ) : List.of();
+		this.metadataKeys = metadataKeys != null ? Collections.unmodifiableList(metadataKeys) : List.of();
 		this.eventTypeName = eventTypeName;
 	}
 }

@@ -8,7 +8,6 @@ import org.springframework.security.web.servletapi.SecurityContextHolderAwareReq
 
 import eu.arrowhead.client.library.config.DefaultSecurityConfig;
 import eu.arrowhead.client.library.util.ClientCommonConstants;
-import eu.arrowhead.common.CommonConstants;
 
 @Configuration
 @EnableWebSecurity
