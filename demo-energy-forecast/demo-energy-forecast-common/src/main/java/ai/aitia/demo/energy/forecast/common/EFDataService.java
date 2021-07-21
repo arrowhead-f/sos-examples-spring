@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 
 import com.opencsv.CSVReader;
 
-import eu.arrowhead.client.library.util.ClientCommonConstants;
+import ai.aitia.arrowhead.application.library.util.ApplicationCommonConstants;
 
 @Component
 public class EFDataService {
@@ -46,7 +46,7 @@ public class EFDataService {
     private static final double VENTILATION = 1.2d;
     private static final double SCALE = 2.0d * 1000.0d;
     
-    @Value(ClientCommonConstants.$CLIENT_SYSTEM_NAME)
+    @Value(ApplicationCommonConstants.$APPLICATION_SYSTEM_NAME)
 	private String mySystemName;
 	
     //=================================================================================================

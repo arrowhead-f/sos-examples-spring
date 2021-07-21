@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 
+import ai.aitia.arrowhead.application.library.ArrowheadService;
 import ai.aitia.demo.energy.forecast.common.EFCommonConstants;
 import ai.aitia.demo.energy.forecast.common.dto.EnergyDetailsListDTO;
-import eu.arrowhead.client.library.ArrowheadService;
 import eu.arrowhead.common.SSLProperties;
 import eu.arrowhead.common.dto.shared.OrchestrationFlags.Flag;
 import eu.arrowhead.common.dto.shared.OrchestrationFormRequestDTO;

@@ -12,10 +12,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpMethod;
 
-import com.aitia.demo.car_common.dto.CarRequestDTO;
-import com.aitia.demo.car_common.dto.CarResponseDTO;
-
-import eu.arrowhead.client.library.ArrowheadService;
+import ai.aitia.arrowhead.application.library.ArrowheadService;
+import ai.aitia.demo.car_common.dto.CarRequestDTO;
+import ai.aitia.demo.car_common.dto.CarResponseDTO;
 import eu.arrowhead.common.CommonConstants;
 import eu.arrowhead.common.SSLProperties;
 import eu.arrowhead.common.Utilities;

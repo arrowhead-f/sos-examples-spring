@@ -19,16 +19,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.aitia.demo.car_common.dto.CarRequestDTO;
-import com.aitia.demo.car_common.dto.CarResponseDTO;
-
+import ai.aitia.demo.car_common.dto.CarRequestDTO;
+import ai.aitia.demo.car_common.dto.CarResponseDTO;
 import ai.aitia.demo.car_provider_with_publishing.CarProviderWithPublishingConstants;
 import ai.aitia.demo.car_provider_with_publishing.database.DTOConverter;
 import ai.aitia.demo.car_provider_with_publishing.database.InMemoryCarDB;
 import ai.aitia.demo.car_provider_with_publishing.entity.Car;
-import eu.arrowhead.client.skeleton.publisher.event.EventTypeConstants;
-import eu.arrowhead.client.skeleton.publisher.event.PresetEventType;
-import eu.arrowhead.client.skeleton.publisher.service.PublisherService;
+import eu.arrowhead.application.skeleton.publisher.event.EventTypeConstants;
+import eu.arrowhead.application.skeleton.publisher.event.PresetEventType;
+import eu.arrowhead.application.skeleton.publisher.service.PublisherService;
 import eu.arrowhead.common.exception.BadPayloadException;
 
 @RestController

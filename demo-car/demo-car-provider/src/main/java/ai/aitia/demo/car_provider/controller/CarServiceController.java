@@ -16,9 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.aitia.demo.car_common.dto.CarRequestDTO;
-import com.aitia.demo.car_common.dto.CarResponseDTO;
-
+import ai.aitia.demo.car_common.dto.CarRequestDTO;
+import ai.aitia.demo.car_common.dto.CarResponseDTO;
 import ai.aitia.demo.car_provider.CarProviderConstants;
 import ai.aitia.demo.car_provider.database.DTOConverter;
 import ai.aitia.demo.car_provider.database.InMemoryCarDB;

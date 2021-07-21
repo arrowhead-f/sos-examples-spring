@@ -28,14 +28,13 @@ import eu.arrowhead.common.dto.shared.SystemRequestDTO;
 import eu.arrowhead.common.exception.ArrowheadException;
 import eu.arrowhead.common.exception.InvalidParameterException;
 
-import eu.arrowhead.client.library.ArrowheadService;
-import eu.arrowhead.client.library.config.ApplicationInitListener;
-import eu.arrowhead.client.library.util.ClientCommonConstants;
-
-import eu.arrowhead.client.skeleton.subscriber.security.SubscriberSecurityConfig;
-import eu.arrowhead.client.skeleton.subscriber.ConfigEventProperites;
-import eu.arrowhead.client.skeleton.subscriber.SubscriberUtilities;
-import eu.arrowhead.client.skeleton.subscriber.constants.SubscriberConstants;
+import ai.aitia.arrowhead.application.library.ArrowheadService;
+import ai.aitia.arrowhead.application.library.config.ApplicationInitListener;
+import ai.aitia.arrowhead.application.library.util.ApplicationCommonConstants;
+import eu.arrowhead.application.skeleton.subscriber.ConfigEventProperites;
+import eu.arrowhead.application.skeleton.subscriber.SubscriberUtilities;
+import eu.arrowhead.application.skeleton.subscriber.constants.SubscriberConstants;
+import eu.arrowhead.application.skeleton.subscriber.security.SubscriberSecurityConfig;
 
 @Component
 public class CarConsumerWithSubscriptionApplicationInitListener extends ApplicationInitListener {
@@ -49,20 +48,20 @@ public class CarConsumerWithSubscriptionApplicationInitListener extends Applicat
 	@Autowired
 	private SubscriberSecurityConfig subscriberSecurityConfig;
 	
-	@Value(ClientCommonConstants.$TOKEN_SECURITY_FILTER_ENABLED_WD)
+	@Value(ApplicationCommonConstants.$TOKEN_SECURITY_FILTER_ENABLED_WD)
 	private boolean tokenSecurityFilterEnabled;
 	
 	@Value(CommonConstants.$SERVER_SSL_ENABLED_WD)
 	private boolean sslEnabled;
 	
-	@Value(ClientCommonConstants.$CLIENT_SYSTEM_NAME)
-	private String clientSystemName;
+	@Value(ApplicationCommonConstants.$APPLICATION_SYSTEM_NAME)
+	private String applicationSystemName;
 	
-	@Value(ClientCommonConstants.$CLIENT_SERVER_ADDRESS_WD)
-	private String clientSystemAddress;
+	@Value(ApplicationCommonConstants.$APPLICATION_SERVER_ADDRESS_WD)
+	private String applicationSystemAddress;
 	
-	@Value(ClientCommonConstants.$CLIENT_SERVER_PORT_WD)
-	private int clientSystemPort;
+	@Value(ApplicationCommonConstants.$APPLICATION_SERVER_PORT_WD)
+	private int applicationSystemPort;
 	
 	private final Logger logger = LogManager.getLogger(CarConsumerWithSubscriptionApplicationInitListener.class);
 	
@@ -128,7 +127,7 @@ public class CarConsumerWithSubscriptionApplicationInitListener extends Applicat
 			logger.info("No preset events to unsubscribe.");
 		} else {
 			for (final String eventType : eventTypeMap.keySet()) {
-				arrowheadService.unsubscribeFromEventHandler(eventType, clientSystemName, clientSystemAddress, clientSystemPort);
+				arrowheadService.unsubscribeFromEventHandler(eventType, applicationSystemName, applicationSystemAddress, applicationSystemPort);
 			}
 		}
 		
@@ -175,16 +174,16 @@ public class CarConsumerWithSubscriptionApplicationInitListener extends Applicat
 			logger.info("No preset events to subscribe.");
 		} else {
 			final SystemRequestDTO subscriber = new SystemRequestDTO();
-			subscriber.setSystemName(clientSystemName);
-			subscriber.setAddress(clientSystemAddress);
-			subscriber.setPort(clientSystemPort);
+			subscriber.setSystemName(applicationSystemName);
+			subscriber.setAddress(applicationSystemAddress);
+			subscriber.setPort(applicationSystemPort);
 			if (sslEnabled) {
 				subscriber.setAuthenticationInfo(Base64.getEncoder().encodeToString( arrowheadService.getMyPublicKey().getEncoded()));		
 			}
 			
 			for (final String eventType  : eventTypeMap.keySet()) {
 				try {
-					arrowheadService.unsubscribeFromEventHandler(eventType, clientSystemName, clientSystemAddress, clientSystemPort);
+					arrowheadService.unsubscribeFromEventHandler(eventType, applicationSystemName, applicationSystemAddress, applicationSystemPort);
 				} catch (final Exception ex) {
 					logger.debug("Exception happend in subscription initalization " + ex);
 				}

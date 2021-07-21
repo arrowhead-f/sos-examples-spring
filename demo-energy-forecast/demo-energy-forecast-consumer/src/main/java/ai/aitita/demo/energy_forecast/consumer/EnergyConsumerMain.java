@@ -21,7 +21,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 import ai.aitia.demo.energy.forecast.common.EFCommonConstants;
 import ai.aitia.demo.energy.forecast.common.dto.EnergyForecastDTO;
-import eu.arrowhead.client.library.ArrowheadService;
+import ai.aitia.arrowhead.application.library.ArrowheadService;
 import eu.arrowhead.common.CommonConstants;
 import eu.arrowhead.common.SSLProperties;
 import eu.arrowhead.common.Utilities;
