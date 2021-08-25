@@ -1,8 +1,11 @@
 package eu.arrowhead.application.skeleton.executor.service;
 
 import org.apache.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ai.aitia.demo.car_executor.execution.ExecutionBoard;
+import ai.aitia.demo.car_executor.model.GetCarServiceModel;
 import eu.arrowhead.common.Utilities;
 import eu.arrowhead.common.dto.shared.ChoreographerAbortStepRequestDTO;
 import eu.arrowhead.common.dto.shared.ChoreographerExecuteStepRequestDTO;
@@ -12,6 +15,15 @@ import eu.arrowhead.common.exception.BadPayloadException;
 
 @Service
 public class ExecutorService {
+	
+	//=================================================================================================
+	// methods
+	
+	@Autowired
+	private ExecutionBoard executionBoard;
+	
+	@Autowired
+	private GetCarServiceModel getCarServiceModel;
 
 	//=================================================================================================
 	// methods
@@ -19,21 +31,23 @@ public class ExecutorService {
 	//-------------------------------------------------------------------------------------------------
 	public void startExecution(final ChoreographerExecuteStepRequestDTO request) {
 		validateChoreographerExecuteStepRequestDTO(request);
-		//TODO implement your logic here
+		executionBoard.newJob(request);
 	}
 	
 	//-------------------------------------------------------------------------------------------------
 	public void abortExecution(final ChoreographerAbortStepRequestDTO request) {
-		//TODO implement your logic here 
+		executionBoard.abortJob(request.getSessionId(), request.getSessionStepId());
 	}
 	
 	//-------------------------------------------------------------------------------------------------
 	public ChoreographerExecutorServiceInfoResponseDTO collectServiceInfo(final ChoreographerExecutorServiceInfoRequestDTO request) {
 		validateChoreographerExecutorServiceInfoRequestDTO(request);
 		
-		final ChoreographerExecutorServiceInfoResponseDTO response = new ChoreographerExecutorServiceInfoResponseDTO();
-		//TODO implement your logic here 
-		return response;
+		if (getCarServiceModel.isServable(request)) {
+			return getCarServiceModel.createChoreographerExecutorServiceInfoResponseDTO();
+		}
+		
+		throw new BadPayloadException("Service request cannot be fulfilled");
 	}
 	
 	//=================================================================================================
