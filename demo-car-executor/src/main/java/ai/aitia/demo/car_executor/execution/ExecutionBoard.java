@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 import eu.arrowhead.common.dto.shared.ChoreographerExecuteStepRequestDTO;
 
@@ -25,10 +26,12 @@ public class ExecutionBoard {
 	// methods
 
 	//-------------------------------------------------------------------------------------------------
-	public Job newJob(final ChoreographerExecuteStepRequestDTO request) {
+	public Job newJob(final ChoreographerExecuteStepRequestDTO jobRequest) {
+		Assert.notNull(jobRequest, "jobRequest is null");
+		
 		synchronized (lock) {
-			final Job job = new Job(request, ExecutionSignal.DO);
-			board.put(getUinqueIdentifier(request), job);
+			final Job job = new Job(jobRequest, ExecutionSignal.DO);
+			board.put(getUinqueIdentifier(jobRequest), job);
 			queue.add(job);
 			return job;			
 		}
@@ -73,7 +76,9 @@ public class ExecutionBoard {
 	public void removeJob(final long sessionId, final long sessionStepId) {
 		synchronized (lock) {
 			final Job job = board.remove(getUinqueIdentifier(sessionId, sessionStepId));
-			queue.remove(job);			
+			if (job != null) {
+				queue.remove(job);							
+			}
 		}
 	}
 	

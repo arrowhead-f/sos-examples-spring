@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import ai.aitia.arrowhead.application.library.ArrowheadService;
 import ai.aitia.arrowhead.application.library.config.ApplicationInitListener;
+import ai.aitia.demo.car_executor.execution.ExecutionManager;
 import eu.arrowhead.common.core.CoreSystem;
 
 @Component
@@ -18,6 +19,9 @@ public class ExecutorApplicationInitListener extends ApplicationInitListener {
 	
 	@Autowired
 	private ArrowheadService arrowheadService;
+	
+	@Autowired
+	private ExecutionManager executionManager;
 	
 	private final Logger logger = LogManager.getLogger(ExecutorApplicationInitListener.class);
 	
@@ -34,12 +38,19 @@ public class ExecutorApplicationInitListener extends ApplicationInitListener {
 		//Initialize Arrowhead Context
 		arrowheadService.updateCoreServiceURIs(CoreSystem.CHOREOGRAPHER);
 		
+		//Start Executor Manager
+		executionManager.start();
+		
 		//TODO: implement here any custom behavior on application start up
 	}
 	
 	//-------------------------------------------------------------------------------------------------
 	@Override
 	public void customDestroy() {
+		
+		//Stop Executor Manager
+		executionManager.interrupt();
+		
 		//TODO: implement here any custom behavior on application shout down
 	}
 }
