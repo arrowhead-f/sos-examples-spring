@@ -62,7 +62,7 @@ public class ExecutionBoard {
 	//-------------------------------------------------------------------------------------------------
 	public void abortJob(final long sessionId, final long sessionStepId) {
 		synchronized (lock) {
-			final Optional<Job> optional = getJob(sessionId, sessionStepId);
+			final Optional<Job> optional = peekJob(sessionId, sessionStepId);
 			if (optional.isPresent()) {
 				optional.get().setExecutionSignal(ExecutionSignal.ABORT);
 			}			
