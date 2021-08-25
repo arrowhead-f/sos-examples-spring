@@ -29,12 +29,13 @@
 		<module>demo-car-with-events</module>
 	    <module>demo-energy-forecast</module>		
 		<module>demo-exchange-rate-intercloud</module>
-  	</modules>
+		<module>demo-car-executor</module>
+	</modules>
   	
-  	<repositories>
+  	<repositories> <!-- TODO: delete this after new app library release  -->
 		<repository>
 			<id>ossrh</id>
-			<url>https://s01.oss.sonatype.org/content/repositories/aiaitia-1017</url>
+			<url>https://s01.oss.sonatype.org/content/repositories/aiaitia-1018</url>
 		</repository>
 	</repositories>
 	
@@ -43,7 +44,12 @@
 			<groupId>ai.aitia</groupId>
 			<artifactId>arrowhead-application-library-java-spring</artifactId>
 			<version>4.4.0.0</version>
-		</dependency>		
+		</dependency>
+		<dependency> <!-- TODO: delete this after new app library release  -->
+			<groupId>ai.aitia</groupId>
+			<artifactId>arrowhead-core-common-essentials-java-spring</artifactId>
+			<version>4.4.0.2</version>
+		</dependency>
 	</dependencies>
 	
 	<build>
