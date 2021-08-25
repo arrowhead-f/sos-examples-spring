@@ -35,7 +35,7 @@ public class ExecutionBoard {
 	}
 	
 	//-------------------------------------------------------------------------------------------------
-	public Optional<Job> getJob(final long sessionId, final long sessionStepId) {
+	public Optional<Job> peekJob(final long sessionId, final long sessionStepId) {
 		final Job job = board.get(getUinqueIdentifier(sessionId, sessionStepId));
 		if (job != null) {
 			return Optional.of(job);
@@ -50,18 +50,22 @@ public class ExecutionBoard {
 	
 	//-------------------------------------------------------------------------------------------------
 	public ExecutionSignal getJobExecutionSignal(final long sessionId, final long sessionStepId) {
-		final Job job = board.get(getUinqueIdentifier(sessionId, sessionStepId));
-		if (job != null) {
-			return job.getExecutionSignal();
+		synchronized (lock) {
+			final Job job = board.get(getUinqueIdentifier(sessionId, sessionStepId));
+			if (job != null) {
+				return job.getExecutionSignal();
+			}
+			return ExecutionSignal.UNKNOWN;			
 		}
-		return ExecutionSignal.UNKNOWN;
 	}
 	
 	//-------------------------------------------------------------------------------------------------
 	public void abortJob(final long sessionId, final long sessionStepId) {
-		final Optional<Job> optional = getJob(sessionId, sessionStepId);
-		if (optional.isPresent()) {
-			optional.get().setExecutionSignal(ExecutionSignal.ABORT);
+		synchronized (lock) {
+			final Optional<Job> optional = getJob(sessionId, sessionStepId);
+			if (optional.isPresent()) {
+				optional.get().setExecutionSignal(ExecutionSignal.ABORT);
+			}			
 		}
 	}
 	
