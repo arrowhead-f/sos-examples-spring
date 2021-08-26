@@ -30,7 +30,7 @@ public class ExecutionWorkerFactoryConfig {
 			return new GetCarServiceExecutionWorker(job);
 
 		default:
-			return new UnkownServiceExecutionWorker();
+			return new UnkownServiceExecutionWorker(job);
 		} 
 	}
 }

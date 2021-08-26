@@ -1,5 +1,7 @@
 package eu.arrowhead.application.skeleton.executor.execution.worker;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import eu.arrowhead.application.skeleton.executor.execution.ExecutionBoard;
@@ -21,6 +23,8 @@ public class GetCarServiceExecutionWorker implements Runnable {
 	
 	private ExecutorDriver driver;
 	
+	private final Logger logger = LogManager.getLogger(GetCarServiceExecutionWorker.class);
+	
 	//=================================================================================================
 	// methods
 
@@ -40,6 +44,7 @@ public class GetCarServiceExecutionWorker implements Runnable {
 		try {
 			consumeCreateCarService();			
 		} catch (final Exception ex) {
+			logger.debug(ex);
 			notifyChoreographer(ChoreographerExecutedStepStatus.ERROR, ex.getMessage(), ex.getClass().getSimpleName());
 		}
 		
@@ -51,6 +56,7 @@ public class GetCarServiceExecutionWorker implements Runnable {
 		try {
 			consumeGetCarService();			
 		} catch (final Exception ex) {
+			logger.debug(ex);
 			notifyChoreographer(ChoreographerExecutedStepStatus.ERROR, ex.getMessage(), ex.getClass().getSimpleName());
 		}
 		
@@ -63,11 +69,13 @@ public class GetCarServiceExecutionWorker implements Runnable {
 	//-------------------------------------------------------------------------------------------------
 	private void consumeCreateCarService() {
 		final OrchestrationResultDTO orchResult = job.getJobRequest().getPreconditionOrchestrationResults().get(0);
+		//TODO impl
 	}
 	
 	//-------------------------------------------------------------------------------------------------
 	private void consumeGetCarService() {
 		final OrchestrationResultDTO orchResult = job.getJobRequest().getMainOrchestrationResult();
+		//TODO impl
 	}
 	
 	//-------------------------------------------------------------------------------------------------
