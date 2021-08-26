@@ -1,7 +1,14 @@
 package ai.aitia.demo.car_executor.execution;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.function.Function;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import eu.arrowhead.application.skeleton.executor.ExecutorConstants;
 
 @Component
 public class ExecutionManager extends Thread {
@@ -11,6 +18,14 @@ public class ExecutionManager extends Thread {
 	
 	@Autowired
 	private ExecutionBoard board;
+	
+	@Autowired
+	private Function<Job,Runnable> workerFactory;
+	
+	private ThreadPoolExecutor threadPool;
+	
+	@Value(ExecutorConstants.$THREAD_NUM_EXECUTION_WORKER_WD)
+	private int threadNum;
 
 	private boolean doWork = true;
 	
@@ -19,7 +34,10 @@ public class ExecutionManager extends Thread {
 	
 	//-------------------------------------------------------------------------------------------------
 	@Override
-	public void run() {		
+	public void run() {	
+		
+		threadPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(threadNum);
+		
 		while (doWork) {
 			try {				
 				final Job job = board.nextJob();
@@ -27,7 +45,7 @@ public class ExecutionManager extends Thread {
 					board.removeJob(job.getJobRequest().getSessionId(), job.getJobRequest().getSessionStepId());
 					
 				} else {
-					//TODO run job on new thread
+					threadPool.execute(workerFactory.apply(job));
 				}
 				
 			} catch (final InterruptedException ex) {

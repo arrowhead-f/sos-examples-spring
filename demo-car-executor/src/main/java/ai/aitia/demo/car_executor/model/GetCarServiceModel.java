@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import eu.arrowhead.application.skeleton.executor.ExecutorConstants;
 import eu.arrowhead.common.dto.shared.ChoreographerExecutorServiceInfoRequestDTO;
 import eu.arrowhead.common.dto.shared.ChoreographerExecutorServiceInfoResponseDTO;
 import eu.arrowhead.common.dto.shared.ServiceQueryFormDTO;
@@ -14,7 +15,7 @@ public class GetCarServiceModel {
 	//=================================================================================================
 	// members
 	
-	private static final String MAIN_SERVICE_DEFINITION = "get-car";
+	private static final String MAIN_SERVICE_DEFINITION = ExecutorConstants.MAIN_SERVICE_GET_CAR;
 	private static final int MAIN_SERVICE_MIN_VERSION = 0;
 	private static final int MAIN_SERVICE_MAX_VERSION = Integer.MAX_VALUE;
 	
