@@ -1,10 +1,10 @@
-package ai.aitia.demo.car_executor.execution.worker;
+package eu.arrowhead.application.skeleton.executor.execution.worker;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import ai.aitia.demo.car_executor.execution.ExecutionBoard;
-import ai.aitia.demo.car_executor.execution.ExecutionSignal;
-import ai.aitia.demo.car_executor.execution.Job;
+import eu.arrowhead.application.skeleton.executor.execution.ExecutionBoard;
+import eu.arrowhead.application.skeleton.executor.execution.ExecutionSignal;
+import eu.arrowhead.application.skeleton.executor.execution.Job;
 import eu.arrowhead.application.skeleton.executor.service.ExecutorDriver;
 import eu.arrowhead.common.dto.shared.ChoreographerExecutedStepStatus;
 import eu.arrowhead.common.dto.shared.OrchestrationResultDTO;

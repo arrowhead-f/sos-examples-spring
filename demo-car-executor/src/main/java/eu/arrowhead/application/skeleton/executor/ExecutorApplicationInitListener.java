@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import ai.aitia.arrowhead.application.library.ArrowheadService;
 import ai.aitia.arrowhead.application.library.config.ApplicationInitListener;
-import ai.aitia.demo.car_executor.execution.ExecutionManager;
+import eu.arrowhead.application.skeleton.executor.execution.ExecutionManager;
 import eu.arrowhead.common.core.CoreSystem;
 
 @Component

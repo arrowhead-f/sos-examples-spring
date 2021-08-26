@@ -1,4 +1,4 @@
-package ai.aitia.demo.car_executor.execution.worker;
+package eu.arrowhead.application.skeleton.executor.execution.worker;
 
 import java.util.function.Function;
 
@@ -7,8 +7,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
-import ai.aitia.demo.car_executor.execution.Job;
 import eu.arrowhead.application.skeleton.executor.ExecutorConstants;
+import eu.arrowhead.application.skeleton.executor.execution.Job;
 
 @Configuration
 public class ExecutionWorkerFactoryConfig {
