@@ -2,15 +2,21 @@ package eu.arrowhead.application.skeleton.executor.execution.worker;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import eu.arrowhead.application.skeleton.executor.execution.Job;
+import eu.arrowhead.application.skeleton.executor.service.ExecutorDriver;
+import eu.arrowhead.common.dto.shared.ChoreographerExecutedStepStatus;
 
 public class UnkownServiceExecutionWorker implements Runnable {
 	
 	//=================================================================================================
 	// members
 	
-	private final Job job;	
+	private final Job job;
+	
+	@Autowired
+	private ExecutorDriver driver;
 	
 	private final Logger logger = LogManager.getLogger(UnkownServiceExecutionWorker.class);
 	
@@ -29,5 +35,8 @@ public class UnkownServiceExecutionWorker implements Runnable {
 					 job.getJobRequest().getSessionId(),
 					 job.getJobRequest().getSessionStepId(),
 					 job.getJobRequest().getMainOrchestrationResult().getService().getServiceDefinition());
+		
+		driver.notifyChoreographer(job.getJobRequest().getSessionId(), job.getJobRequest().getSessionStepId(), ChoreographerExecutedStepStatus.ERROR,
+								   job.getJobRequest().getMainOrchestrationResult().getService().getServiceDefinition() + " is not supported", null);
 	}
 }

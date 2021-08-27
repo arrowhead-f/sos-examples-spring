@@ -31,7 +31,7 @@ public class ExecutionBoard {
 		
 		synchronized (lock) {
 			final Job job = new Job(jobRequest, ExecutionSignal.DO);
-			board.put(getUinqueIdentifier(jobRequest), job);
+			board.put(getUniqueIdentifier(jobRequest), job);
 			queue.add(job);
 			return job;			
 		}
@@ -39,7 +39,7 @@ public class ExecutionBoard {
 	
 	//-------------------------------------------------------------------------------------------------
 	public Optional<Job> peekJob(final long sessionId, final long sessionStepId) {
-		final Job job = board.get(getUinqueIdentifier(sessionId, sessionStepId));
+		final Job job = board.get(getUniqueIdentifier(sessionId, sessionStepId));
 		if (job != null) {
 			return Optional.of(job);
 		}
@@ -54,7 +54,7 @@ public class ExecutionBoard {
 	//-------------------------------------------------------------------------------------------------
 	public ExecutionSignal getJobExecutionSignal(final long sessionId, final long sessionStepId) {
 		synchronized (lock) {
-			final Job job = board.get(getUinqueIdentifier(sessionId, sessionStepId));
+			final Job job = board.get(getUniqueIdentifier(sessionId, sessionStepId));
 			if (job != null) {
 				return job.getExecutionSignal();
 			}
@@ -75,7 +75,7 @@ public class ExecutionBoard {
 	//-------------------------------------------------------------------------------------------------
 	public void removeJob(final long sessionId, final long sessionStepId) {
 		synchronized (lock) {
-			final Job job = board.remove(getUinqueIdentifier(sessionId, sessionStepId));
+			final Job job = board.remove(getUniqueIdentifier(sessionId, sessionStepId));
 			if (job != null) {
 				queue.remove(job);							
 			}
@@ -86,12 +86,12 @@ public class ExecutionBoard {
 	// assistant methods
 
 	//-------------------------------------------------------------------------------------------------
-	private String getUinqueIdentifier(final ChoreographerExecuteStepRequestDTO request) {
-		return getUinqueIdentifier(request.getSessionId(), request.getSessionStepId());
+	private String getUniqueIdentifier(final ChoreographerExecuteStepRequestDTO request) {
+		return getUniqueIdentifier(request.getSessionId(), request.getSessionStepId());
 	}
 	
 	//-------------------------------------------------------------------------------------------------
-	private String getUinqueIdentifier(final long sessionId, final long sessionStepId) {
+	private String getUniqueIdentifier(final long sessionId, final long sessionStepId) {
 		return sessionId + "-" + sessionStepId;
 	}
 }
