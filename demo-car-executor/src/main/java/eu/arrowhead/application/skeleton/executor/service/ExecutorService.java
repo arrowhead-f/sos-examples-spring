@@ -4,7 +4,7 @@ import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ai.aitia.demo.car_executor.model.GetCarServiceModel;
+import ai.aitia.demo.car_executor.model.service.GetCarServiceModel;
 import eu.arrowhead.application.skeleton.executor.execution.ExecutionBoard;
 import eu.arrowhead.common.Utilities;
 import eu.arrowhead.common.dto.shared.ChoreographerAbortStepRequestDTO;

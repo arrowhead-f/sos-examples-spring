@@ -1,4 +1,4 @@
-package ai.aitia.demo.car_executor.model;
+package ai.aitia.demo.car_executor.model.service;
 
 import java.util.List;
 
