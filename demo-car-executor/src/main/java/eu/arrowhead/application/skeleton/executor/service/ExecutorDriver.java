@@ -1,6 +1,8 @@
 package eu.arrowhead.application.skeleton.executor.service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -18,6 +20,8 @@ import eu.arrowhead.common.core.CoreSystemService;
 import eu.arrowhead.common.dto.shared.ChoreographerExecutedStepResultDTO;
 import eu.arrowhead.common.dto.shared.ChoreographerExecutedStepStatus;
 import eu.arrowhead.common.dto.shared.OrchestrationResultDTO;
+import eu.arrowhead.common.dto.shared.ServiceInterfaceResponseDTO;
+import eu.arrowhead.common.exception.InvalidParameterException;
 
 @Service
 public class ExecutorDriver {
@@ -55,9 +59,9 @@ public class ExecutorDriver {
 		Assert.notNull(orchResult, "OrchestrationResultDTO is null");
 		Assert.notNull(request, "CarRequestDTO is null");
 		
-		final String token = orchResult.getAuthorizationTokens() == null ? null : orchResult.getAuthorizationTokens().get(getInterface());
+		final String token = orchResult.getAuthorizationTokens() == null ? null : orchResult.getAuthorizationTokens().get(getInterface(orchResult));
 		return arrowheadService.consumeServiceHTTP(CarResponseDTO.class, HttpMethod.POST, orchResult.getProvider().getAddress(), orchResult.getProvider().getPort(), orchResult.getServiceUri(),
-												   getInterface(), token, request, new String[0]);
+												   getInterface(orchResult), token, request, new String[0]);
 	}
 	
 	//-------------------------------------------------------------------------------------------------
@@ -68,9 +72,9 @@ public class ExecutorDriver {
 		Assert.isTrue(!Utilities.isEmpty(color), "color is empty");
 		
 		final String[] queryParam = {"brand", brand, "color", color};	
-		final String token = orchResult.getAuthorizationTokens() == null ? null : orchResult.getAuthorizationTokens().get(getInterface());
+		final String token = orchResult.getAuthorizationTokens() == null ? null : orchResult.getAuthorizationTokens().get(getInterface(orchResult));
 		return arrowheadService.consumeServiceHTTP(List.class, HttpMethod.POST, orchResult.getProvider().getAddress(), orchResult.getProvider().getPort(), orchResult.getServiceUri(),
-				   								   getInterface(), token, null, queryParam);
+				   								   getInterface(orchResult), token, null, queryParam);
 	}
 	
 	//=================================================================================================
@@ -82,7 +86,26 @@ public class ExecutorDriver {
 	}
 	
 	//-------------------------------------------------------------------------------------------------
-    private String getInterface() {
-    	return sslProperties.isSslEnabled() ? CommonConstants.HTTP_SECURE_JSON : CommonConstants.HTTP_INSECURE_JSON;
+    private String getInterface(final OrchestrationResultDTO orchResult) {
+    	final Set<String> interfaces = new HashSet<>();
+    	for (final ServiceInterfaceResponseDTO interfaceDTO : orchResult.getInterfaces()) {
+    		interfaces.add(interfaceDTO.getInterfaceName());
+    	}
+    	
+    	if (!sslProperties.isSslEnabled() && interfaces.contains(CommonConstants.HTTP_INSECURE_JSON)) {
+    		return CommonConstants.HTTP_INSECURE_JSON;
+    		
+		}
+    	
+    	if (sslProperties.isSslEnabled()) {
+			if (interfaces.contains(CommonConstants.HTTP_SECURE_JSON)) {
+				return CommonConstants.HTTP_SECURE_JSON;
+			}
+			if (interfaces.contains(CommonConstants.HTTP_INSECURE_JSON)) {
+				return CommonConstants.HTTP_INSECURE_JSON;
+			}
+		}
+    	
+    	throw new InvalidParameterException("Have no proper interface to call the provider.");
     }
 }

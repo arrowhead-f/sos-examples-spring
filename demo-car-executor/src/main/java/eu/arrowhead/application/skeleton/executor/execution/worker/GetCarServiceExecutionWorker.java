@@ -88,36 +88,41 @@ public class GetCarServiceExecutionWorker implements Runnable {
 		final ChoreographerExecutorServiceInfoResponseDTO serviceInfo = serviceModel.createChoreographerExecutorServiceInfoResponseDTO();
 		
 		Assert.isTrue(jobRequest.getMainOrchestrationResult().getService().getServiceDefinition().equalsIgnoreCase(serviceInfo.getServiceDefinition()),
-					  "main service missmatch");
+					  "main service mismatch");
 		
 		final Integer mainServiceProvidedVersion = jobRequest.getMainOrchestrationResult().getVersion();
 		final int mainServiceRequiredMinVersion = serviceInfo.getMinVersion();
 		final int mainServiceRequiredMaxVersion = serviceInfo.getMaxVersion();
 		if (mainServiceProvidedVersion != null
-				&& mainServiceProvidedVersion < mainServiceRequiredMinVersion
-				&& mainServiceProvidedVersion > mainServiceRequiredMaxVersion) {
+				&& (mainServiceProvidedVersion < mainServiceRequiredMinVersion || mainServiceProvidedVersion > mainServiceRequiredMaxVersion)) {
 			throw new InvalidParameterException("main service version not supported");
 		}
 		
 		if (jobRequest.getPreconditionOrchestrationResults() == null
 				|| jobRequest.getPreconditionOrchestrationResults().isEmpty()
 				|| jobRequest.getPreconditionOrchestrationResults().size() > 1) {
-			throw new InvalidParameterException("preconditionOrchestrationResults list is empty or more than 1");
+			throw new InvalidParameterException("preconditionOrchestrationResults list is empty or more than needed");
 		}
 		
 		final String providedPreconditionService = jobRequest.getPreconditionOrchestrationResults().get(0).getService().getServiceDefinition();
 		final String requiredPreconditionService = serviceInfo.getDependencies().get(0).getServiceDefinitionRequirement();
-		if (providedPreconditionService.equalsIgnoreCase(requiredPreconditionService)) {
-			throw new InvalidParameterException("precondition service missmatch");
+		if (!providedPreconditionService.equalsIgnoreCase(requiredPreconditionService)) {
+			throw new InvalidParameterException("precondition service mismatch");
 		}
 		
 		final Integer preconditionServiceProvidedVersion = jobRequest.getPreconditionOrchestrationResults().get(0).getVersion();
 		final int preconditionServiceRequiredMinVersion = serviceInfo.getDependencies().get(0).getMinVersionRequirement();
 		final int preconditionServiceRequiredMaxVersion = serviceInfo.getDependencies().get(0).getMaxVersionRequirement();
 		if (preconditionServiceProvidedVersion != null
-				&& preconditionServiceProvidedVersion < preconditionServiceRequiredMinVersion
-				&& preconditionServiceProvidedVersion > preconditionServiceRequiredMaxVersion) {
+				&& (preconditionServiceProvidedVersion < preconditionServiceRequiredMinVersion || preconditionServiceProvidedVersion > preconditionServiceRequiredMaxVersion)) {
 			throw new InvalidParameterException("precondition service version not supported");
+		}
+		
+		if (!jobRequest.getStaticParameters().containsKey(PARAMETER_BRAND)) {
+			throw new InvalidParameterException("Static parameter '" + PARAMETER_BRAND + "' is missing");
+		}
+		if (!jobRequest.getStaticParameters().containsKey(PARAMETER_COLOR)) {
+			throw new InvalidParameterException("Static parameter '" + PARAMETER_COLOR + "' is missing");
 		}
 	}
 

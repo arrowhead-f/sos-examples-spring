@@ -5,9 +5,11 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import eu.arrowhead.application.skeleton.executor.ExecutorConstants;
 import eu.arrowhead.application.skeleton.executor.service.ExecutorService;
 import eu.arrowhead.common.CommonConstants;
 import eu.arrowhead.common.dto.shared.ChoreographerAbortStepRequestDTO;
@@ -16,7 +18,7 @@ import eu.arrowhead.common.dto.shared.ChoreographerExecutorServiceInfoRequestDTO
 import eu.arrowhead.common.dto.shared.ChoreographerExecutorServiceInfoResponseDTO;
 
 @RestController
-//@RequestMapping("/executor") // TODO: specify the base URI here
+@RequestMapping(ExecutorConstants.BASE_URI)
 public class ExecutorController {
 
 	//=================================================================================================
@@ -24,8 +26,6 @@ public class ExecutorController {
 
 	@Autowired
 	private ExecutorService executorService;
-	
-	//TODO: add your variables here
 
 	//=================================================================================================
 	// methods
@@ -53,7 +53,4 @@ public class ExecutorController {
 	@ResponseBody public ChoreographerExecutorServiceInfoResponseDTO serviceInfo(@RequestBody final ChoreographerExecutorServiceInfoRequestDTO request) {
 		return executorService.collectServiceInfo(request);
 	}
-	
-	//-------------------------------------------------------------------------------------------------
-	//TODO: implement here your executor related REST end points
 }

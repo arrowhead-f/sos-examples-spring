@@ -40,8 +40,6 @@ public class ExecutorApplicationInitListener extends ApplicationInitListener {
 		
 		//Start Executor Manager
 		executionManager.start();
-		
-		//TODO: implement here any custom behavior on application start up
 	}
 	
 	//-------------------------------------------------------------------------------------------------
@@ -50,7 +48,5 @@ public class ExecutorApplicationInitListener extends ApplicationInitListener {
 		
 		//Stop Executor Manager
 		executionManager.interrupt();
-		
-		//TODO: implement here any custom behavior on application shout down
 	}
 }

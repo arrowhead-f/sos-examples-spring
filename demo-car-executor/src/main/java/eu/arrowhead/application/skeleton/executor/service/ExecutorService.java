@@ -56,7 +56,7 @@ public class ExecutorService {
 	//-------------------------------------------------------------------------------------------------
 	private void validateChoreographerExecuteStepRequestDTO(final ChoreographerExecuteStepRequestDTO dto) {
 		if (dto == null) {
-			throw new BadPayloadException("dto is null", HttpStatus.SC_BAD_REQUEST);
+			throw new BadPayloadException("request is null", HttpStatus.SC_BAD_REQUEST);
 		}		
 		if (dto.getMainOrchestrationResult() == null) {
 			throw new BadPayloadException("mainOrchestrationResult is null", HttpStatus.SC_BAD_REQUEST);
@@ -66,7 +66,7 @@ public class ExecutorService {
 	//-------------------------------------------------------------------------------------------------
 	private void validateChoreographerExecutorServiceInfoRequestDTO(final ChoreographerExecutorServiceInfoRequestDTO dto) {
 		if (dto == null) {
-			throw new BadPayloadException("dto is null", HttpStatus.SC_BAD_REQUEST);
+			throw new BadPayloadException("request is null", HttpStatus.SC_BAD_REQUEST);
 		}		
 		if (Utilities.isEmpty(dto.getServiceDefinition())) {
 			throw new BadPayloadException("serviceDefinition is empty", HttpStatus.SC_BAD_REQUEST);

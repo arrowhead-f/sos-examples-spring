@@ -31,8 +31,6 @@ public class ExecutorAccessControlFilter extends AccessControlFilter {
 			//Only Choreographer Core System is allowed to call this endpoints
 			checkIfClientIsChoreographer(clientCN, cloudCN);			
 		}
-		
-		//TODO: implement here your custom access filter if any further
 	}
 	
 	//=================================================================================================
