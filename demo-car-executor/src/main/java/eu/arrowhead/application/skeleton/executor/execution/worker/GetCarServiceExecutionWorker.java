@@ -101,7 +101,7 @@ public class GetCarServiceExecutionWorker implements Runnable {
 		if (jobRequest.getPreconditionOrchestrationResults() == null
 				|| jobRequest.getPreconditionOrchestrationResults().isEmpty()
 				|| jobRequest.getPreconditionOrchestrationResults().size() > 1) {
-			throw new InvalidParameterException("preconditionOrchestrationResults list is empty or more than needed");
+			throw new InvalidParameterException("preconditionOrchestrationResults list is empty or contains more elements than needed");
 		}
 		
 		final String providedPreconditionService = jobRequest.getPreconditionOrchestrationResults().get(0).getService().getServiceDefinition();
