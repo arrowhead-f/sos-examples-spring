@@ -71,6 +71,8 @@ public class CarProviderWithPublishingApplicationInitListener extends Applicatio
 	//-------------------------------------------------------------------------------------------------
 	@Override
 	protected void customInit(final ContextRefreshedEvent event) {
+		checkConfiguration();
+		
 		//Checking the availability of necessary core systems
 		checkCoreSystemReachability(CoreSystem.SERVICEREGISTRY);
 		if (sslEnabled && tokenSecurityFilterEnabled) {
@@ -109,6 +111,14 @@ public class CarProviderWithPublishingApplicationInitListener extends Applicatio
 	
 	//=================================================================================================
 	// assistant methods
+	
+	//-------------------------------------------------------------------------------------------------
+	private void checkConfiguration() {
+		if (!sslEnabled && tokenSecurityFilterEnabled) {			 
+			logger.info("Contradictory configuration:");
+			logger.info("token.security.filter.enabled=true while server.ssl.enabled=false");
+		}
+	}
 
 	//-------------------------------------------------------------------------------------------------
 	private void publishDestroyedEvent() {
@@ -165,7 +175,7 @@ public class CarProviderWithPublishingApplicationInitListener extends Applicatio
 		systemRequest.setAddress(mySystemAddress);
 		systemRequest.setPort(mySystemPort);		
 
-		if (tokenSecurityFilterEnabled) {
+		if (sslEnabled && tokenSecurityFilterEnabled) {
 			systemRequest.setAuthenticationInfo(Base64.getEncoder().encodeToString(arrowheadService.getMyPublicKey().getEncoded()));
 			serviceRegistryRequest.setSecure(ServiceSecurityType.TOKEN.name());
 			serviceRegistryRequest.setInterfaces(List.of(CarProviderWithPublishingConstants.INTERFACE_SECURE));
