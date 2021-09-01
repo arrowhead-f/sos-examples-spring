@@ -19,6 +19,8 @@ import eu.arrowhead.common.Utilities;
 import eu.arrowhead.common.core.CoreSystemService;
 import eu.arrowhead.common.dto.shared.ChoreographerExecutedStepResultDTO;
 import eu.arrowhead.common.dto.shared.ChoreographerExecutedStepStatus;
+import eu.arrowhead.common.dto.shared.ChoreographerExecutorRequestDTO;
+import eu.arrowhead.common.dto.shared.ChoreographerExecutorResponseDTO;
 import eu.arrowhead.common.dto.shared.OrchestrationResultDTO;
 import eu.arrowhead.common.dto.shared.ServiceInterfaceResponseDTO;
 import eu.arrowhead.common.exception.InvalidParameterException;
@@ -37,6 +39,23 @@ public class ExecutorDriver {
 	
 	//=================================================================================================
 	// methods
+	
+	//-------------------------------------------------------------------------------------------------
+	public void registerExecutor(ChoreographerExecutorRequestDTO request) {
+		Assert.notNull(request, "ChoreographerExecutorRequestDTO is null");
+		
+		final CoreServiceUri uri = arrowheadService.getCoreServiceUri(CoreSystemService.CHOREOGRAPHER_REGISTER_EXECUTOR_SERVICE);
+		arrowheadService.consumeServiceHTTP(ChoreographerExecutorResponseDTO.class, HttpMethod.POST, uri.getAddress(), uri.getPort(), uri.getPath(), getCoreSystemInterface(), null, request, new String[0]);
+	}
+	
+	//-------------------------------------------------------------------------------------------------
+	public void unregisterExecutor(final String executorName) {
+		Assert.isTrue(!Utilities.isEmpty(executorName), "executorName is empty");		
+		
+		final String[] queryParam = {CommonConstants.OP_CHOREOGRAPHER_EXECUTOR_UNREGISTER_REQUEST_PARAM_NAME, executorName};
+		final CoreServiceUri uri = arrowheadService.getCoreServiceUri(CoreSystemService.CHOREOGRAPHER_UNREGISTER_EXECUTOR_SERVICE);
+		arrowheadService.consumeServiceHTTP(Void.class, HttpMethod.DELETE, uri.getAddress(), uri.getPort(), uri.getPath(), getCoreSystemInterface(), null, null, queryParam);
+	}
 
 	//-------------------------------------------------------------------------------------------------
 	public void notifyChoreographer(final long sessionId, final long sessionStepId, final ChoreographerExecutedStepStatus status,
