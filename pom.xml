@@ -30,13 +30,6 @@
 	    <module>demo-energy-forecast</module>		
 		<module>demo-exchange-rate-intercloud</module>
   	</modules>
-  	
-  	<repositories>
-		<repository>
-			<id>ossrh</id>
-			<url>https://s01.oss.sonatype.org/content/repositories/aiaitia-1017</url>
-		</repository>
-	</repositories>
 	
 	<dependencies>
 		<dependency>
