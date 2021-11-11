@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import eu.arrowhead.client.skeleton.subscriber.constants.SubscriberConstants;
-import eu.arrowhead.client.skeleton.subscriber.constants.SubscriberDefaults;
+import eu.arrowhead.application.skeleton.subscriber.constants.SubscriberConstants;
+import eu.arrowhead.application.skeleton.subscriber.constants.SubscriberDefaults;
 import eu.arrowhead.common.CommonConstants;
 import eu.arrowhead.common.dto.shared.EventDTO;
 
@@ -40,32 +40,21 @@ public class CarConsumerWithSubscriptionController {
 	
 	//-------------------------------------------------------------------------------------------------
 	@PostMapping(path = SubscriberConstants.REQUEST_RECEIVED_NOTIFICATION_URI) 
-	public void receiveEventRequestReceived(@RequestBody final EventDTO event ) {	
+	public void receiveEventRequestReceived(@RequestBody final EventDTO event) {	
 		logger.debug("receiveEventRequestReceived started...");
 		
-		if( event.getEventType() != null) {
-			
-			notificatonQueue.add( event );
-
+		if (event.getEventType() != null) {
+			notificatonQueue.add(event);
 		}
-		
-		
-		//TODO implement your event handling logic here 
 	}
 	
 	//-------------------------------------------------------------------------------------------------
 	@PostMapping(path = SubscriberConstants.PUBLISHER_DESTORYED_NOTIFICATION_URI) 
-	public void receiveEventDestroyed(@RequestBody final EventDTO event ) {
+	public void receiveEventDestroyed(@RequestBody final EventDTO event) {
 		logger.debug("receiveEventDestroyed started... ");
 		
-		if( event.getEventType() != null  ) {
-			
-			notificatonQueue.add( event );
+		if (event.getEventType() != null) {
+			notificatonQueue.add(event);
 		}
-		
-		//TODO implement your event handling logic here 
 	}
-	
-	//-------------------------------------------------------------------------------------------------
-	//TODO: implement here additional subscriber related REST end points
 }

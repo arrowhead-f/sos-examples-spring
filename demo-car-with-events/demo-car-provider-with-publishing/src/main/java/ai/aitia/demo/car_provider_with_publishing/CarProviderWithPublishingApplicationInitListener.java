@@ -21,12 +21,12 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 
-import eu.arrowhead.client.library.ArrowheadService;
-import eu.arrowhead.client.library.config.ApplicationInitListener;
-import eu.arrowhead.client.library.util.ClientCommonConstants;
-import eu.arrowhead.client.skeleton.provider.security.ProviderSecurityConfig;
-import eu.arrowhead.client.skeleton.publisher.constants.PublisherConstants;
-import eu.arrowhead.client.skeleton.publisher.event.PresetEventType;
+import ai.aitia.arrowhead.application.library.ArrowheadService;
+import ai.aitia.arrowhead.application.library.config.ApplicationInitListener;
+import ai.aitia.arrowhead.application.library.util.ApplicationCommonConstants;
+import eu.arrowhead.application.skeleton.provider.security.ProviderSecurityConfig;
+import eu.arrowhead.application.skeleton.publisher.constants.PublisherConstants;
+import eu.arrowhead.application.skeleton.publisher.event.PresetEventType;
 import eu.arrowhead.common.CommonConstants;
 import eu.arrowhead.common.Utilities;
 import eu.arrowhead.common.core.CoreSystem;
@@ -48,19 +48,19 @@ public class CarProviderWithPublishingApplicationInitListener extends Applicatio
 	@Autowired
 	private ProviderSecurityConfig providerSecurityConfig;
 	
-	@Value(ClientCommonConstants.$TOKEN_SECURITY_FILTER_ENABLED_WD)
+	@Value(ApplicationCommonConstants.$TOKEN_SECURITY_FILTER_ENABLED_WD)
 	private boolean tokenSecurityFilterEnabled;
 	
 	@Value(CommonConstants.$SERVER_SSL_ENABLED_WD)
 	private boolean sslEnabled;
 	
-	@Value(ClientCommonConstants.$CLIENT_SYSTEM_NAME)
+	@Value(ApplicationCommonConstants.$APPLICATION_SYSTEM_NAME)
 	private String mySystemName;
 	
-	@Value(ClientCommonConstants.$CLIENT_SERVER_ADDRESS_WD)
+	@Value(ApplicationCommonConstants.$APPLICATION_SERVER_ADDRESS_WD)
 	private String mySystemAddress;
 	
-	@Value(ClientCommonConstants.$CLIENT_SERVER_PORT_WD)
+	@Value(ApplicationCommonConstants.$APPLICATION_SERVER_PORT_WD)
 	private int mySystemPort;
 	
 	private final Logger logger = LogManager.getLogger(CarProviderWithPublishingApplicationInitListener.class);
@@ -71,9 +71,10 @@ public class CarProviderWithPublishingApplicationInitListener extends Applicatio
 	//-------------------------------------------------------------------------------------------------
 	@Override
 	protected void customInit(final ContextRefreshedEvent event) {
-
+		checkConfiguration();
+		
 		//Checking the availability of necessary core systems
-		checkCoreSystemReachability(CoreSystem.SERVICE_REGISTRY);
+		checkCoreSystemReachability(CoreSystem.SERVICEREGISTRY);
 		if (sslEnabled && tokenSecurityFilterEnabled) {
 			checkCoreSystemReachability(CoreSystem.AUTHORIZATION);			
 
@@ -81,7 +82,6 @@ public class CarProviderWithPublishingApplicationInitListener extends Applicatio
 			arrowheadService.updateCoreServiceURIs(CoreSystem.AUTHORIZATION);
 			
 			setTokenSecurityFilter();
-			
 		} else {
 			logger.info("TokenSecurityFilter in not active");
 		}		
@@ -95,12 +95,9 @@ public class CarProviderWithPublishingApplicationInitListener extends Applicatio
 		getCarServiceRequest.getMetadata().put(CarProviderWithPublishingConstants.REQUEST_PARAM_KEY_COLOR, CarProviderWithPublishingConstants.REQUEST_PARAM_COLOR);
 		arrowheadService.forceRegisterServiceToServiceRegistry(getCarServiceRequest);
 		
-		if ( arrowheadService.echoCoreSystem( CoreSystem.EVENT_HANDLER ) ) {
-			
-			arrowheadService.updateCoreServiceURIs( CoreSystem.EVENT_HANDLER );	
-
+		if (arrowheadService.echoCoreSystem(CoreSystem.EVENTHANDLER)) {
+			arrowheadService.updateCoreServiceURIs(CoreSystem.EVENTHANDLER);	
 		}
-		
 	}
 	
 	//-------------------------------------------------------------------------------------------------
@@ -108,30 +105,35 @@ public class CarProviderWithPublishingApplicationInitListener extends Applicatio
 	public void customDestroy() {
 		//Unregister service
 		publishDestroyedEvent();
-		arrowheadService.unregisterServiceFromServiceRegistry(CarProviderWithPublishingConstants.CREATE_CAR_SERVICE_DEFINITION);
+		arrowheadService.unregisterServiceFromServiceRegistry(CarProviderWithPublishingConstants.CREATE_CAR_SERVICE_DEFINITION, CarProviderWithPublishingConstants.CAR_URI);
+		arrowheadService.unregisterServiceFromServiceRegistry(CarProviderWithPublishingConstants.GET_CAR_SERVICE_DEFINITION, CarProviderWithPublishingConstants.CAR_URI);
 	}
 	
 	//=================================================================================================
 	// assistant methods
+	
+	//-------------------------------------------------------------------------------------------------
+	private void checkConfiguration() {
+		if (!sslEnabled && tokenSecurityFilterEnabled) {			 
+			logger.warn("Contradictory configuration:");
+			logger.warn("token.security.filter.enabled=true while server.ssl.enabled=false");
+		}
+	}
 
 	//-------------------------------------------------------------------------------------------------
 	private void publishDestroyedEvent() {
 		final String eventType = PresetEventType.PUBLISHER_DESTROYED.getEventTypeName();
 		
 		final SystemRequestDTO source = new SystemRequestDTO();
-		source.setSystemName( mySystemName );
-		source.setAddress( mySystemAddress );
-		source.setPort( mySystemPort );
+		source.setSystemName(mySystemName);
+		source.setAddress(mySystemAddress);
+		source.setPort(mySystemPort);
 		if (sslEnabled) {
-	
-			source.setAuthenticationInfo( Base64.getEncoder().encodeToString( arrowheadService.getMyPublicKey().getEncoded() ) );
-	
+			source.setAuthenticationInfo(Base64.getEncoder().encodeToString( arrowheadService.getMyPublicKey().getEncoded()));
 		}
 
 		final Map<String,String> metadata = null;
-		
 		final String payload = PublisherConstants.PUBLISHR_DESTROYED_EVENT_PAYLOAD;
-		
 		final String timeStamp = Utilities.convertZonedDateTimeToUTCString( ZonedDateTime.now() );
 		
 		final EventPublishRequestDTO publishRequestDTO = new EventPublishRequestDTO(
@@ -141,13 +143,11 @@ public class CarProviderWithPublishingApplicationInitListener extends Applicatio
 				payload, 
 				timeStamp);
 		
-		arrowheadService.publishToEventHandler( publishRequestDTO );
-		
+		arrowheadService.publishToEventHandler(publishRequestDTO);
 	}
 
 	//-------------------------------------------------------------------------------------------------
 	private void setTokenSecurityFilter() {
-
 		final PublicKey authorizationPublicKey = arrowheadService.queryAuthorizationPublicKey();
 		if (authorizationPublicKey == null) {
 			throw new ArrowheadException("Authorization public key is null");
@@ -157,14 +157,13 @@ public class CarProviderWithPublishingApplicationInitListener extends Applicatio
 		try {
 			keystore = KeyStore.getInstance(sslProperties.getKeyStoreType());
 			keystore.load(sslProperties.getKeyStore().getInputStream(), sslProperties.getKeyStorePassword().toCharArray());
-		} catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException ex) {
+		} catch (final KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException ex) {
 			throw new ArrowheadException(ex.getMessage());
 		}			
 		final PrivateKey providerPrivateKey = Utilities.getPrivateKey(keystore, sslProperties.getKeyPassword());
 		
 		providerSecurityConfig.getTokenSecurityFilter().setAuthorizationPublicKey(authorizationPublicKey);
 		providerSecurityConfig.getTokenSecurityFilter().setMyPrivateKey(providerPrivateKey);
-
 	}
 	
 	//-------------------------------------------------------------------------------------------------
@@ -176,7 +175,7 @@ public class CarProviderWithPublishingApplicationInitListener extends Applicatio
 		systemRequest.setAddress(mySystemAddress);
 		systemRequest.setPort(mySystemPort);		
 
-		if (tokenSecurityFilterEnabled) {
+		if (sslEnabled && tokenSecurityFilterEnabled) {
 			systemRequest.setAuthenticationInfo(Base64.getEncoder().encodeToString(arrowheadService.getMyPublicKey().getEncoded()));
 			serviceRegistryRequest.setSecure(ServiceSecurityType.TOKEN.name());
 			serviceRegistryRequest.setInterfaces(List.of(CarProviderWithPublishingConstants.INTERFACE_SECURE));

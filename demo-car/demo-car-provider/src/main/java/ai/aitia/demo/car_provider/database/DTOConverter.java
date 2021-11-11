@@ -5,8 +5,7 @@ import java.util.List;
 
 import org.springframework.util.Assert;
 
-import com.aitia.demo.car_common.dto.CarResponseDTO;
-
+import ai.aitia.demo.car_common.dto.CarResponseDTO;
 import ai.aitia.demo.car_provider.entity.Car;
 
 public class DTOConverter {

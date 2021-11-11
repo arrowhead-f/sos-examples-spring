@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
 
-import eu.arrowhead.client.skeleton.subscriber.ConfigEventProperites;
+import eu.arrowhead.application.skeleton.subscriber.ConfigEventProperites;
 import eu.arrowhead.common.CommonConstants;
 
 @SpringBootApplication

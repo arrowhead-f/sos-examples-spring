@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 
 import com.opencsv.CSVReader;
 
-import eu.arrowhead.client.library.util.ClientCommonConstants;
+import ai.aitia.arrowhead.application.library.util.ApplicationCommonConstants;
 
 @Component
 public class EFDataService {
@@ -46,7 +46,7 @@ public class EFDataService {
     private static final double VENTILATION = 1.2d;
     private static final double SCALE = 2.0d * 1000.0d;
     
-    @Value(ClientCommonConstants.$CLIENT_SYSTEM_NAME)
+    @Value(ApplicationCommonConstants.$APPLICATION_SYSTEM_NAME)
 	private String mySystemName;
 	
     //=================================================================================================
@@ -64,7 +64,7 @@ public class EFDataService {
 	public double getOutdoorTemperature(final LocalDateTime timestamp) {
 		final LocalDateTime yearStart = LocalDateTime.of(timestamp.getYear(), 1, 1, 0, 0);
 		final int hourOfYear = (int) yearStart.until(timestamp, ChronoUnit.HOURS);
-		return outdoorTemperatureData.get(hourOfYear);
+		return outdoorTemperatureData.get(Math.min(hourOfYear, outdoorTemperatureData.size() - 1)); //due to leap years
 	}
 	
 	//-------------------------------------------------------------------------------------------------
@@ -101,7 +101,7 @@ public class EFDataService {
 			for (final String[] strings : readAll) {
 				outdoorTemperatureData.add(Double.valueOf(strings[0]));
 			}			
-		} catch (Exception ex) {
+		} catch (final Exception ex) {
 			throw ex;
 		} finally {
 			reader.close();
