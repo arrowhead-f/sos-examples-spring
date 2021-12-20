@@ -11,7 +11,7 @@
 	
 	<groupId>eu.arrowhead</groupId>	
 	<artifactId>demo</artifactId>
-	<version>4.4.0.0</version>
+	<version>4.4.0.1</version>
 	<packaging>pom</packaging>
 	<name>demo-java-spring</name>
 	<description>Arrowhead Client Demo using Spring Boot</description>
@@ -23,6 +23,10 @@
 	     	<url>https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt</url>
 	   </license>
   	</licenses>
+  	
+  	<properties>
+		<log4j2.version>2.17.0</log4j2.version>
+	</properties>
 	
 	<modules>
 	    <module>demo-car</module>
@@ -35,7 +39,7 @@
 		<dependency>
 			<groupId>ai.aitia</groupId>
 			<artifactId>arrowhead-application-library-java-spring</artifactId>
-			<version>4.4.0.0</version>
+			<version>4.4.0.1</version>
 		</dependency>		
 	</dependencies>
 	

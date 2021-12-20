@@ -5,7 +5,7 @@
   <parent>
     <groupId>eu.arrowhead</groupId>
     <artifactId>demo-energy-forecast</artifactId>
-    <version>4.4.0.0</version>
+    <version>4.4.0.1</version>
   </parent>
   
   <artifactId>demo-energy-forecast-outdoor-provider</artifactId>
@@ -15,7 +15,7 @@
   	<dependency>
   		<groupId>eu.arrowhead</groupId>
   		<artifactId>demo-energy-forecast-common</artifactId>
-  		<version>4.4.0.0</version>
+  		<version>4.4.0.1</version>
   	</dependency>
   </dependencies>
   
