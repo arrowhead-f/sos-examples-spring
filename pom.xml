@@ -5,13 +5,13 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.1.5.RELEASE</version>
+		<version>2.6.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	
 	<groupId>eu.arrowhead</groupId>	
 	<artifactId>demo</artifactId>
-	<version>4.4.0.1</version>
+	<version>4.4.0.2</version>
 	<packaging>pom</packaging>
 	<name>demo-java-spring</name>
 	<description>Arrowhead Client Demo using Spring Boot</description>
@@ -23,10 +23,6 @@
 	     	<url>https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt</url>
 	   </license>
   	</licenses>
-  	
-  	<properties>
-		<log4j2.version>2.17.0</log4j2.version>
-	</properties>
 	
 	<modules>
 	    <module>demo-car</module>
@@ -39,8 +35,8 @@
 		<dependency>
 			<groupId>ai.aitia</groupId>
 			<artifactId>arrowhead-application-library-java-spring</artifactId>
-			<version>4.4.0.1</version>
-		</dependency>		
+			<version>4.4.0.2</version>
+		</dependency>
 	</dependencies>
 	
 	<build>
