@@ -4,7 +4,7 @@
 	<parent>
     	<groupId>eu.arrowhead</groupId>
     	<artifactId>demo-car</artifactId>
-    	<version>4.4.0.1</version>
+    	<version>4.4.0.2</version>
   	</parent>
 	
 	<artifactId>demo-car-provider</artifactId>
@@ -14,7 +14,7 @@
 		<dependency>
 			<groupId>eu.arrowhead</groupId>
 			<artifactId>demo-car-common</artifactId>
-			<version>4.4.0.1</version>
+			<version>4.4.0.2</version>
 		</dependency>
 	</dependencies>
 	
