@@ -89,6 +89,8 @@ public class CarConsumerWithSubscriptionApplicationInitListener extends Applicat
 	//-------------------------------------------------------------------------------------------------
 	@Override
 	protected void customInit(final ContextRefreshedEvent event) {
+		checkConfiguration();
+		
 		//Checking the availability of necessary core systems
 		checkCoreSystemReachability(CoreSystem.SERVICEREGISTRY);
 
@@ -138,6 +140,14 @@ public class CarConsumerWithSubscriptionApplicationInitListener extends Applicat
 	
 	//=================================================================================================
 	// assistant methods
+	
+	//-------------------------------------------------------------------------------------------------
+	private void checkConfiguration() {
+		if (!sslEnabled && tokenSecurityFilterEnabled) {			 
+			logger.warn("Contradictory configuration:");
+			logger.warn("token.security.filter.enabled=true while server.ssl.enabled=false");
+		}
+	}
 
 	//-------------------------------------------------------------------------------------------------
 	private void setTokenSecurityFilter() {

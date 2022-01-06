@@ -11,7 +11,7 @@
 	
 	<groupId>eu.arrowhead</groupId>	
 	<artifactId>demo</artifactId>
-	<version>4.4.0.0</version>
+	<version>4.4.0.2</version>
 	<packaging>pom</packaging>
 	<name>demo-java-spring</name>
 	<description>Arrowhead Client Demo using Spring Boot</description>
@@ -38,7 +38,7 @@
 			<url>https://s01.oss.sonatype.org/content/repositories/aiaitia-1027</url>
 		</repository>
 	</repositories>
-	
+  	
 	<dependencies>
 		<dependency>
 			<groupId>ai.aitia</groupId>

@@ -64,7 +64,7 @@ public class EFDataService {
 	public double getOutdoorTemperature(final LocalDateTime timestamp) {
 		final LocalDateTime yearStart = LocalDateTime.of(timestamp.getYear(), 1, 1, 0, 0);
 		final int hourOfYear = (int) yearStart.until(timestamp, ChronoUnit.HOURS);
-		return outdoorTemperatureData.get(hourOfYear);
+		return outdoorTemperatureData.get(Math.min(hourOfYear, outdoorTemperatureData.size() - 1)); //due to leap years
 	}
 	
 	//-------------------------------------------------------------------------------------------------
