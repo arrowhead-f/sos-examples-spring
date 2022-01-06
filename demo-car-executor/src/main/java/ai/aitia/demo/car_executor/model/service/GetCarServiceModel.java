@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import eu.arrowhead.application.skeleton.executor.ExecutorConstants;
 import eu.arrowhead.common.dto.shared.ChoreographerExecutorServiceInfoRequestDTO;
 import eu.arrowhead.common.dto.shared.ChoreographerExecutorServiceInfoResponseDTO;
-import eu.arrowhead.common.dto.shared.ServiceQueryFormDTO;
+import eu.arrowhead.common.dto.shared.ChoreographerServiceQueryFormDTO;
 
 @Component
 public class GetCarServiceModel {
@@ -15,7 +15,7 @@ public class GetCarServiceModel {
 	//=================================================================================================
 	// members
 	
-	private List<ServiceQueryFormDTO> dependencies;
+	private List<ChoreographerServiceQueryFormDTO> dependencies;
 	private boolean initialized = false;
 	
 	//=================================================================================================
@@ -48,8 +48,8 @@ public class GetCarServiceModel {
 	}
 	
 	//-------------------------------------------------------------------------------------------------
-	private ServiceQueryFormDTO createCarService() {
-		final ServiceQueryFormDTO form = new ServiceQueryFormDTO();
+	private ChoreographerServiceQueryFormDTO createCarService() {
+		final ChoreographerServiceQueryFormDTO form = new ChoreographerServiceQueryFormDTO();
 		form.setServiceDefinitionRequirement(ExecutorConstants.PRECONDITION_SERVICE_CREATE_CAR);
 		return form;
 	}
