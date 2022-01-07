@@ -30,6 +30,7 @@
 		<module>demo-car-with-events</module>
 	    <module>demo-energy-forecast</module>		
 		<module>demo-exchange-rate-intercloud</module>
+		<module>demo-conveyor-choreographer</module>
 	</modules>
   	
   	<repositories> <!-- TODO: delete this after new app library release  -->
