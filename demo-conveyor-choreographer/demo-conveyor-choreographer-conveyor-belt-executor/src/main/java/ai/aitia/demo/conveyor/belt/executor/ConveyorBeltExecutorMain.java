@@ -1,4 +1,4 @@
-package eu.arrowhead.application.skeleton.executor;
+package ai.aitia.demo.conveyor.belt.executor;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,13 +8,13 @@ import eu.arrowhead.common.CommonConstants;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {CommonConstants.BASE_PACKAGE}) //TODO: add custom packages if any
-public class ExecutorMain {
+public class ConveyorBeltExecutorMain {
 
 	//=================================================================================================
 	// methods
 
 	//-------------------------------------------------------------------------------------------------
 	public static void main(final String[] args) {
-		SpringApplication.run(ExecutorMain.class, args);
+		SpringApplication.run(ConveyorBeltExecutorMain.class, args);
 	}	
 }

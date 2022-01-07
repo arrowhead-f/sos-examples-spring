@@ -1,4 +1,4 @@
-package eu.arrowhead.application.skeleton.executor.execution;
+package ai.aitia.demo.conveyor.belt.executor.execution;
 
 import eu.arrowhead.common.dto.shared.ChoreographerExecuteStepRequestDTO;
 

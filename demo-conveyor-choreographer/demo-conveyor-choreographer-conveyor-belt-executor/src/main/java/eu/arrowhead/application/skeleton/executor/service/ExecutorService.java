@@ -4,7 +4,8 @@ import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import eu.arrowhead.application.skeleton.executor.execution.ExecutionBoard;
+import ai.aitia.demo.conveyor.belt.executor.execution.ExecutionBoard;
+import ai.aitia.demo.conveyor.belt.executor.model.service.TransportWithConveyorService;
 import eu.arrowhead.common.Utilities;
 import eu.arrowhead.common.dto.shared.ChoreographerAbortStepRequestDTO;
 import eu.arrowhead.common.dto.shared.ChoreographerExecuteStepRequestDTO;
@@ -40,7 +41,7 @@ public class ExecutorService {
 		validateChoreographerExecutorServiceInfoRequestDTO(request);
 		
 		final ChoreographerExecutorServiceInfoResponseDTO response = new ChoreographerExecutorServiceInfoResponseDTO();
-		//TODO implement your logic here 
+		response.setServiceDefinition(TransportWithConveyorService.SERVICE_DEFINITION);
 		return response;
 	}
 	
