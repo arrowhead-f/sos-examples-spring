@@ -7,21 +7,31 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.CertificateException;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 
 import ai.aitia.arrowhead.application.library.ArrowheadService;
 import ai.aitia.arrowhead.application.library.config.ApplicationInitListener;
 import ai.aitia.arrowhead.application.library.util.ApplicationCommonConstants;
+import ai.aitia.demo.robotic.arm.Constant;
+import ai.aitia.demo.robotic.arm.model.service.provided.DuckSeenService;
+import ai.aitia.demo.robotic.arm.model.service.provided.TakeOffService;
 import eu.arrowhead.application.skeleton.provider.security.ProviderSecurityConfig;
 import eu.arrowhead.common.CommonConstants;
 import eu.arrowhead.common.Utilities;
 import eu.arrowhead.common.core.CoreSystem;
+import eu.arrowhead.common.dto.shared.ServiceRegistryRequestDTO;
+import eu.arrowhead.common.dto.shared.ServiceSecurityType;
+import eu.arrowhead.common.dto.shared.SystemRequestDTO;
 import eu.arrowhead.common.exception.ArrowheadException;
 
 @Component
@@ -41,6 +51,15 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 	
 	@Value(CommonConstants.$SERVER_SSL_ENABLED_WD)
 	private boolean sslEnabled;
+	
+	@Value(ApplicationCommonConstants.$APPLICATION_SYSTEM_NAME)
+	private String mySystemName;
+	
+	@Value(ApplicationCommonConstants.$APPLICATION_SERVER_ADDRESS_WD)
+	private String mySystemAddress;
+	
+	@Value(ApplicationCommonConstants.$APPLICATION_SERVER_PORT_WD)
+	private int mySystemPort;
 	
 	private final Logger logger = LogManager.getLogger(ProviderApplicationInitListener.class);
 	
@@ -66,7 +85,13 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 			logger.info("TokenSecurityFilter in not active");
 		}		
 		
-		//TODO: implement here any custom behavior on application start up
+		arrowheadService.forceRegisterServiceToServiceRegistry(createServiceRegistryRequest(DuckSeenService.SERVICE_DEFINITION,
+																							DuckSeenService.PATH,
+																							DuckSeenService.METHOD));
+		
+		arrowheadService.forceRegisterServiceToServiceRegistry(createServiceRegistryRequest(TakeOffService.SERVICE_DEFINITION,
+																							TakeOffService.PATH,
+																							TakeOffService.METHOD));
 	}
 	
 	//-------------------------------------------------------------------------------------------------
@@ -105,5 +130,33 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 		providerSecurityConfig.getTokenSecurityFilter().setAuthorizationPublicKey(authorizationPublicKey);
 		providerSecurityConfig.getTokenSecurityFilter().setMyPrivateKey(providerPrivateKey);
 
+	}
+	
+	//-------------------------------------------------------------------------------------------------
+	private ServiceRegistryRequestDTO createServiceRegistryRequest(final String serviceDefinition, final String serviceUri, final HttpMethod method) {
+		final ServiceRegistryRequestDTO serviceRegistryRequest = new ServiceRegistryRequestDTO();
+		serviceRegistryRequest.setServiceDefinition(serviceDefinition);
+		serviceRegistryRequest.setMetadata(new HashMap<>());
+		serviceRegistryRequest.getMetadata().put(Constant.HTTP_METHOD, method.name());
+		final SystemRequestDTO systemRequest = new SystemRequestDTO();
+		systemRequest.setSystemName(mySystemName);
+		systemRequest.setAddress(mySystemAddress);
+		systemRequest.setPort(mySystemPort);		
+
+		if (tokenSecurityFilterEnabled) {
+			systemRequest.setAuthenticationInfo(Base64.getEncoder().encodeToString(arrowheadService.getMyPublicKey().getEncoded()));
+			serviceRegistryRequest.setSecure(ServiceSecurityType.TOKEN.name());
+			serviceRegistryRequest.setInterfaces(List.of(Constant.INTERFACE_SECURE));
+		} else if (sslEnabled) {
+			systemRequest.setAuthenticationInfo(Base64.getEncoder().encodeToString(arrowheadService.getMyPublicKey().getEncoded()));
+			serviceRegistryRequest.setSecure(ServiceSecurityType.CERTIFICATE.name());
+			serviceRegistryRequest.setInterfaces(List.of(Constant.INTERFACE_SECURE));
+		} else {
+			serviceRegistryRequest.setSecure(ServiceSecurityType.NOT_SECURE.name());
+			serviceRegistryRequest.setInterfaces(List.of(Constant.INTERFACE_INSECURE));
+		}
+		serviceRegistryRequest.setProviderSystem(systemRequest);
+		serviceRegistryRequest.setServiceUri(serviceUri);
+		return serviceRegistryRequest;
 	}
 }
