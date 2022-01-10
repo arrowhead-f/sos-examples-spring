@@ -4,6 +4,7 @@ public class RecognizeService {
 
 	public static final String SERVICE_DEFINITION = "recognize";
 	public static final String QUERY_PARAM_OBJECT = "object";
+	public static final int VERSION = 1;
 	
 	//=================================================================================================
 	// assistant methods

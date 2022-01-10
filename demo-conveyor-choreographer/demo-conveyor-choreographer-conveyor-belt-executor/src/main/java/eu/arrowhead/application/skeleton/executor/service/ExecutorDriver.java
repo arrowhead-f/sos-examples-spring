@@ -36,6 +36,8 @@ public class ExecutorDriver {
 	public void registerIntoChoreographer(final String systemName, final String address, final int port, final String authenticationInfo) {
 		final ChoreographerExecutorRequestDTO dto = new ChoreographerExecutorRequestDTO();
 		dto.setServiceDefinitionName(TransportWithConveyorService.SERVICE_DEFINITION);
+		dto.setMinVersion(TransportWithConveyorService.VERSION);
+		dto.setMaxVersion(TransportWithConveyorService.VERSION);
 		dto.setSystem(new SystemRequestDTO(systemName, address, port, authenticationInfo, null));
 		
 		final CoreServiceUri uri = arrowheadService.getCoreServiceUri(CoreSystemService.CHOREOGRAPHER_REGISTER_EXECUTOR_SERVICE);

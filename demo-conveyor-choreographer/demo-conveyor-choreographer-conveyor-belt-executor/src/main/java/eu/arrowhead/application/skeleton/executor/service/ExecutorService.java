@@ -42,6 +42,8 @@ public class ExecutorService {
 		
 		final ChoreographerExecutorServiceInfoResponseDTO response = new ChoreographerExecutorServiceInfoResponseDTO();
 		response.setServiceDefinition(TransportWithConveyorService.SERVICE_DEFINITION);
+		response.setMinVersion(TransportWithConveyorService.VERSION);
+		response.setMaxVersion(TransportWithConveyorService.VERSION);
 		return response;
 	}
 	

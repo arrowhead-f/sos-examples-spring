@@ -46,6 +46,8 @@ public class ExecutorService {
 		
 		final ChoreographerExecutorServiceInfoResponseDTO response = new ChoreographerExecutorServiceInfoResponseDTO();
 		response.setServiceDefinition(TakeOffService.SERVICE_DEFINITION);
+		response.setMinVersion(TakeOffService.VERSION);
+		response.setMaxVersion(TakeOffService.VERSION);
 		
 		final ChoreographerServiceQueryFormDTO dependency = new ChoreographerServiceQueryFormDTO();
 		dependency.setServiceDefinitionRequirement(RecognizeService.SERVICE_DEFINITION);
