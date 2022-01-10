@@ -50,6 +50,7 @@ public class ExecutorApplicationInitListener extends ApplicationInitListener {
 	protected void customInit(final ContextRefreshedEvent event) {
 
 		//Checking the availability of necessary core systems
+		checkCoreSystemReachability(CoreSystem.SERVICEREGISTRY);
 		checkCoreSystemReachability(CoreSystem.CHOREOGRAPHER);
 		
 		//Initialize Arrowhead Context

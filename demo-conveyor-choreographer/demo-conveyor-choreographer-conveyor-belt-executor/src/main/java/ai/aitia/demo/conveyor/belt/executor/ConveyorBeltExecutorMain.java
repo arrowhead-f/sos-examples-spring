@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 import eu.arrowhead.common.CommonConstants;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {CommonConstants.BASE_PACKAGE}) //TODO: add custom packages if any
+@ComponentScan(basePackages = {CommonConstants.BASE_PACKAGE, Constant.BASE_PACKAGE})
 public class ConveyorBeltExecutorMain {
 
 	//=================================================================================================
