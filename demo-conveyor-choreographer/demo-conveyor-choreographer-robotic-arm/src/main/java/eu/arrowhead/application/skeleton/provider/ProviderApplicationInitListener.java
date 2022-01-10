@@ -23,7 +23,7 @@ import ai.aitia.arrowhead.application.library.ArrowheadService;
 import ai.aitia.arrowhead.application.library.config.ApplicationInitListener;
 import ai.aitia.arrowhead.application.library.util.ApplicationCommonConstants;
 import ai.aitia.demo.robotic.arm.Constant;
-import ai.aitia.demo.robotic.arm.model.service.provided.DuckSeenService;
+import ai.aitia.demo.robotic.arm.model.service.provided.RecognizeService;
 import ai.aitia.demo.robotic.arm.model.service.provided.TakeOffService;
 import eu.arrowhead.application.skeleton.provider.security.ProviderSecurityConfig;
 import eu.arrowhead.common.CommonConstants;
@@ -85,9 +85,9 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 			logger.info("TokenSecurityFilter in not active");
 		}		
 		
-		arrowheadService.forceRegisterServiceToServiceRegistry(createServiceRegistryRequest(DuckSeenService.SERVICE_DEFINITION,
-																							DuckSeenService.PATH,
-																							DuckSeenService.METHOD));
+		arrowheadService.forceRegisterServiceToServiceRegistry(createServiceRegistryRequest(RecognizeService.SERVICE_DEFINITION,
+																							RecognizeService.PATH,
+																							RecognizeService.METHOD));
 		
 		arrowheadService.forceRegisterServiceToServiceRegistry(createServiceRegistryRequest(TakeOffService.SERVICE_DEFINITION,
 																							TakeOffService.PATH,

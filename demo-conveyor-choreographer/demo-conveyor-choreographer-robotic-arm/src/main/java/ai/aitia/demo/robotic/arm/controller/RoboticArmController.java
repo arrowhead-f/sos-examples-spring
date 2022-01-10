@@ -6,11 +6,12 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ai.aitia.demo.robotic.arm.model.dto.CoordinateDTO;
-import ai.aitia.demo.robotic.arm.model.dto.DuckSeenResponseDTO;
-import ai.aitia.demo.robotic.arm.model.service.provided.DuckSeenService;
+import ai.aitia.demo.robotic.arm.model.dto.RecognizeResponseDTO;
+import ai.aitia.demo.robotic.arm.model.service.provided.RecognizeService;
 import ai.aitia.demo.robotic.arm.model.service.provided.TakeOffService;
 import eu.arrowhead.common.CommonConstants;
 
@@ -32,17 +33,17 @@ public class RoboticArmController {
 	}
 	
 	//-------------------------------------------------------------------------------------------------
-	@GetMapping(path = DuckSeenService.PATH, produces = MediaType.APPLICATION_JSON_VALUE)
-	public DuckSeenResponseDTO duckSeen() {
-		final DuckSeenResponseDTO response = new DuckSeenResponseDTO();
-		response.setSeen(!rnd.nextBoolean());
+	@GetMapping(path = RecognizeService.PATH, produces = MediaType.APPLICATION_JSON_VALUE)
+	public RecognizeResponseDTO recognize(@RequestParam(required = true, name = RecognizeService.QUERY_PARAM_OBJECT) final String object) {
+		final RecognizeResponseDTO response = new RecognizeResponseDTO();
+		response.setRecognized(!rnd.nextBoolean());
 		
-		if (!response.isSeen()) {
-			System.out.println("No duck recognized");
+		if (!response.isRecognized()) {
+			System.out.println("No '" + object + "' has been recognized");
 			
 		} else {
 			response.setCoordinate(new CoordinateDTO(rnd.nextInt(50), rnd.nextInt(50), rnd.nextInt(50)));
-			System.out.println("Duck has been recognize at " + response.getCoordinate().toString());
+			System.out.println("' "+ object + "' has been recognize at " + response.getCoordinate().toString());
 		}
 		
 		return response;
@@ -50,7 +51,7 @@ public class RoboticArmController {
 	
 	//-------------------------------------------------------------------------------------------------
 	@PostMapping(path = TakeOffService.PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void takeDuck(@RequestBody final CoordinateDTO coordinate) {
+	public void takeOff(@RequestBody final CoordinateDTO coordinate) {
 		System.out.println("Object has taken off from " + coordinate.toString());
 	}
 }

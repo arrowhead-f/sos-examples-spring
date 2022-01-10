@@ -1,14 +1,15 @@
 package ai.aitia.demo.robotic.arm.executor.model.service.dependency;
 
-public class DuckSeenService {
+public class RecognizeService {
 
-	public static final String SERVICE_DEFINITION = "duck-seen";
+	public static final String SERVICE_DEFINITION = "recognize";
+	public static final String QUERY_PARAM_OBJECT = "object";
 	
 	//=================================================================================================
 	// assistant methods
 
 	//-------------------------------------------------------------------------------------------------
-	private DuckSeenService() {
+	private RecognizeService() {
 		throw new UnsupportedOperationException();
 	}
 }

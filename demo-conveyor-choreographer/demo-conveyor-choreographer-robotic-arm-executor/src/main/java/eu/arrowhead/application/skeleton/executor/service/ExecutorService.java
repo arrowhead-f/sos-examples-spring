@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import ai.aitia.demo.robotic.arm.executor.execution.ExecutionBoard;
 import ai.aitia.demo.robotic.arm.executor.model.service.TakeOffService;
-import ai.aitia.demo.robotic.arm.executor.model.service.dependency.DuckSeenService;
+import ai.aitia.demo.robotic.arm.executor.model.service.dependency.RecognizeService;
 import eu.arrowhead.common.Utilities;
 import eu.arrowhead.common.dto.shared.ChoreographerAbortStepRequestDTO;
 import eu.arrowhead.common.dto.shared.ChoreographerExecuteStepRequestDTO;
@@ -48,7 +48,7 @@ public class ExecutorService {
 		response.setServiceDefinition(TakeOffService.SERVICE_DEFINITION);
 		
 		final ChoreographerServiceQueryFormDTO dependency = new ChoreographerServiceQueryFormDTO();
-		dependency.setServiceDefinitionRequirement(DuckSeenService.SERVICE_DEFINITION);
+		dependency.setServiceDefinitionRequirement(RecognizeService.SERVICE_DEFINITION);
 		dependency.setLocalCloudOnly(true);
 		response.setDependencies(List.of(dependency));
 		

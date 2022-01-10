@@ -11,9 +11,9 @@ import ai.aitia.arrowhead.application.library.ArrowheadService;
 import ai.aitia.demo.robotic.arm.executor.Constant;
 import ai.aitia.demo.robotic.arm.executor.execution.ExecutionSignal;
 import ai.aitia.demo.robotic.arm.executor.execution.Job;
-import ai.aitia.demo.robotic.arm.executor.model.dto.DuckSeenResponseDTO;
+import ai.aitia.demo.robotic.arm.executor.model.dto.RecognizeResponseDTO;
 import ai.aitia.demo.robotic.arm.executor.model.service.TakeOffService;
-import ai.aitia.demo.robotic.arm.executor.model.service.dependency.DuckSeenService;
+import ai.aitia.demo.robotic.arm.executor.model.service.dependency.RecognizeService;
 import eu.arrowhead.application.skeleton.executor.service.ExecutorDriver;
 import eu.arrowhead.common.SSLProperties;
 import eu.arrowhead.common.dto.shared.ChoreographerExecutedStepStatus;
@@ -56,34 +56,43 @@ public class TakeOffServiceExecutionWorker implements Runnable {
 		}
 		
 		if (job.getExecutionSignal() == ExecutionSignal.DO) {
-			//Dependency service
-			final OrchestrationResultDTO duckSeenService = retrieveDuckSeenService(job.getJobRequest().getPreconditionOrchestrationResults());
-			if (duckSeenService == null) {
+			final String object = job.getJobRequest().getStaticParameters().get(RecognizeService.QUERY_PARAM_OBJECT);
+			if (object  == null || object.isEmpty()) {
 				driver.notifyChoreographer(job.getJobRequest().getSessionId(), job.getJobRequest().getSessionStepId(), ChoreographerExecutedStepStatus.ERROR,
-		   				   				   "Have no 'duck-seen' dependency service", "Missing dependency service");
+		   				   				   "Have no 'object' parameter defined", "Missing static parameter");
 				return;
 			}
-			final DuckSeenResponseDTO duckSeenResp;
+			
+			//Dependency service
+			final OrchestrationResultDTO recognizeService = retrieveRecognizeService(job.getJobRequest().getPreconditionOrchestrationResults());
+			if (recognizeService == null) {
+				driver.notifyChoreographer(job.getJobRequest().getSessionId(), job.getJobRequest().getSessionStepId(), ChoreographerExecutedStepStatus.ERROR,
+		   				   				   "Have no 'recognize' dependency service", "Missing dependency service");
+				return;
+			}
+			
+			final RecognizeResponseDTO recognizeResp;
 			try {
-				duckSeenResp = ahService.consumeServiceHTTP(DuckSeenResponseDTO.class,
-															getMethod(duckSeenService),
-															duckSeenService.getProvider().getAddress(), duckSeenService.getProvider().getPort(),
-															duckSeenService.getServiceUri(),
-															getInterface(),
-															getToken(duckSeenService),
-															null);
+				recognizeResp = ahService.consumeServiceHTTP(RecognizeResponseDTO.class,
+															 getMethod(recognizeService),
+															 recognizeService.getProvider().getAddress(), recognizeService.getProvider().getPort(),
+															 recognizeService.getServiceUri(),
+															 getInterface(),
+															 getToken(recognizeService),
+															 null,
+															 getQueryParams(object));
 				
 			} catch (final Exception ex) {
 				logger.error(ex.getMessage());
 				logger.debug(ex);
 				driver.notifyChoreographer(job.getJobRequest().getSessionId(), job.getJobRequest().getSessionStepId(), ChoreographerExecutedStepStatus.ERROR,
-		   				   				   "Error has been occured while consuming service" + DuckSeenService.SERVICE_DEFINITION, ex.getMessage());
+		   				   				   "Error has been occured while consuming service" + RecognizeService.SERVICE_DEFINITION, ex.getMessage());
 				return;
 			}
-			if (!duckSeenResp.isSeen()) {
-				logger.info("No duck has been recognized");
+			if (!recognizeResp.isRecognized()) {
+				logger.info("No '" + object + "' has been recognized");
 				driver.notifyChoreographer(job.getJobRequest().getSessionId(), job.getJobRequest().getSessionStepId(), ChoreographerExecutedStepStatus.SUCCESS,
-										   "No duck has been recognized", null);
+										   "No '" + object + "' has been recognized", null);
 				return;
 			}
 			
@@ -96,10 +105,10 @@ public class TakeOffServiceExecutionWorker implements Runnable {
 						  takeOffService.getServiceUri(),
 						  getInterface(),
 						  getToken(takeOffService),
-						  duckSeenResp.getCoordinate());
+						  recognizeResp.getCoordinate());
 				
 				driver.notifyChoreographer(job.getJobRequest().getSessionId(), job.getJobRequest().getSessionStepId(), ChoreographerExecutedStepStatus.SUCCESS,
-		   				   				   "Duck has been recognized and taken off", null);
+		   				   				   "'" + object + "' has been recognized and taken off", null);
 			} catch (final Exception ex) {
 				logger.error(ex.getMessage());
 				logger.debug(ex);
@@ -113,10 +122,10 @@ public class TakeOffServiceExecutionWorker implements Runnable {
 	// methods
 
 	//-------------------------------------------------------------------------------------------------
-	private OrchestrationResultDTO retrieveDuckSeenService(final List<OrchestrationResultDTO> dependencyResults) {
+	private OrchestrationResultDTO retrieveRecognizeService(final List<OrchestrationResultDTO> dependencyResults) {
 		OrchestrationResultDTO dependency = null;
 		for (final OrchestrationResultDTO result : dependencyResults) {
-			if (result.getService().getServiceDefinition().equalsIgnoreCase(DuckSeenService.SERVICE_DEFINITION)) {
+			if (result.getService().getServiceDefinition().equalsIgnoreCase(RecognizeService.SERVICE_DEFINITION)) {
 				dependency = result;
 				break;
 			}
@@ -137,5 +146,11 @@ public class TakeOffServiceExecutionWorker implements Runnable {
     //-------------------------------------------------------------------------------------------------
     private String getToken(final OrchestrationResultDTO orchResult) {
     	return orchResult.getAuthorizationTokens() == null ? null : orchResult.getAuthorizationTokens().get(getInterface());
+    }
+    
+    //-------------------------------------------------------------------------------------------------
+    private String[] getQueryParams(final String object) {
+    	final String[] params = {RecognizeService.QUERY_PARAM_OBJECT, object};
+    	return params;
     }
 }
