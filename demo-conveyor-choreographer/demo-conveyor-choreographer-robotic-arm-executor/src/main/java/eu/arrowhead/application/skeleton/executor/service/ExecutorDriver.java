@@ -16,6 +16,7 @@ import eu.arrowhead.common.dto.shared.ChoreographerExecutedStepStatus;
 import eu.arrowhead.common.dto.shared.ChoreographerExecutorRequestDTO;
 import eu.arrowhead.common.dto.shared.ChoreographerExecutorResponseDTO;
 import eu.arrowhead.common.dto.shared.SystemRequestDTO;
+import eu.arrowhead.common.exception.InvalidParameterException;
 
 @Service
 public class ExecutorDriver {
@@ -33,15 +34,23 @@ public class ExecutorDriver {
 	// methods
 
 	//-------------------------------------------------------------------------------------------------
-	public void registerIntoChoreographer(final String systemName, final String address, final int port, final String authenticationInfo) {
+	public void forceRegisterIntoChoreographer(final String systemName, final String address, final int port, final String authenticationInfo) {
 		final ChoreographerExecutorRequestDTO dto = new ChoreographerExecutorRequestDTO();
 		dto.setServiceDefinitionName(TakeOffService.SERVICE_DEFINITION);
 		dto.setMinVersion(TakeOffService.VERSION);
 		dto.setMaxVersion(TakeOffService.VERSION);
 		dto.setSystem(new SystemRequestDTO(systemName, address, port, authenticationInfo, null));
 		
-		final CoreServiceUri uri = arrowheadService.getCoreServiceUri(CoreSystemService.CHOREOGRAPHER_REGISTER_EXECUTOR_SERVICE);
-		arrowheadService.consumeServiceHTTP(ChoreographerExecutorResponseDTO.class, HttpMethod.POST, uri.getAddress(), uri.getPort(), uri.getPath(), getCoreSystemInterface(), null, dto, new String[0]);
+		final CoreServiceUri regUri = arrowheadService.getCoreServiceUri(CoreSystemService.CHOREOGRAPHER_REGISTER_EXECUTOR_SERVICE);
+		try {
+			arrowheadService.consumeServiceHTTP(ChoreographerExecutorResponseDTO.class, HttpMethod.POST, regUri.getAddress(), regUri.getPort(), regUri.getPath(), getCoreSystemInterface(), null, dto, new String[0]);
+			
+		} catch (final InvalidParameterException ex) {
+			final CoreServiceUri unregUri = arrowheadService.getCoreServiceUri(CoreSystemService.CHOREOGRAPHER_UNREGISTER_EXECUTOR_SERVICE);
+			final String[] params = {CommonConstants.OP_CHOREOGRAPHER_EXECUTOR_UNREGISTER_REQUEST_PARAM_NAME, systemName};
+			arrowheadService.consumeServiceHTTP(Void.class, HttpMethod.DELETE, unregUri.getAddress(), unregUri.getPort(), unregUri.getPath(), getCoreSystemInterface(), null, null, params);
+			arrowheadService.consumeServiceHTTP(ChoreographerExecutorResponseDTO.class, HttpMethod.POST, regUri.getAddress(), regUri.getPort(), regUri.getPath(), getCoreSystemInterface(), null, dto, new String[0]);
+		}
 	}
 	
 	//-------------------------------------------------------------------------------------------------

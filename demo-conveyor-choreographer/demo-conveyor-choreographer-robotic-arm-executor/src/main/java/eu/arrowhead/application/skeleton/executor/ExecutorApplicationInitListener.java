@@ -73,7 +73,7 @@ public class ExecutorApplicationInitListener extends ApplicationInitListener {
 	
 	//-------------------------------------------------------------------------------------------------
 	private void register() {
-		driver.registerIntoChoreographer(mySystemName, mySystemAddress, mySystemPort, Base64.getEncoder().encodeToString(arrowheadService.getMyPublicKey().getEncoded()));
+		driver.forceRegisterIntoChoreographer(mySystemName, mySystemAddress, mySystemPort, Base64.getEncoder().encodeToString(arrowheadService.getMyPublicKey().getEncoded()));
 		logger.info("Successfully registered into Choreographer Core System");
 	}
 }
