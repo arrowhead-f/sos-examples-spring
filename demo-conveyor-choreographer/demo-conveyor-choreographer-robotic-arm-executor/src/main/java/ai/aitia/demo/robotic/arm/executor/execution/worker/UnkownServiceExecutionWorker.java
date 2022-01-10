@@ -1,10 +1,10 @@
-package eu.arrowhead.application.skeleton.executor.execution.worker;
+package ai.aitia.demo.robotic.arm.executor.execution.worker;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import eu.arrowhead.application.skeleton.executor.execution.Job;
+import ai.aitia.demo.robotic.arm.executor.execution.Job;
 import eu.arrowhead.application.skeleton.executor.service.ExecutorDriver;
 import eu.arrowhead.common.dto.shared.ChoreographerExecutedStepStatus;
 

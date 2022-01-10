@@ -1,4 +1,4 @@
-package eu.arrowhead.application.skeleton.executor.execution;
+package ai.aitia.demo.robotic.arm.executor.execution;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;

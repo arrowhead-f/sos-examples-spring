@@ -24,8 +24,6 @@ public class ExecutorController {
 
 	@Autowired
 	private ExecutorService executorService;
-	
-	//TODO: add your variables here
 
 	//=================================================================================================
 	// methods
@@ -53,7 +51,4 @@ public class ExecutorController {
 	@ResponseBody public ChoreographerExecutorServiceInfoResponseDTO serviceInfo(@RequestBody final ChoreographerExecutorServiceInfoRequestDTO request) {
 		return executorService.collectServiceInfo(request);
 	}
-	
-	//-------------------------------------------------------------------------------------------------
-	//TODO: implement here your executor related REST end points
 }

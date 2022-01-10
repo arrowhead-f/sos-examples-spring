@@ -1,15 +1,20 @@
 package eu.arrowhead.application.skeleton.executor.service;
 
+import java.util.List;
+
 import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import eu.arrowhead.application.skeleton.executor.execution.ExecutionBoard;
+import ai.aitia.demo.robotic.arm.executor.execution.ExecutionBoard;
+import ai.aitia.demo.robotic.arm.executor.model.service.TakeOffService;
+import ai.aitia.demo.robotic.arm.executor.model.service.dependency.DuckSeenService;
 import eu.arrowhead.common.Utilities;
 import eu.arrowhead.common.dto.shared.ChoreographerAbortStepRequestDTO;
 import eu.arrowhead.common.dto.shared.ChoreographerExecuteStepRequestDTO;
 import eu.arrowhead.common.dto.shared.ChoreographerExecutorServiceInfoRequestDTO;
 import eu.arrowhead.common.dto.shared.ChoreographerExecutorServiceInfoResponseDTO;
+import eu.arrowhead.common.dto.shared.ChoreographerServiceQueryFormDTO;
 import eu.arrowhead.common.exception.BadPayloadException;
 
 @Service
@@ -40,7 +45,13 @@ public class ExecutorService {
 		validateChoreographerExecutorServiceInfoRequestDTO(request);
 		
 		final ChoreographerExecutorServiceInfoResponseDTO response = new ChoreographerExecutorServiceInfoResponseDTO();
-		//TODO implement your logic here 
+		response.setServiceDefinition(TakeOffService.SERVICE_DEFINITION);
+		
+		final ChoreographerServiceQueryFormDTO dependency = new ChoreographerServiceQueryFormDTO();
+		dependency.setServiceDefinitionRequirement(DuckSeenService.SERVICE_DEFINITION);
+		dependency.setLocalCloudOnly(true);
+		response.setDependencies(List.of(dependency));
+		
 		return response;
 	}
 	

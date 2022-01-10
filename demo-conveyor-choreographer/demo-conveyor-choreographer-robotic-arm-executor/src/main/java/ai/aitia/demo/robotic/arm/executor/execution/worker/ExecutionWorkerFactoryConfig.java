@@ -1,4 +1,4 @@
-package eu.arrowhead.application.skeleton.executor.execution.worker;
+package ai.aitia.demo.robotic.arm.executor.execution.worker;
 
 import java.util.function.Function;
 
@@ -7,7 +7,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
-import eu.arrowhead.application.skeleton.executor.execution.Job;
+import ai.aitia.demo.robotic.arm.executor.execution.Job;
+import ai.aitia.demo.robotic.arm.executor.model.service.TakeOffService;
 
 @Configuration
 public class ExecutionWorkerFactoryConfig {
@@ -22,15 +23,12 @@ public class ExecutionWorkerFactoryConfig {
 	@Bean
 	@Scope(BeanDefinition.SCOPE_PROTOTYPE)
 	public Runnable createExecutionWorker(final Job job) {
-		final String serviceDefinition = job.getJobRequest().getMainOrchestrationResult().getService().getServiceDefinition();
+		final String serviceDefinition = job.getJobRequest().getMainOrchestrationResult().getService().getServiceDefinition().trim().toLowerCase();
 		
 		switch (serviceDefinition) {
-		//TODO initiate here your execution workers
-//		case "your-main-service-A":
-//			return new YourMainServiceAExecutionWorker(job);
 		
-//		case "your-main-service-B":
-//		return new YourMainServiceBExecutionWorker(job);
+		case TakeOffService.SERVICE_DEFINITION:
+			return new TakeOffServiceExecutionWorker(job);
 
 		default:
 			return new UnkownServiceExecutionWorker(job);
