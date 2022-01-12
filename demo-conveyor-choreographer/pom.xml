@@ -15,6 +15,7 @@
   	<module>demo-conveyor-choreographer-robotic-arm</module>
   	<module>demo-conveyor-choreographer-conveyor-belt-executor</module>
   	<module>demo-conveyor-choreographer-robotic-arm-executor</module>
+  	<module>demo-conveyor-choreographer-session-monitor</module>
   </modules>
   
 </project>
