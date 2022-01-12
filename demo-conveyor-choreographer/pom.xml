@@ -11,8 +11,10 @@
   <packaging>pom</packaging>
   
   <modules>
+  	<module>demo-conveyor-choreographer-object-loader</module>
   	<module>demo-conveyor-choreographer-conveyor-belt</module>
   	<module>demo-conveyor-choreographer-robotic-arm</module>
+  	<module>demo-conveyor-choreographer-object-loader-executor</module>
   	<module>demo-conveyor-choreographer-conveyor-belt-executor</module>
   	<module>demo-conveyor-choreographer-robotic-arm-executor</module>
   	<module>demo-conveyor-choreographer-session-monitor</module>

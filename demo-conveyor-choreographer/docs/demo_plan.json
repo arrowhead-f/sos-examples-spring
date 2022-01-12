@@ -1,7 +1,34 @@
 {
   "name": "Conveyor Demo",
-  "firstActionName": "operate-conveyor",
+  "firstActionName": "feed-conveyor",
   "actions": [
+  	{
+      "name": "feed-conveyor",
+      "nextActionName": "operate-conveyor",
+      "firstStepNames": [
+        "load-to-conveyor"
+      ],
+      "steps": [
+        {
+          "name": "load-to-conveyor",
+          "nextStepNames": [],
+          "quantity": 1,
+          "serviceRequirement": {
+            "serviceDefinitionRequirement": "load-object",
+            "versionRequirement": 1,
+            "interfaceRequirements": [
+              "HTTP-SECURE-JSON"
+            ],
+            "securityRequirements": [
+              "TOKEN"
+            ],
+            "localCloudOnly": true,
+            "pingProviders": false
+          },
+          "staticParameters": {}
+        }
+      ]
+    },
     {
       "name": "operate-conveyor",
       "nextActionName": "",
