@@ -12,8 +12,6 @@
 The project has the following dependencies:
 * **JRE/JDK 11** [Download from here](https://www.oracle.com/technetwork/java/javase/downloads/jdk11-downloads-5066655.html)
 * **Maven 3.5+** [Download from here](http://maven.apache.org/download.cgi) | [Install guide](https://www.baeldung.com/install-maven-on-windows-linux-mac)
-* **GitHub Packages** [Configuring Maven for GitHub Packages](https://help.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-apache-maven-for-use-with-github-packages) | [Example](https://github.com/arrowhead-f/client-library-java-spring/blob/master/docs/example_mvn_settings.xml)
-
 * **Authorization settings for the demo systems in your local arrowhead database**
 
   ***By Arrowhead Management Tool***
@@ -22,7 +20,7 @@ The project has the following dependencies:
   ***By Swagger API documentation***
   
   - Go to `http(s)://<authorization_host>:<authorization_port>`.
-  - Create the authorization rule via the [`POST /authorization/mgmt/intracloud`](https://github.com/arrowhead-f/core-java-spring/blob/master/README.md#add-intracloud-rules) or [`POST /authorization/mgmt/intercloud`](https://github.com/arrowhead-f/core-java-spring/blob/master/README.md#add-intercloud-rules) endpoint.
+  - Create the authorization rule via the [`POST /authorization/mgmt/intracloud`](https://github.com/eclipse-arrowhead/core-java-spring/blob/master/README.md#add-intracloud-rules) or [`POST /authorization/mgmt/intercloud`](https://github.com/eclipse-arrowhead/core-java-spring/blob/master/README.md#add-intercloud-rules) endpoint.
   
   ***By MySQL queries***
   

@@ -1,5 +1,5 @@
-# Car SoS Demo (Java Spring-Boot)
-##### The project provides Arrowhead v4.1.3 Clients demo implementation developed from [client-skeleton project](https://github.com/arrowhead-f/client-skeleton-java-spring)
+# Car Demo (Java Spring-Boot)
+##### The project provides Arrowhead Application demo implementation developed from [application-skeleton project](https://github.com/arrowhead-f/client-skeleton-java-spring)
 
 ## Overview
 The goal of the project is to simply demonstrate how a consumer could orchestrate for a service and consume it afterward.
@@ -58,3 +58,6 @@ Returns a car list based on the given parameters.
 4. Start the provider (it will registrate automatically to the Service Registry Core System).
 5. At the very first time, register the consumer manually and create the intra cloud authorization rules.
 6. Start the Consumer.
+
+## Video tutorial
+[link](https://www.youtube.com/watch?v=9BHemnv3mQA&t=5s)
