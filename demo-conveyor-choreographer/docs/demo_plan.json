@@ -1,0 +1,84 @@
+{
+  "name": "Conveyor Demo",
+  "firstActionName": "feed-conveyor",
+  "actions": [
+  	{
+      "name": "feed-conveyor",
+      "nextActionName": "operate-conveyor",
+      "firstStepNames": [
+        "load-to-conveyor"
+      ],
+      "steps": [
+        {
+          "name": "load-to-conveyor",
+          "nextStepNames": [],
+          "quantity": 1,
+          "serviceRequirement": {
+            "serviceDefinitionRequirement": "load-object",
+            "versionRequirement": 1,
+            "interfaceRequirements": [
+              "HTTP-SECURE-JSON"
+            ],
+            "securityRequirements": [
+              "TOKEN"
+            ],
+            "localCloudOnly": true,
+            "pingProviders": false
+          },
+          "staticParameters": {}
+        }
+      ]
+    },
+    {
+      "name": "operate-conveyor",
+      "nextActionName": "",
+      "firstStepNames": [
+        "take-duck-if-any"
+      ],
+      "steps": [
+        {
+          "name": "take-duck-if-any",
+          "nextStepNames": [
+            "move-belt"
+          ],
+          "quantity": 1,
+          "serviceRequirement": {
+            "serviceDefinitionRequirement": "take-off",
+            "versionRequirement": 1,
+            "interfaceRequirements": [
+              "HTTP-SECURE-JSON"
+            ],
+            "securityRequirements": [
+              "TOKEN"
+            ],
+            "localCloudOnly": true,
+            "pingProviders": false
+          },
+          "staticParameters": {
+            "object": "duck"
+          }
+        },
+        {
+          "name": "move-belt",
+          "nextStepNames": [],
+          "quantity": 1,
+          "serviceRequirement": {
+            "serviceDefinitionRequirement": "transport-with-conveyor",
+            "versionRequirement": 1,
+            "interfaceRequirements": [
+              "HTTP-SECURE-JSON"
+            ],
+            "securityRequirements": [
+              "TOKEN"
+            ],
+            "localCloudOnly": true,
+            "pingProviders": false
+          },
+          "staticParameters": {
+            "signed-distance": "15"
+          }
+        }
+      ]
+    }
+  ]
+}

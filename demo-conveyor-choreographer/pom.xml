@@ -1,0 +1,23 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  
+  <parent>
+    <groupId>eu.arrowhead</groupId>
+    <artifactId>demo</artifactId>
+    <version>4.4.0.2</version>
+  </parent>
+  
+  <artifactId>demo-conveyor-choreographer</artifactId>
+  <packaging>pom</packaging>
+  
+  <modules>
+  	<module>demo-conveyor-choreographer-object-loader</module>
+  	<module>demo-conveyor-choreographer-conveyor-belt</module>
+  	<module>demo-conveyor-choreographer-robotic-arm</module>
+  	<module>demo-conveyor-choreographer-object-loader-executor</module>
+  	<module>demo-conveyor-choreographer-conveyor-belt-executor</module>
+  	<module>demo-conveyor-choreographer-robotic-arm-executor</module>
+  	<module>demo-conveyor-choreographer-session-monitor</module>
+  </modules>
+  
+</project>
