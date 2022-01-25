@@ -6,6 +6,7 @@
 2. Energy Forecast demo ([read me](https://github.com/arrowhead-f/sos-examples-spring/blob/master/demo-energy-forecast/README.md))
 3. Car demo with events ([read me](https://github.com/arrowhead-f/sos-examples-spring/blob/master/demo-car-with-events/README.md))
 4. Exchange Rate Intercloud demo ([read me](https://github.com/arrowhead-f/sos-examples-spring/blob/master/demo-exchange-rate-intercloud/README.md))
+5. Choreographer Conveyor demo ([read me](https://github.com/arrowhead-f/sos-examples-spring/blob/executor-demo/demo-conveyor-choreographer/ReadMe.md))
 
 ### Requirements
 
