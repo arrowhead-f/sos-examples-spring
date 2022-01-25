@@ -26,7 +26,6 @@
 	
 	<modules>
 	    <module>demo-car</module>
-		<module>demo-car-executor</module>
 		<module>demo-car-with-events</module>
 	    <module>demo-energy-forecast</module>		
 		<module>demo-exchange-rate-intercloud</module>
