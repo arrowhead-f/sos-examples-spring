@@ -107,6 +107,7 @@ public class TakeOffServiceExecutionWorker implements Runnable {
 						  getToken(takeOffService),
 						  recognizeResp.getCoordinate());
 				
+				logger.info("'" + object + "' has been recognized and taken off");
 				driver.notifyChoreographer(job.getJobRequest().getSessionId(), job.getJobRequest().getSessionStepId(), ChoreographerExecutedStepStatus.SUCCESS,
 		   				   				   "'" + object + "' has been recognized and taken off", null);
 			} catch (final Exception ex) {

@@ -8,13 +8,13 @@ import eu.arrowhead.common.CommonConstants;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {CommonConstants.BASE_PACKAGE, Constant.BASE_PACKAGE})
-public class ObjectLoaderMain {
+public class ObjectLoaderExecutorMain {
 
 	//=================================================================================================
 	// methods
 
 	//-------------------------------------------------------------------------------------------------
 	public static void main(final String[] args) {
-		SpringApplication.run(ObjectLoaderMain.class, args);
+		SpringApplication.run(ObjectLoaderExecutorMain.class, args);
 	}	
 }

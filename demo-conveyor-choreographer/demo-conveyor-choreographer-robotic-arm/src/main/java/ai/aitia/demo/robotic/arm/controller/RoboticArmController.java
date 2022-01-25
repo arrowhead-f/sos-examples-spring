@@ -43,7 +43,7 @@ public class RoboticArmController {
 			
 		} else {
 			response.setCoordinate(new CoordinateDTO(rnd.nextInt(50), rnd.nextInt(50), rnd.nextInt(50)));
-			System.out.println("' "+ object + "' has been recognize at " + response.getCoordinate().toString());
+			System.out.println("'"+ object + "' has been recognize at " + response.getCoordinate().toString());
 		}
 		
 		return response;
