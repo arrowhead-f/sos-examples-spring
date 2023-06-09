@@ -15,7 +15,7 @@ The project has the following dependencies:
 * **Authorization settings for the demo systems in your local arrowhead database**
 
   ***By Arrowhead Management Tool***
-  - Management Tool from [AITA Arrowhead Management Toolkit](https://www.aitia.ai/](https://www.aitia.ai/products/arrowhead-tools/)
+  - Management Tool from [AITIA Arrowhead Management Toolkit](https://www.aitia.ai/products/arrowhead-tools/)
   
   ***By Swagger API documentation***
   
