@@ -15,7 +15,7 @@ The project has the following dependencies:
 * **Authorization settings for the demo systems in your local arrowhead database**
 
   ***By Arrowhead Management Tool***
-  - coming soon
+  - Management Tool from [AITA Arrowhead Management Toolkit]([https://github.com/arrowhead-f/sos-examples-spring/tree/master](https://www.aitia.ai/](https://www.aitia.ai/products/arrowhead-tools/))
   
   ***By Swagger API documentation***
   
