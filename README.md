@@ -15,12 +15,11 @@ The project has the following dependencies:
 * **Authorization settings for the demo systems in your local arrowhead database**
 
   ***By Arrowhead Management Tool***
-  - Management Tool from [AITA Arrowhead Management Toolkit]([https://github.com/arrowhead-f/sos-examples-spring/tree/master](https://www.aitia.ai/](https://www.aitia.ai/products/arrowhead-tools/))
+  - Management Tool from [AITA Arrowhead Management Toolkit](https://www.aitia.ai/](https://www.aitia.ai/products/arrowhead-tools/)
   
   ***By Swagger API documentation***
   
-  - Go to `http(s)://<authorization_host>:<authorization_port>`.
-  - Create the authorization rule via the [`POST /authorization/mgmt/intracloud`](https://github.com/eclipse-arrowhead/core-java-spring/blob/master/README.md#add-intracloud-rules) or [`POST /authorization/mgmt/intercloud`](https://github.com/eclipse-arrowhead/core-java-spring/blob/master/README.md#add-intercloud-rules) endpoint.
+  - Use [Swagger](https://github.com/eclipse-arrowhead/core-java-spring/wiki/Implementation#interactive-api-documentation---swagger-ui) at `http(s)://<authorization_host>:<authorization_port>` in your browser when your Local Cloud is up an running.
   
   ***By MySQL queries***
   
