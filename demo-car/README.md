@@ -50,7 +50,7 @@ Returns a car list based on the given parameters.
 ## How to run?
 1. Clone this repo to your local machine.
 2. Go to the root directory and execute `mvn install` command, then wait until the build succeeds.
-3. Start the [Arrowhead Framework v4.1.3](https://github.com/arrowhead-f/core-java-spring), before you would start the demo.
+3. Start the [Arrowhead Framework](https://github.com/arrowhead-f/core-java-spring](https://github.com/eclipse-arrowhead/core-java-spring), before you would start the demo.
    Required core systems:
    * Service Registry
    * Authorization
