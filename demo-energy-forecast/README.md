@@ -79,3 +79,7 @@ Forcasts the energy consumption between the current time and the given time in t
 7. Use the command line commands to trigger the SoS workflow.
 8. *(You can observe what happens in Arrowhead Framework if you switch the logging level to "DEBUG".)*
 
+## Configuration
+  - Find the `application.properties` confirguration file under the `<project>/src/main/resources` folder before the build or under the `<project>/target` after the build.
+  - Default configuration is provided out of the box which works when the Arrowhead Local Cloud is running on your localhost and has the common [testclou2 certificates](https://github.com/eclipse-arrowhead/core-java-spring/tree/master/certificates/testcloud2). 
+
