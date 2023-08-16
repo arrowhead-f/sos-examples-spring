@@ -50,7 +50,7 @@ Returns a car list based on the given parameters.
 ## How to run?
 1. Clone this repo to your local machine.
 2. Go to the root directory and execute `mvn install` command, then wait until the build succeeds.
-3. Start the [Arrowhead Framework](https://github.com/arrowhead-f/core-java-spring](https://github.com/eclipse-arrowhead/core-java-spring), before you would start the demo.
+3. Start the [Arrowhead Framework](https://github.com/eclipse-arrowhead/core-java-spring), before you would start the demo.
    Required core systems:
    * Service Registry
    * Authorization
@@ -58,6 +58,10 @@ Returns a car list based on the given parameters.
 4. Start the provider (it will registrate automatically to the Service Registry Core System).
 5. At the very first time, register the consumer manually and create the intra cloud authorization rules.
 6. Start the Consumer.
+
+## Configuration
+  - Find the `application.properties` confirguration file under the `<project>/src/main/resources` folder before the build or under the `<project>/target` after the build.
+  - Default configuration is provided out of the box which works when the Arrowhead Local Cloud is running on your localhost and has the common [testclou2 certificates](https://github.com/eclipse-arrowhead/core-java-spring/tree/master/certificates/testcloud2). 
 
 ## Video tutorial
 [link](https://www.youtube.com/watch?v=9BHemnv3mQA&t=5s)
