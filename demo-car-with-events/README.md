@@ -77,3 +77,7 @@ Returns a car list based on the given parameters.
 8. For the very first time, register the consumer manually and create the `intracloud`  authorization rules.
 
 9. Start the Consumer.
+
+## Configuration
+  - Find the `application.properties` confirguration file under the `<project>/src/main/resources` folder before the build or under the `<project>/target` after the build.
+  - Default configuration is provided out of the box which works when the Arrowhead Local Cloud is running on your localhost and has the common [testclou2 certificates](https://github.com/eclipse-arrowhead/core-java-spring/tree/master/certificates/testcloud2). 
